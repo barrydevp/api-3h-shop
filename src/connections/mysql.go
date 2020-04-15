@@ -13,7 +13,7 @@ func init() {
 
 	mysqlUrl := os.Getenv("CLEARDB_DATABASE_URL")
 	if mysqlUrl == "" {
-		log.Print("$CLEARDB_DATABASE_URL must be set => Using default CLEARDB_DATABASE_URL: ", DefaultMysqlUrl)
+		log.Println("$CLEARDB_DATABASE_URL must be set => Using default CLEARDB_DATABASE_URL: ", DefaultMysqlUrl)
 		mysqlUrl = DefaultMysqlUrl
 	}
 

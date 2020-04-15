@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/barrydev/api-3h-shop/src"
+	"github.com/barrydev/api-3h-shop/src/connections"
 	"log"
 	"net/http"
 	"os"
@@ -26,6 +27,7 @@ func main() {
 
 	defer func() {
 		log.Println("App shutting down.")
+		connections.Mysql.Close()
 		s.Close()
 	}()
 
