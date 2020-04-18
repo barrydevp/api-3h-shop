@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 )
 
 type Exec func(Context *gin.Context) (interface{}, error)
@@ -80,22 +79,4 @@ func (handle *Handle) Catch(callback ErrorFunc) *Handle {
 	callback(handle.Context, handle.error)
 
 	return handle
-}
-
-func SendSuccess(Context *gin.Context, data interface{}) {
-	response := gin.H{
-		"success": true,
-		"data":    data,
-	}
-
-	Context.JSON(http.StatusOK, response)
-}
-
-func SendError(Context *gin.Context, error error) {
-	response := gin.H{
-		"success": false,
-		"message": error.Error(),
-	}
-
-	Context.JSON(http.StatusOK, response)
 }

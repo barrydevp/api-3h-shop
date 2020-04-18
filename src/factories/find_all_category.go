@@ -1,18 +1,20 @@
-package userfac
+package factories
 
 import (
 	"github.com/barrydev/api-3h-shop/src/connections"
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func GetListUser() ([]*model.User, error){
+func FindAllCategory() ([]*model.Category, error) {
 	connection := connections.Mysql.GetConnection()
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, email, name, password, address, status, created_at, updated_at
-		FROM users
+			_id, name, parent_id, status, updated_at
+		FROM categories
 	`)
+
+	defer stmt.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -24,23 +26,25 @@ func GetListUser() ([]*model.User, error){
 	}
 
 	defer rows.Close()
-	var listUser []*model.User
+	var allCategory []*model.Category
 
 	for rows.Next() {
-		_user := model.User{}
+		_category := model.Category{}
 
-		err = rows.Scan(&_user.Id, &_user.Email, &_user.Name, &_user.Password, &_user.Address, &_user.Status, &_user.CreatedAt, &_user.UpdatedAt)
+		err = rows.Scan(&_category.RawId, &_category.RawName, &_category.RawParentId, &_category.RawStatus, &_category.RawUpdatedAt)
 
 		if err != nil {
 			return nil, err
 		}
 
-		listUser = append(listUser, &_user)
+		_category.FillResponse()
+
+		allCategory = append(allCategory, &_category)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listUser, nil
+	return allCategory, nil
 }
