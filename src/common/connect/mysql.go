@@ -47,7 +47,7 @@ func (db *MysqlDB) Close() {
 type QueryMySQL struct {
 	Where   *string
 	Join    *string
-	GroupBy  *string
+	GroupBy *string
 	Having  *string
 	OrderBy *string
 	Limit   *string
@@ -55,34 +55,34 @@ type QueryMySQL struct {
 	Args    []interface{}
 }
 
-func(query *QueryMySQL) ToQueryString() string {
+func (query *QueryMySQL) ToQueryString() string {
 	queryString := ""
 	if query.Where != nil {
-		queryString = "WHERE" + *query.Where
+		queryString += "WHERE" + *query.Where
 	}
 
 	if query.Join != nil {
-		queryString = "JOIN" + *query.Join
+		queryString += "\nJOIN" + *query.Join
 	}
 
 	if query.GroupBy != nil {
-		queryString = "GROUP BY" + *query.GroupBy
+		queryString += "\nGROUP BY" + *query.GroupBy
 	}
 
 	if query.Having != nil {
-		queryString = "HAVING" + *query.Having
+		queryString += "\nHAVING" + *query.Having
 	}
 
 	if query.OrderBy != nil {
-		queryString = "ORDER BY" + *query.OrderBy
-	}
-
-	if query.Offset != nil {
-		queryString = "OFFSET" + *query.Offset
+		queryString += "\nORDER BY" + *query.OrderBy
 	}
 
 	if query.Limit != nil {
-		queryString = "LIMIT" + *query.Limit
+		queryString += "\nLIMIT" + *query.Limit
+	}
+
+	if query.Offset != nil {
+		queryString += "\nOFFSET" + *query.Offset
 	}
 
 	return queryString

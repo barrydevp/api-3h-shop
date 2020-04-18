@@ -121,7 +121,7 @@ func (query *QueryCategory) ParsePaging() {
 
 	skip := (*query.Page - 1) * *query.Limit
 
-	query.Limit = &skip
+	query.Offset = &skip
 }
 
 type CategoryTree struct {

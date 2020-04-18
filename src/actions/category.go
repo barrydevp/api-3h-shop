@@ -7,13 +7,23 @@ import (
 )
 
 func GetListCategory(queryCategory *model.QueryCategory) (interface{}, error) {
+	query, err := queryCategory.GetQueryList()
+
+	if err != nil {
+		return nil, err
+	}
+
 	data, err := factories.FindListCategory()
 
 	if err != nil {
 		return nil, err
 	}
 
-	total := len(data)
+	total, err := factories.CountCategory(query)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &response.DataList{
 		Data:  data,

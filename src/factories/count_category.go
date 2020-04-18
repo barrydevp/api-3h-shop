@@ -1,53 +1,50 @@
 package factories
 
 import (
+	"database/sql"
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
-	"github.com/barrydev/api-3h-shop/src/model"
+	"log"
 )
 
-func CountCategory(query connect.QueryMySQL) ([]*model.Category, error) {
+func CountCategory(query *connect.QueryMySQL) (int, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
 			COUNT(*)
 		FROM categories
-	` + query.ToQueryString()
+	`
+	var args []interface{}
+
+	if query != nil {
+		queryString += query.ToQueryString()
+		args = query.Args
+	}
+
+	log.Println(queryString)
+	log.Println(args)
 
 	stmt, err := connection.Prepare(queryString)
 
+	if err != nil {
+		return 0, err
+	}
+
 	defer stmt.Close()
-	if err != nil {
-		return nil, err
+
+	var total int
+
+	err = stmt.QueryRow(args...).Scan(&total)
+
+	switch err {
+	case sql.ErrNoRows:
+		return 0, nil
+	case nil:
+		return total, nil
+	default:
+		return 0, err
 	}
 
-	rows, err := stmt.Query(query.Args...)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer rows.Close()
-	var listCategory []*model.Category
-
-	for rows.Next() {
-		_category := model.Category{}
-
-		err = rows.Scan(&_category.RawId, &_category.RawName, &_category.RawParentId, &_category.RawStatus, &_category.RawUpdatedAt)
-
-		if err != nil {
-			return nil, err
-		}
-
-		_category.FillResponse()
-
-		listCategory = append(listCategory, &_category)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return listCategory, nil
+	return total, nil
 }

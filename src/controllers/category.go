@@ -16,7 +16,7 @@ func GetListCategory(c *gin.Context) (interface{}, error) {
 		return nil, err
 	}
 
-	return actions.GetListCategory(query)
+	return actions.GetListCategory(&query)
 }
 
 func GetOneCategory(c *gin.Context) (interface{}, error) {

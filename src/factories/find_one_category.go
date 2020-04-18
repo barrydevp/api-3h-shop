@@ -15,11 +15,11 @@ func FindCategoryById(categoryId *int64) (*model.Category, error) {
 		WHERE _id=?
 	`)
 
-	defer stmt.Close()
-
 	if err != nil {
 		return nil, err
 	}
+
+	defer stmt.Close()
 
 	var _category model.Category
 
