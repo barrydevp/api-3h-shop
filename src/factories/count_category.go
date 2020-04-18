@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
-	"log"
 )
 
 func CountCategory(query *connect.QueryMySQL) (int, error) {
@@ -21,9 +20,6 @@ func CountCategory(query *connect.QueryMySQL) (int, error) {
 		queryString += query.ToQueryString()
 		args = query.Args
 	}
-
-	log.Println(queryString)
-	log.Println(args)
 
 	stmt, err := connection.Prepare(queryString)
 

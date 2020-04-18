@@ -13,7 +13,7 @@ func GetListCategory(queryCategory *model.QueryCategory) (interface{}, error) {
 		return nil, err
 	}
 
-	data, err := factories.FindListCategory()
+	data, err := factories.FindCategory(query)
 
 	if err != nil {
 		return nil, err
