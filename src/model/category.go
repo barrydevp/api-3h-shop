@@ -75,8 +75,8 @@ func (query *QueryCategory) GetQueryList() (*connect.QueryMySQL, error) {
 		Args = append(Args, query.Id)
 	}
 	if query.Name != nil {
-		Where += " name=?"
-		Args = append(Args, query.Name)
+		Where += " name LIKE ?"
+		Args = append(Args, "%"+ *query.Name + "%")
 	}
 	if query.ParentId != nil {
 		Where += " parent_id=?"
@@ -104,6 +104,37 @@ func (query *QueryCategory) GetQueryList() (*connect.QueryMySQL, error) {
 		OrderBy: &OrderBy,
 		Limit:   &Limit,
 		Offset:  &Offset,
+		Args:    Args,
+	}, nil
+}
+
+func (query *QueryCategory) GetQueryCountList() (*connect.QueryMySQL, error) {
+	Where := ""
+	var Args []interface{}
+
+	if query.Id != nil {
+		Where += " _id=?"
+		Args = append(Args, query.Id)
+	}
+	if query.Name != nil {
+		Where += " name LIKE ?"
+		Args = append(Args, "%"+ *query.Name + "%")
+	}
+	if query.ParentId != nil {
+		Where += " parent_id=?"
+		Args = append(Args, query.ParentId)
+	}
+	if query.Status != nil {
+		Where += " status=?"
+		Args = append(Args, query.Status)
+	}
+	if query.UpdatedAtFrom != nil && query.UpdatedAtTo != nil {
+		Where += " updated_at BETWEEN ? AND ?"
+		Args = append(Args, query.UpdatedAtFrom, query.UpdatedAtTo)
+	}
+
+	return &connect.QueryMySQL{
+		Where:   &Where,
 		Args:    Args,
 	}, nil
 }

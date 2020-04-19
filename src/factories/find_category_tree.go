@@ -5,7 +5,7 @@ import (
 )
 
 func FindAllCategoryTree() ([]*model.CategoryTree, error) {
-	allCategory, err := FindAllCategory()
+	allCategory, err := FindCategory(nil)
 
 	if err != nil {
 		return nil, err

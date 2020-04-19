@@ -6,5 +6,5 @@ import (
 )
 
 func GetListUser() ([]*model.User, error) {
-	return factories.GetListUser()
+	return factories.FindUser()
 }

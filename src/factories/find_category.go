@@ -23,10 +23,11 @@ func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
 
 	stmt, err := connection.Prepare(queryString)
 
-	defer stmt.Close()
 	if err != nil {
 		return nil, err
 	}
+
+	defer stmt.Close()
 
 	rows, err := stmt.Query(args...)
 

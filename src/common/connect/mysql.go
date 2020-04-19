@@ -57,33 +57,34 @@ type QueryMySQL struct {
 
 func (query *QueryMySQL) ToQueryString() string {
 	queryString := ""
-	if query.Where != nil {
-		queryString += "WHERE" + *query.Where
+	if query.Where != nil && *query.Where != "" {
+		queryString += "WHERE" + *query.Where + "\n"
 	}
 
-	if query.Join != nil {
-		queryString += "\nJOIN" + *query.Join
+	if query.Join != nil && *query.Join != "" {
+		queryString += "JOIN" + *query.Join + "\n"
 	}
 
-	if query.GroupBy != nil {
-		queryString += "\nGROUP BY" + *query.GroupBy
+	if query.GroupBy != nil && *query.GroupBy != "" {
+		queryString += "GROUP BY" + *query.GroupBy + "\n"
 	}
 
-	if query.Having != nil {
-		queryString += "\nHAVING" + *query.Having
+	if query.Having != nil && *query.Having != "" {
+		queryString += "HAVING" + *query.Having + "\n"
 	}
 
-	if query.OrderBy != nil {
-		queryString += "\nORDER BY" + *query.OrderBy
+	if query.OrderBy != nil && *query.OrderBy != "" {
+		queryString += "ORDER BY" + *query.OrderBy + "\n"
 	}
 
-	if query.Limit != nil {
-		queryString += "\nLIMIT" + *query.Limit
+	if query.Limit != nil && *query.Limit != "" {
+		queryString += "LIMIT"
+		if query.Offset != nil && *query.Offset != "" {
+			queryString += *query.Offset + ","
+		}
+		queryString += *query.Limit + "\n"
 	}
 
-	if query.Offset != nil {
-		queryString += "\nOFFSET" + *query.Offset
-	}
 
 	return queryString
 }

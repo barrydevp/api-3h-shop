@@ -5,13 +5,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindAllCategory() ([]*model.Category, error) {
+func FindUser() ([]*model.User, error){
 	connection := connections.Mysql.GetConnection()
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, name, parent_id, status, updated_at
-		FROM categories
+			_id, email, name, password, address, status, created_at, updated_at
+		FROM users
 	`)
 
 	defer stmt.Close()
@@ -26,25 +26,23 @@ func FindAllCategory() ([]*model.Category, error) {
 	}
 
 	defer rows.Close()
-	var allCategory []*model.Category
+	var listUser []*model.User
 
 	for rows.Next() {
-		_category := model.Category{}
+		_user := model.User{}
 
-		err = rows.Scan(&_category.RawId, &_category.RawName, &_category.RawParentId, &_category.RawStatus, &_category.RawUpdatedAt)
+		err = rows.Scan(&_user.Id, &_user.Email, &_user.Name, &_user.Password, &_user.Address, &_user.Status, &_user.CreatedAt, &_user.UpdatedAt)
 
 		if err != nil {
 			return nil, err
 		}
 
-		_category.FillResponse()
-
-		allCategory = append(allCategory, &_category)
+		listUser = append(listUser, &_user)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return allCategory, nil
+	return listUser, nil
 }

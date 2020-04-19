@@ -1,11 +1,13 @@
 package factories
 
 import (
+	"database/sql"
+	"errors"
 	"github.com/barrydev/api-3h-shop/src/connections"
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindCategoryById(categoryId *int64) (*model.Category, error) {
+func FindCategoryById(categoryId int64) (*model.Category, error) {
 	connection := connections.Mysql.GetConnection()
 
 	stmt, err := connection.Prepare(`
@@ -25,11 +27,16 @@ func FindCategoryById(categoryId *int64) (*model.Category, error) {
 
 	err = stmt.QueryRow(categoryId).Scan(&_category.RawId, &_category.RawName, &_category.RawParentId, &_category.RawStatus, &_category.RawUpdatedAt)
 
-	if err != nil {
+	switch err {
+	case sql.ErrNoRows:
+		return nil, errors.New("category does not exists")
+	case nil:
+		_category.FillResponse()
+
+		return &_category, nil
+	default:
 		return nil, err
 	}
 
-	_category.FillResponse()
-
-	return &_category, nil
+	return nil, nil
 }

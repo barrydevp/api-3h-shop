@@ -19,14 +19,24 @@ func GetListCategory(c *gin.Context) (interface{}, error) {
 	return actions.GetListCategory(&query)
 }
 
-func GetOneCategory(c *gin.Context) (interface{}, error) {
+func GetCategoryById(c *gin.Context) (interface{}, error) {
 	categoryId, err := strconv.ParseInt(c.Param("categoryId"), 10, 64)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return actions.GetOneCategory(&categoryId)
+	return actions.GetCategoryById(categoryId)
+}
+
+func GetCategoryTreeById(c *gin.Context) (interface{}, error) {
+	categoryId, err := strconv.ParseInt(c.Param("categoryId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.GetCategoryTreeById(categoryId)
 }
 
 func InsertCategory(c *gin.Context) (interface{}, error) {

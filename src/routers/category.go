@@ -17,7 +17,13 @@ func BindCategory(router *gin.RouterGroup) {
 	router.GET("/:categoryId", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
-		handle.Try(controllers.GetOneCategory).Then(response.SendSuccess).Catch(response.SendError)
+		handle.Try(controllers.GetCategoryById).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.GET("/:categoryId/tree", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetCategoryTreeById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
 	router.POST("/", func(c *gin.Context) {
