@@ -1,6 +1,7 @@
 module github.com/barrydev/api-3h-shop
 
-go 1.14
+go 1.13
+// +heroku goVersion 1.13
 
 require (
 	github.com/gin-contrib/cors v1.3.1
