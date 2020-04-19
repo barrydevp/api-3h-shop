@@ -16,36 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `orders`
+-- Table structure for table `shippings`
 --
 
-DROP TABLE IF EXISTS `orders`;
+DROP TABLE IF EXISTS `shippings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `orders` (
+CREATE TABLE `shippings` (
   `_id` int(11) NOT NULL AUTO_INCREMENT,
-  `session` varchar(100) NOT NULL,
-  `address` varchar(50) NOT NULL,
-  `payment_status` varchar(20) NOT NULL DEFAULT 'pending',
-  `fulfillment_status` varchar(20) NOT NULL DEFAULT 'pending',
+  `carrier` varchar(50) NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'created',
+  `order_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `paid_at` datetime DEFAULT NULL,
-  `fulfilled_at` datetime DEFAULT NULL,
-  `cancelled_at` datetime DEFAULT NULL,
-  `note` varchar(500) DEFAULT NULL,
+  `delivered_at` datetime DEFAULT NULL,
   PRIMARY KEY (`_id`),
-  UNIQUE KEY `idx_order_session` (`session`)
+  KEY `fk_shipping_order` (`order_id`),
+  CONSTRAINT `fk_shipping_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orders`
+-- Dumping data for table `shippings`
 --
 
-LOCK TABLES `orders` WRITE;
-/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+LOCK TABLES `shippings` WRITE;
+/*!40000 ALTER TABLE `shippings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shippings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-17 15:39:47
+-- Dump completed on 2020-04-19 17:03:17

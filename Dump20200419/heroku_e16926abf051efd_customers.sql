@@ -16,33 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `product_items`
+-- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `product_items`;
+DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_items` (
+CREATE TABLE `customers` (
   `_id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
-  `stock` int(11) NOT NULL,
-  `in_price` float NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `expired_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`_id`),
-  KEY `fk_product_item_product` (`product_id`),
-  CONSTRAINT `fk_product_item_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `phone` varchar(45) NOT NULL,
+  `address` varchar(45) NOT NULL,
+  `full_name` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product_items`
+-- Dumping data for table `customers`
 --
 
-LOCK TABLES `product_items` WRITE;
-/*!40000 ALTER TABLE `product_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_items` ENABLE KEYS */;
+LOCK TABLES `customers` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-17 15:39:14
+-- Dump completed on 2020-04-19 17:03:03

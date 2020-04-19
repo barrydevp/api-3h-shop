@@ -16,34 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `products`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
+CREATE TABLE `products` (
   `_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `password` varchar(20) NOT NULL,
-  `address` varchar(100) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'active',
+  `out_price` float NOT NULL,
+  `discount` float DEFAULT '0',
+  `image_path` varchar(100) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+  KEY `fk_product_category` (`category_id`),
+  CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `products`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'barrydevp@gmail.com','barrydevp','123456','Lao Cai','active','2020-04-11 15:48:16','2020-04-11 15:48:16');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-17 15:39:27
+-- Dump completed on 2020-04-19 17:03:37

@@ -16,35 +16,38 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `products`
+-- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `products` (
+CREATE TABLE `orders` (
   `_id` int(11) NOT NULL AUTO_INCREMENT,
-  `category_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `out_price` float NOT NULL,
-  `discount` float DEFAULT '0',
-  `image_path` varchar(100) DEFAULT NULL,
-  `description` varchar(500) DEFAULT NULL,
+  `session` varchar(100) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `payment_status` varchar(20) NOT NULL DEFAULT 'pending',
+  `fulfillment_status` varchar(20) NOT NULL DEFAULT 'pending',
   `created_at` datetime NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `paid_at` datetime DEFAULT NULL,
+  `fulfilled_at` datetime DEFAULT NULL,
+  `cancelled_at` datetime DEFAULT NULL,
+  `note` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`_id`),
-  KEY `fk_product_category` (`category_id`),
-  CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE KEY `idx_order_session` (`session`),
+  KEY `fk_order_customer_idx` (`customer_id`),
+  CONSTRAINT `fk_order_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `products`
+-- Dumping data for table `orders`
 --
 
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-17 15:39:20
+-- Dump completed on 2020-04-19 17:03:43

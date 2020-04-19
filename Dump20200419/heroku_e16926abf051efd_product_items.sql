@@ -16,33 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `shippings`
+-- Table structure for table `product_items`
 --
 
-DROP TABLE IF EXISTS `shippings`;
+DROP TABLE IF EXISTS `product_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `shippings` (
+CREATE TABLE `product_items` (
   `_id` int(11) NOT NULL AUTO_INCREMENT,
-  `carrier` varchar(50) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'created',
-  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `in_price` float NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `delivered_at` datetime DEFAULT NULL,
+  `expired_at` datetime DEFAULT NULL,
   PRIMARY KEY (`_id`),
-  KEY `fk_shipping_order` (`order_id`),
-  CONSTRAINT `fk_shipping_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`_id`)
+  KEY `fk_product_item_product` (`product_id`),
+  CONSTRAINT `fk_product_item_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `shippings`
+-- Dumping data for table `product_items`
 --
 
-LOCK TABLES `shippings` WRITE;
-/*!40000 ALTER TABLE `shippings` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shippings` ENABLE KEYS */;
+LOCK TABLES `product_items` WRITE;
+/*!40000 ALTER TABLE `product_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product_items` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-17 15:39:34
+-- Dump completed on 2020-04-19 17:03:30
