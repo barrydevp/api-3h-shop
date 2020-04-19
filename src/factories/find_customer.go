@@ -6,13 +6,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
+func FindCustomer(query *connect.QueryMySQL) ([]*model.Customer, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			_id, name, parent_id, status, updated_at
-		FROM categories
+			_id, phone, address, full_name, email, updated_at
+		FROM customers
 	`
 	var args []interface{}
 
@@ -36,31 +36,32 @@ func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
 	}
 
 	defer rows.Close()
-	var listCategory []*model.Category
+	var listCustomer []*model.Customer
 
 	for rows.Next() {
-		_category := model.Category{}
+		_customer := model.Customer{}
 
 		err = rows.Scan(
-			&_category.RawId,
-			&_category.RawName,
-			&_category.RawParentId,
-			&_category.RawStatus,
-			&_category.RawUpdatedAt,
+			&_customer.RawId,
+			&_customer.RawPhone,
+			&_customer.RawAddress,
+			&_customer.RawFullName,
+			&_customer.RawEmail,
+			&_customer.RawUpdatedAt,
 		)
 
 		if err != nil {
 			return nil, err
 		}
 
-		_category.FillResponse()
+		_customer.FillResponse()
 
-		listCategory = append(listCategory, &_category)
+		listCustomer = append(listCustomer, &_customer)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listCategory, nil
+	return listCustomer, nil
 }

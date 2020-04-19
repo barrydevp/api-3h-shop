@@ -31,4 +31,10 @@ func BindCategory(router *gin.RouterGroup) {
 
 		handle.Try(controllers.InsertCategory).Then(response.SendSuccess).Catch(response.SendError)
 	})
+
+	router.POST("/:categoryId/update", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.UpdateCategory).Then(response.SendSuccess).Catch(response.SendError)
+	})
 }

@@ -3,13 +3,8 @@ package model
 import (
 	"database/sql"
 	"errors"
-	"github.com/barrydev/api-3h-shop/src/common/connect"
+	"github.com/barrydev/api-3h-shop/src/constants"
 	"github.com/barrydev/api-3h-shop/src/helpers"
-)
-
-const (
-	DEFAULT_PAGE  = 1
-	DEFAULT_LIMIT = 20
 )
 
 type Category struct {
@@ -41,8 +36,8 @@ func (cat *Category) FillResponse() {
 }
 
 type BodyCategory struct {
-	Name     *string `json:"name" binding:"required"`
-	ParentId *int64  `json:"parent_id" binding:"omitempty,gt=0"`
+	Name     *string `json:"name" binding:"omitempty"`
+	ParentId *int64  `json:"parent_id" binding:"omitempty,gte=0"`
 }
 
 func (body *BodyCategory) Normalize() error {
@@ -57,96 +52,23 @@ func (body *BodyCategory) Normalize() error {
 type QueryCategory struct {
 	Id            *string `form:"id" binding:"omitempty,gt=0"`
 	Name          *string `form:"name" binding:"omitempty"`
-	ParentId      *int64  `form:"parent_id" binding:"omitempty,gt=0"`
+	ParentId      *int64  `form:"parent_id" binding:"omitempty,gte=0"`
 	Status        *string `form:"status" binding:""`
-	UpdatedAtFrom *string `form:"updated_at_from" binding:"required_with=UpdatedAtTo"`
-	UpdatedAtTo   *string `form:"updated_at_to" binding:"required_with=UpdatedAtFrom"`
+	UpdatedAtFrom *string `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
+	UpdatedAtTo   *string `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
 	Page          *int    `form:"page" binding:"omitempty,gte=0"`
 	Limit         *int    `form:"limit" binding:"omitempty,gte=0"`
 	Offset        *int
 }
 
-func (query *QueryCategory) GetQueryList() (*connect.QueryMySQL, error) {
-	Where := ""
-	var Args []interface{}
-
-	if query.Id != nil {
-		Where += " _id=?"
-		Args = append(Args, query.Id)
-	}
-	if query.Name != nil {
-		Where += " name LIKE ?"
-		Args = append(Args, "%"+ *query.Name + "%")
-	}
-	if query.ParentId != nil {
-		Where += " parent_id=?"
-		Args = append(Args, query.ParentId)
-	}
-	if query.Status != nil {
-		Where += " status=?"
-		Args = append(Args, query.Status)
-	}
-	if query.UpdatedAtFrom != nil && query.UpdatedAtTo != nil {
-		Where += " updated_at BETWEEN ? AND ?"
-		Args = append(Args, query.UpdatedAtFrom, query.UpdatedAtTo)
-	}
-
-	OrderBy := " _id ASC"
-
-	query.ParsePaging()
-	Offset := " ?"
-	Args = append(Args, query.Offset)
-	Limit := " ?"
-	Args = append(Args, query.Limit)
-
-	return &connect.QueryMySQL{
-		Where:   &Where,
-		OrderBy: &OrderBy,
-		Limit:   &Limit,
-		Offset:  &Offset,
-		Args:    Args,
-	}, nil
-}
-
-func (query *QueryCategory) GetQueryCountList() (*connect.QueryMySQL, error) {
-	Where := ""
-	var Args []interface{}
-
-	if query.Id != nil {
-		Where += " _id=?"
-		Args = append(Args, query.Id)
-	}
-	if query.Name != nil {
-		Where += " name LIKE ?"
-		Args = append(Args, "%"+ *query.Name + "%")
-	}
-	if query.ParentId != nil {
-		Where += " parent_id=?"
-		Args = append(Args, query.ParentId)
-	}
-	if query.Status != nil {
-		Where += " status=?"
-		Args = append(Args, query.Status)
-	}
-	if query.UpdatedAtFrom != nil && query.UpdatedAtTo != nil {
-		Where += " updated_at BETWEEN ? AND ?"
-		Args = append(Args, query.UpdatedAtFrom, query.UpdatedAtTo)
-	}
-
-	return &connect.QueryMySQL{
-		Where:   &Where,
-		Args:    Args,
-	}, nil
-}
-
 func (query *QueryCategory) ParsePaging() {
 	if query.Page == nil {
-		page := DEFAULT_PAGE
+		page := constants.DEFAULT_PAGE
 		query.Page = &page
 	}
 
 	if query.Limit == nil {
-		limit := DEFAULT_LIMIT
+		limit := constants.DEFAULT_LIMIT
 		query.Limit = &limit
 	}
 

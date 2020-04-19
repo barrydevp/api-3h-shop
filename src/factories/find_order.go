@@ -6,13 +6,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
+func FindOrder(query *connect.QueryMySQL) ([]*model.Order, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			_id, name, parent_id, status, updated_at
-		FROM categories
+			_id, session, customer_id, payment_status, fulfillment_status, created_at, updated_at, paid_at, fulfilled_at, cancelled_at, note
+		FROM orders
 	`
 	var args []interface{}
 
@@ -36,31 +36,37 @@ func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
 	}
 
 	defer rows.Close()
-	var listCategory []*model.Category
+	var listOrder []*model.Order
 
 	for rows.Next() {
-		_category := model.Category{}
+		_order := model.Order{}
 
 		err = rows.Scan(
-			&_category.RawId,
-			&_category.RawName,
-			&_category.RawParentId,
-			&_category.RawStatus,
-			&_category.RawUpdatedAt,
+			&_order.RawId,
+			&_order.RawSession,
+			&_order.RawCustomerId,
+			&_order.RawPaymentStatus,
+			&_order.RawFulfillmentStatus,
+			&_order.RawCreatedAt,
+			&_order.RawUpdatedAt,
+			&_order.RawPaidAt,
+			&_order.RawFulfilledAt,
+			&_order.RawCancelledAt,
+			&_order.RawNote,
 		)
 
 		if err != nil {
 			return nil, err
 		}
 
-		_category.FillResponse()
+		_order.FillResponse()
 
-		listCategory = append(listCategory, &_category)
+		listOrder = append(listOrder, &_order)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listCategory, nil
+	return listOrder, nil
 }

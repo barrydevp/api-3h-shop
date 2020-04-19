@@ -6,13 +6,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/connections"
 )
 
-func CountCategory(query *connect.QueryMySQL) (int, error) {
+func CountCustomer(query *connect.QueryMySQL) (int, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
 			COUNT(*)
-		FROM categories
+		FROM customers
 	`
 	var args []interface{}
 

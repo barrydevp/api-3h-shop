@@ -30,4 +30,20 @@ func BindRouterWithApp(router *gin.Engine) {
 
 		handle.Try(controllers.GetAllCategoryTree).Then(response.SendSuccess).Catch(response.SendError)
 	})
+
+	/**
+	 * Customers.
+	 */
+
+	customerRouter := router.Group("/customers")
+
+	routers.BindCustomer(customerRouter)
+
+	/**
+	 * Orders.
+	 */
+
+	orderRouter := router.Group("/orders")
+
+	routers.BindOrder(orderRouter)
 }

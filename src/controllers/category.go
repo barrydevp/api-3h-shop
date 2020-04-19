@@ -51,6 +51,24 @@ func InsertCategory(c *gin.Context) (interface{}, error) {
 	return actions.InsertCategory(&insertCategory)
 }
 
+func UpdateCategory(c *gin.Context) (interface{}, error) {
+	categoryId, err := strconv.ParseInt(c.Param("categoryId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body model.BodyCategory
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.UpdateCategory(categoryId, &body)
+}
+
 func GetAllCategoryTree(c *gin.Context) (interface{}, error) {
 	return actions.GetAllCategoryTree()
 }

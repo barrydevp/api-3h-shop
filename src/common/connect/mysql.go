@@ -45,46 +45,6 @@ func (db *MysqlDB) Close() {
 }
 
 type QueryMySQL struct {
-	Where   *string
-	Join    *string
-	GroupBy *string
-	Having  *string
-	OrderBy *string
-	Limit   *string
-	Offset  *string
-	Args    []interface{}
-}
-
-func (query *QueryMySQL) ToQueryString() string {
-	queryString := ""
-	if query.Where != nil && *query.Where != "" {
-		queryString += "WHERE" + *query.Where + "\n"
-	}
-
-	if query.Join != nil && *query.Join != "" {
-		queryString += "JOIN" + *query.Join + "\n"
-	}
-
-	if query.GroupBy != nil && *query.GroupBy != "" {
-		queryString += "GROUP BY" + *query.GroupBy + "\n"
-	}
-
-	if query.Having != nil && *query.Having != "" {
-		queryString += "HAVING" + *query.Having + "\n"
-	}
-
-	if query.OrderBy != nil && *query.OrderBy != "" {
-		queryString += "ORDER BY" + *query.OrderBy + "\n"
-	}
-
-	if query.Limit != nil && *query.Limit != "" {
-		queryString += "LIMIT"
-		if query.Offset != nil && *query.Offset != "" {
-			queryString += *query.Offset + ","
-		}
-		queryString += *query.Limit + "\n"
-	}
-
-
-	return queryString
+	QueryString string
+	Args        []interface{}
 }
