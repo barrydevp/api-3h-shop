@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/barrydev/api-3h-shop/src/actions"
+	"github.com/barrydev/api-3h-shop/src/constants"
 	"github.com/barrydev/api-3h-shop/src/model"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -24,7 +25,7 @@ func GetCurrentOrder(c *gin.Context) (interface{}, error) {
 		return nil, err
 	}
 
-	c.SetCookie("3h.session", *current.Session, 1000*30*24*3600, "/", "localhost", false, true)
+	c.SetCookie("3h.session", *current.Session, 1000*30*24*3600, "/", constants.PRIMARY_HOST, false, true)
 
 	return res, nil
 }

@@ -2,7 +2,6 @@ package parser
 
 import (
 	"errors"
-	"log"
 	"strings"
 )
 
@@ -14,7 +13,7 @@ func ParseMysqlUrl(url string) (string, error) {
 		return "", errors.New(ErrorMsg)
 	}
 
-	protocol := protocolAndRest[0]
+	_ = protocolAndRest[0]
 	hostAndRest := strings.Split(protocolAndRest[1], "/")
 
 	if len(hostAndRest) != 2 {
@@ -37,9 +36,6 @@ func ParseMysqlUrl(url string) (string, error) {
 	dbName := dbNameAndAttributes[0]
 
 	returnUrl := userCredentials + "@tcp(" + address + ")/" + dbName
-
-	log.Println("protocol: ", protocol)
-	log.Println("returnUrl: ", returnUrl)
 
 	return returnUrl, nil
 }

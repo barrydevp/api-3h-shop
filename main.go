@@ -3,25 +3,17 @@ package main
 import (
 	"github.com/barrydev/api-3h-shop/src"
 	"github.com/barrydev/api-3h-shop/src/connections"
+	"github.com/barrydev/api-3h-shop/src/constants"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
-	const DefaultPort string = "4000"
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		log.Print("$PORT must be set => Using default port: ", DefaultPort)
-		port = DefaultPort
-	}
-
 	app := src.App{}
 	ginEngine := app.NewGinEngine()
 
 	s := &http.Server{
-		Addr:           ":" + port,
+		Addr:           ":" + constants.PORT,
 		Handler:        ginEngine,
 	}
 
@@ -33,5 +25,5 @@ func main() {
 
 	s.ListenAndServe()
 
-	log.Println("Listening on port ", port, "...")
+	log.Println("Listening on port ", constants.PORT, "...")
 }
