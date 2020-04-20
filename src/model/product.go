@@ -99,3 +99,7 @@ func (query *QueryProduct) ParsePaging() {
 
 	query.Offset = &skip
 }
+
+type SliceBodyProduct struct {
+	Data []*BodyProduct `json:"data"`
+}

@@ -43,3 +43,6 @@ coverage
 .nyc_output
 
 .idea/
+
+Dump20200420/
+create.sql

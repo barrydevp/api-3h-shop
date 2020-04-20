@@ -14,7 +14,7 @@ func InsertProduct(query *connect.QueryMySQL) (*int64, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
-		INSERT products 
+		INSERT INTO products 
 	` + query.QueryString
 	args := query.Args
 

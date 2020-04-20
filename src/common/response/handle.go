@@ -72,7 +72,7 @@ func (handle *Handle) Catch(callback ErrorFunc) *Handle {
 		return handle
 	}
 
-	if handle.data != nil {
+	if handle.error == nil {
 		return handle
 	}
 
