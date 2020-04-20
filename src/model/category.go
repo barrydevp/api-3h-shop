@@ -50,10 +50,10 @@ func (body *BodyCategory) Normalize() error {
 }
 
 type QueryCategory struct {
-	Id            *string `form:"id" binding:"omitempty,gt=0"`
+	Id            *string `form:"id" binding:"omitempty"`
 	Name          *string `form:"name" binding:"omitempty"`
-	ParentId      *int64  `form:"parent_id" binding:"omitempty,gte=0"`
-	Status        *string `form:"status" binding:""`
+	ParentId      *int64  `form:"parent_id" binding:"omitempty"`
+	Status        *string `form:"status" binding:"omitempty"`
 	UpdatedAtFrom *string `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
 	UpdatedAtTo   *string `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
 	Page          *int    `form:"page" binding:"omitempty,gte=0"`

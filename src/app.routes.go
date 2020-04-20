@@ -46,4 +46,12 @@ func BindRouterWithApp(router *gin.Engine) {
 	orderRouter := router.Group("/orders")
 
 	routers.BindOrder(orderRouter)
+
+	/**
+	 * Products.
+	 */
+
+	productRouter := router.Group("/products")
+
+	routers.BindProduct(productRouter)
 }

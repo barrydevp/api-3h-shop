@@ -30,7 +30,7 @@ func InsertOrder(body *model.BodyOrder) (*model.Order, error) {
 	}
 
 	if len(set) > 0 {
-		queryString += "SET" + strings.Join(set, ",") + "\n"
+		queryString += "SET" + strings.Join(set, ",") + ", created_at=NOW() \n"
 	} else {
 		return nil, errors.New("invalid body")
 	}

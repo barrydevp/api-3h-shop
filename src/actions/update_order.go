@@ -34,6 +34,11 @@ func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
 		args = append(args, body.PaidAt)
 	}
 
+	if body.Note != nil {
+		set = append(set, " note=?")
+		args = append(args, body.Note)
+	}
+
 	if body.FulfilledAt != nil {
 		set = append(set, " fulfilled_at=?")
 		args = append(args, body.FulfilledAt)

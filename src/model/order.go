@@ -7,17 +7,17 @@ import (
 
 type Order struct {
 	/** Response Field */
-	Id                *int64  `json:"_id"`
-	Session           *string `json:"session"`
-	CustomerId        *int64  `json:"customer_id"`
-	PaymentStatus     *string `json:"payment_status"`
-	FulfillmentStatus *string `json:"fulfillment_status"`
-	Note              *string `json:"note"`
-	CreatedAt         *string `json:"created_at"`
-	UpdatedAt         *string `json:"updated_at"`
-	PaidAt            *string `json:"paid_at"`
-	FulfilledAt       *string `json:"fulfill_at"`
-	CancelledAt       *string `json:"cancelled_at"`
+	Id                *int64  `json:"_id,omitempty"`
+	Session           *string `json:"session,omitempty"`
+	CustomerId        *int64  `json:"customer_id,omitempty"`
+	PaymentStatus     *string `json:"payment_status,omitempty"`
+	FulfillmentStatus *string `json:"fulfillment_status,omitempty"`
+	Note              *string `json:"note,omitempty"`
+	CreatedAt         *string `json:"created_at,omitempty"`
+	UpdatedAt         *string `json:"updated_at,omitempty"`
+	PaidAt            *string `json:"paid_at,omitempty"`
+	FulfilledAt       *string `json:"fulfill_at,omitempty"`
+	CancelledAt       *string `json:"cancelled_at,omitempty"`
 	/** Database Field */
 	RawId                *int64          `json:"-"`
 	RawSession           *string         `json:"-"`
@@ -32,36 +32,36 @@ type Order struct {
 	RawCancelledAt       *sql.NullString `json:"-"`
 }
 
-func (cus *Order) FillResponse() {
-	cus.Id = cus.RawId
-	cus.Session = cus.RawSession
-	if cus.RawCustomerId != nil {
-		if cus.RawCustomerId.Valid {
-			cus.CustomerId = &cus.RawCustomerId.Int64
+func (order *Order) FillResponse() {
+	order.Id = order.RawId
+	order.Session = order.RawSession
+	if order.RawCustomerId != nil {
+		if order.RawCustomerId.Valid {
+			order.CustomerId = &order.RawCustomerId.Int64
 		}
 	}
-	cus.PaymentStatus = cus.RawPaymentStatus
-	cus.FulfillmentStatus = cus.RawFulfillmentStatus
-	if cus.RawNote != nil {
-		if cus.RawNote.Valid {
-			cus.Note = &cus.RawNote.String
+	order.PaymentStatus = order.RawPaymentStatus
+	order.FulfillmentStatus = order.RawFulfillmentStatus
+	if order.RawNote != nil {
+		if order.RawNote.Valid {
+			order.Note = &order.RawNote.String
 		}
 	}
-	cus.CreatedAt = cus.RawCreatedAt
-	cus.UpdatedAt = cus.RawUpdatedAt
-	if cus.RawFulfilledAt != nil {
-		if cus.RawFulfilledAt.Valid {
-			cus.FulfilledAt = &cus.RawFulfilledAt.String
+	order.CreatedAt = order.RawCreatedAt
+	order.UpdatedAt = order.RawUpdatedAt
+	if order.RawFulfilledAt != nil {
+		if order.RawFulfilledAt.Valid {
+			order.FulfilledAt = &order.RawFulfilledAt.String
 		}
 	}
-	if cus.RawPaidAt != nil {
-		if cus.RawPaidAt.Valid {
-			cus.PaidAt = &cus.RawPaidAt.String
+	if order.RawPaidAt != nil {
+		if order.RawPaidAt.Valid {
+			order.PaidAt = &order.RawPaidAt.String
 		}
 	}
-	if cus.RawCancelledAt != nil {
-		if cus.RawCancelledAt.Valid {
-			cus.CancelledAt = &cus.RawCancelledAt.String
+	if order.RawCancelledAt != nil {
+		if order.RawCancelledAt.Valid {
+			order.CancelledAt = &order.RawCancelledAt.String
 		}
 	}
 }
@@ -73,8 +73,6 @@ type BodyOrder struct {
 	PaymentStatus     *string `json:"payment_status" binding:"omitempty"`
 	FulfillmentStatus *string `json:"fulfillment_status" binding:"omitempty"`
 	Note              *string `json:"note" binding:"omitempty"`
-	CreatedAt         *string `json:"created_at" binding:"omitempty,datetime"`
-	UpdatedAt         *string `json:"updated_at" binding:"omitempty"`
 	PaidAt            *string `json:"paid_at" binding:"omitempty"`
 	FulfilledAt       *string `json:"fulfill_at" binding:"omitempty"`
 	CancelledAt       *string `json:"cancelled_at" binding:"omitempty"`
@@ -90,12 +88,12 @@ func (body *BodyOrder) Normalize() error {
 }
 
 type QueryOrder struct {
-	Id                *string `form:"id" binding:"omitempty,gt=0"`
-	Session           *string `json:"session" binding:"omitempty"`
-	CustomerId        *int64  `json:"customer_id" binding:"omitempty,gt=0"`
-	PaymentStatus     *string `json:"payment_status" binding:"omitempty"`
-	FulfillmentStatus *string `json:"fulfillment_status" binding:"omitempty"`
-	Note              *string `json:"note" binding:"omitempty"`
+	Id                *string `form:"id" binding:"omitempty"`
+	Session           *string `form:"session" binding:"omitempty"`
+	CustomerId        *int64  `form:"customer_id" binding:"omitempty"`
+	PaymentStatus     *string `form:"payment_status" binding:"omitempty"`
+	FulfillmentStatus *string `form:"fulfillment_status" binding:"omitempty"`
+	Note              *string `form:"note" binding:"omitempty"`
 	CreatedAtFrom     *string `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
 	CreatedAtTo       *string `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
 	UpdatedAtFrom     *string `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`

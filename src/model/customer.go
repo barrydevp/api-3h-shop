@@ -7,12 +7,12 @@ import (
 
 type Customer struct {
 	/** Response Field */
-	Id        *int64  `json:"_id"`
-	Phone     *string `json:"phone"`
-	Address   *string `json:"address"`
+	Id        *int64  `json:"_id,omitempty"`
+	Phone     *string `json:"phone,omitempty"`
+	Address   *string `json:"address,omitempty"`
 	FullName  *string `json:"full_name,omitempty"`
 	Email     *string `json:"email,omitempty"`
-	UpdatedAt *string `json:"updated_at"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
 	/** Database Field */
 	RawId        *int64          `json:"-"`
 	RawPhone     *string         `json:"-"`
@@ -58,7 +58,7 @@ func (body *BodyCustomer) Normalize() error {
 }
 
 type QueryCustomer struct {
-	Id            *string `form:"id" binding:"omitempty,gt=0"`
+	Id            *string `form:"id" binding:"omitempty"`
 	Phone         *string `form:"phone" binding:"omitempty"`
 	Address       *string `form:"address" binding:"omitempty"`
 	FullName      *string `form:"full_name" binding:"omitempty"`
