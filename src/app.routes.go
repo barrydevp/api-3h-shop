@@ -70,4 +70,13 @@ func BindRouterWithApp(router *gin.Engine) {
 	orderItemRouter := router.Group("/order-items")
 
 	routers.BindOrderItem(orderItemRouter)
+
+
+	/**
+	 * Shippings.
+	 */
+
+	shippingRouter := router.Group("/shippings")
+
+	routers.BindShipping(shippingRouter)
 }

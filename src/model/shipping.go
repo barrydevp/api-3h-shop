@@ -7,13 +7,13 @@ import (
 
 type Shipping struct {
 	/** Response Field */
-	Id          *int64  `json:"_id"`
-	Carrier     *string `json:"carrier"`
-	Status      *string `json:"status"`
-	OrderId     *int64  `json:"order_id"`
-	CreatedAt   *string `json:"created_at"`
-	UpdatedAt   *string `json:"updated_at"`
-	DeliveredAt *string `json:"delivered_at"`
+	Id          *int64  `json:"_id,omitempty"`
+	Carrier     *string `json:"carrier,omitempty"`
+	Status      *string `json:"status,omitempty"`
+	OrderId     *int64  `json:"order_id,omitempty"`
+	CreatedAt   *string `json:"created_at,omitempty"`
+	UpdatedAt   *string `json:"updated_at,omitempty"`
+	DeliveredAt *string `json:"delivered_at,omitempty"`
 	/** Database Field */
 	RawId          *int64          `json:"-"`
 	RawCarrier     *string         `json:"-"`
