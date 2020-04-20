@@ -49,13 +49,23 @@ func UpdateCategory(categoryId int64, body *model.BodyCategory) (*model.Category
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + "\n"
 	} else {
-		return factories.FindCategoryById(categoryId)
+		category, err := factories.FindCategoryById(categoryId)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if category == nil {
+			return nil, errors.New("category does not exists")
+		}
+
+		return category, nil
 	}
 
 	queryString += "WHERE _id=?"
 	args = append(args, categoryId)
 
-	cat, err := factories.UpdateCategory(&connect.QueryMySQL{
+	rowEffected, err := factories.UpdateCategory(&connect.QueryMySQL{
 		QueryString: queryString,
 		Args:        args,
 	})
@@ -64,8 +74,8 @@ func UpdateCategory(categoryId int64, body *model.BodyCategory) (*model.Category
 		return nil, err
 	}
 
-	if cat == nil {
-		return nil, errors.New("category does not exists")
+	if rowEffected == nil {
+		return nil, errors.New("update error")
 	}
 
 	return GetCategoryById(categoryId)

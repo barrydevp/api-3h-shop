@@ -20,6 +20,18 @@ func BindProduct(router *gin.RouterGroup) {
 		handle.Try(controllers.GetProductById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
+	router.GET("/:productId/items", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetProductItemByProductId).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:productId/items", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.InsertProductItemByProductId).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	router.POST("/", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 

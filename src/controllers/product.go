@@ -29,6 +29,34 @@ func GetProductById(c *gin.Context) (interface{}, error) {
 	return actions.GetProductById(productId)
 }
 
+func GetProductItemByProductId(c *gin.Context) (interface{}, error) {
+	productId, err := strconv.ParseInt(c.Param("productId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.GetProductItemByProductId(productId)
+}
+
+func InsertProductItemByProductId(c *gin.Context) (interface{}, error) {
+	productId, err := strconv.ParseInt(c.Param("productId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var insertProductItem model.BodyProductItem
+
+	err = c.ShouldBindJSON(&insertProductItem)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.InsertProductItemByProductId(productId, &insertProductItem)
+}
+
 func InsertProduct(c *gin.Context) (interface{}, error) {
 	var insertProduct model.BodyProduct
 

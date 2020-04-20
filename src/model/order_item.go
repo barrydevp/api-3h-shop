@@ -1,6 +1,9 @@
 package model
 
-import "github.com/barrydev/api-3h-shop/src/constants"
+import (
+	"database/sql"
+	"github.com/barrydev/api-3h-shop/src/constants"
+)
 
 type OrderItem struct {
 	/** Response Field */
@@ -13,20 +16,24 @@ type OrderItem struct {
 	CreatedAt     *string `json:"created_at,omitempty"`
 	UpdatedAt     *string `json:"updated_at,omitempty"`
 	/** Database Field */
-	RawId            *int64  `json:"-"`
-	RawProductId     *int64  `json:"-"`
-	RawProductItemId *int64  `json:"-"`
-	RawOrderId       *int64  `json:"-"`
-	RawQuantity      *int64  `json:"-"`
-	RawStatus        *string `json:"-"`
-	RawCreatedAt     *string `json:"-"`
-	RawUpdatedAt     *string `json:"-"`
+	RawId            *int64         `json:"-"`
+	RawProductId     *int64         `json:"-"`
+	RawProductItemId *sql.NullInt64 `json:"-"`
+	RawOrderId       *int64         `json:"-"`
+	RawQuantity      *int64         `json:"-"`
+	RawStatus        *string        `json:"-"`
+	RawCreatedAt     *string        `json:"-"`
+	RawUpdatedAt     *string        `json:"-"`
 }
 
 func (orderItem *OrderItem) FillResponse() {
 	orderItem.Id = orderItem.RawId
 	orderItem.ProductId = orderItem.RawProductId
-	orderItem.ProductItemId = orderItem.RawProductItemId
+	if orderItem.RawProductItemId != nil {
+		if orderItem.RawProductItemId.Valid {
+			orderItem.ProductItemId = &orderItem.RawProductItemId.Int64
+		}
+	}
 	orderItem.OrderId = orderItem.RawOrderId
 	orderItem.CreatedAt = orderItem.RawCreatedAt
 	orderItem.UpdatedAt = orderItem.RawUpdatedAt

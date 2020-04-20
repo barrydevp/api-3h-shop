@@ -73,7 +73,7 @@ func UpdateProduct(productId int64, body *model.BodyProduct) (*model.Product, er
 	queryString += "WHERE _id=?"
 	args = append(args, productId)
 
-	cat, err := factories.UpdateProduct(&connect.QueryMySQL{
+	rowEffected, err := factories.UpdateProduct(&connect.QueryMySQL{
 		QueryString: queryString,
 		Args:        args,
 	})
@@ -82,8 +82,8 @@ func UpdateProduct(productId int64, body *model.BodyProduct) (*model.Product, er
 		return nil, err
 	}
 
-	if cat == nil {
-		return nil, errors.New("product does not exists")
+	if rowEffected == nil {
+		return nil, errors.New("update error")
 	}
 
 	return GetProductById(productId)

@@ -6,13 +6,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindProduct(query *connect.QueryMySQL) ([]*model.Product, error) {
+func FindOrderItem(query *connect.QueryMySQL) ([]*model.OrderItem, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			_id, category_id, name, out_price, discount, image_path, description, created_at, updated_at 
-		FROM products
+			_id, product_id, product_item_id, order_id, quantity, status, created_at, updated_at
+		FROM order_items
 	`
 	var args []interface{}
 
@@ -36,35 +36,34 @@ func FindProduct(query *connect.QueryMySQL) ([]*model.Product, error) {
 	}
 
 	defer rows.Close()
-	var listProduct []*model.Product
+	var listOrderItem []*model.OrderItem
 
 	for rows.Next() {
-		_product := model.Product{}
+		_orderItem := model.OrderItem{}
 
 		err = rows.Scan(
-			&_product.RawId,
-			&_product.RawCategoryId,
-			&_product.RawName,
-			&_product.RawOutPrice,
-			&_product.RawDiscount,
-			&_product.RawImagePath,
-			&_product.RawDescription,
-			&_product.RawCreatedAt,
-			&_product.RawUpdatedAt,
+			&_orderItem.RawId,
+			&_orderItem.RawProductId,
+			&_orderItem.RawProductItemId,
+			&_orderItem.RawOrderId,
+			&_orderItem.RawQuantity,
+			&_orderItem.RawStatus,
+			&_orderItem.RawCreatedAt,
+			&_orderItem.RawUpdatedAt,
 		)
 
 		if err != nil {
 			return nil, err
 		}
 
-		_product.FillResponse()
+		_orderItem.FillResponse()
 
-		listProduct = append(listProduct, &_product)
+		listOrderItem = append(listOrderItem, &_orderItem)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listProduct, nil
+	return listOrderItem, nil
 }

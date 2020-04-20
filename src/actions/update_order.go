@@ -68,7 +68,7 @@ func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
 	queryString += "WHERE _id=?"
 	args = append(args, orderId)
 
-	cat, err := factories.UpdateOrder(&connect.QueryMySQL{
+	rowEffected, err := factories.UpdateOrder(&connect.QueryMySQL{
 		QueryString: queryString,
 		Args:        args,
 	})
@@ -77,8 +77,8 @@ func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
 		return nil, err
 	}
 
-	if cat == nil {
-		return nil, errors.New("order does not exists")
+	if rowEffected == nil {
+		return nil, errors.New("update error")
 	}
 
 	return GetOrderById(orderId)

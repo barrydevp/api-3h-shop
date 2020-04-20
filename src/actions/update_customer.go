@@ -53,7 +53,7 @@ func UpdateCustomer(customerId int64, body *model.BodyCustomer) (*model.Customer
 	queryString += "WHERE _id=?"
 	args = append(args, customerId)
 
-	cat, err := factories.UpdateCustomer(&connect.QueryMySQL{
+	rowEffected, err := factories.UpdateCustomer(&connect.QueryMySQL{
 		QueryString: queryString,
 		Args:        args,
 	})
@@ -62,8 +62,8 @@ func UpdateCustomer(customerId int64, body *model.BodyCustomer) (*model.Customer
 		return nil, err
 	}
 
-	if cat == nil {
-		return nil, errors.New("customer does not exists")
+	if rowEffected == nil {
+		return nil, errors.New("update error")
 	}
 
 	return GetCustomerById(customerId)
