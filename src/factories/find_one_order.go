@@ -1,17 +1,18 @@
 package factories
 
 import (
+	"database/sql"
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindOrder(query *connect.QueryMySQL) ([]*model.Order, error) {
+func FindOneOrder(query *connect.QueryMySQL) (*model.Order, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			_id, session, customer_id, payment_status, fulfillment_status, created_at, updated_at, paid_at, fulfilled_at, cancelled_at, note
+			_id, session, customer_id, status, payment_status, fulfillment_status, created_at, updated_at, paid_at, fulfilled_at, cancelled_at, note
 		FROM orders
 	`
 	var args []interface{}
@@ -29,44 +30,33 @@ func FindOrder(query *connect.QueryMySQL) ([]*model.Order, error) {
 
 	defer stmt.Close()
 
-	rows, err := stmt.Query(args...)
+	var _order model.Order
 
-	if err != nil {
-		return nil, err
-	}
+	err = stmt.QueryRow(args...).Scan(
+		&_order.RawId,
+		&_order.RawSession,
+		&_order.RawCustomerId,
+		&_order.RawStatus,
+		&_order.RawPaymentStatus,
+		&_order.RawFulfillmentStatus,
+		&_order.RawCreatedAt,
+		&_order.RawUpdatedAt,
+		&_order.RawPaidAt,
+		&_order.RawFulfilledAt,
+		&_order.RawCancelledAt,
+		&_order.RawNote,
+	)
 
-	defer rows.Close()
-	var listOrder []*model.Order
-
-	for rows.Next() {
-		_order := model.Order{}
-
-		err = rows.Scan(
-			&_order.RawId,
-			&_order.RawSession,
-			&_order.RawCustomerId,
-			&_order.RawPaymentStatus,
-			&_order.RawFulfillmentStatus,
-			&_order.RawCreatedAt,
-			&_order.RawUpdatedAt,
-			&_order.RawPaidAt,
-			&_order.RawFulfilledAt,
-			&_order.RawCancelledAt,
-			&_order.RawNote,
-		)
-
-		if err != nil {
-			return nil, err
-		}
-
+	switch err {
+	case sql.ErrNoRows:
+		return nil, nil
+	case nil:
 		_order.FillResponse()
 
-		listOrder = append(listOrder, &_order)
-	}
-
-	if err = rows.Err(); err != nil {
+		return &_order, nil
+	default:
 		return nil, err
 	}
 
-	return listOrder, nil
+	return nil, nil
 }

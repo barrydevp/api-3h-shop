@@ -79,4 +79,13 @@ func BindRouterWithApp(router *gin.Engine) {
 	shippingRouter := router.Group("/shippings")
 
 	routers.BindShipping(shippingRouter)
+
+
+	/**
+	 * Current.
+	 */
+
+	currentRouter := router.Group("/current")
+
+	routers.BindCurrent(currentRouter)
 }

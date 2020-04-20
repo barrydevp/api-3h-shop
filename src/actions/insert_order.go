@@ -5,7 +5,6 @@ import (
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"github.com/google/uuid"
 	"strings"
 )
 
@@ -15,14 +14,12 @@ func InsertOrder(body *model.BodyOrder) (*model.Order, error) {
 
 	var set []string
 
-	_uuid, err := uuid.NewRandom()
-
-	if err != nil {
-		return nil, err
+	if body.Session != nil {
+		set = append(set, " session=?")
+		args = append(args, body.Session)
+	} else {
+		return nil, errors.New("order's session is required")
 	}
-
-	set = append(set, " session=?")
-	args = append(args, _uuid.String())
 
 	if body.Note != nil {
 		set = append(set, " note=?")

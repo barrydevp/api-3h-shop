@@ -11,7 +11,7 @@ func FindOrderById(orderId int64) (*model.Order, error) {
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, session, customer_id, payment_status, fulfillment_status, created_at, updated_at, paid_at, fulfilled_at, cancelled_at, note
+			_id, session, customer_id, status, payment_status, fulfillment_status, created_at, updated_at, paid_at, fulfilled_at, cancelled_at, note
 		FROM orders
 		WHERE _id=?
 	`)
@@ -29,6 +29,7 @@ func FindOrderById(orderId int64) (*model.Order, error) {
 		&_order.RawSession,
 		&_order.RawCustomerId,
 		&_order.RawPaymentStatus,
+		&_order.RawStatus,
 		&_order.RawFulfillmentStatus,
 		&_order.RawCreatedAt,
 		&_order.RawUpdatedAt,

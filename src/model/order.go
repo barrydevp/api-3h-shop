@@ -10,6 +10,7 @@ type Order struct {
 	Id                *int64  `json:"_id,omitempty"`
 	Session           *string `json:"session,omitempty"`
 	CustomerId        *int64  `json:"customer_id,omitempty"`
+	Status            *string `json:"status,omitempty"`
 	PaymentStatus     *string `json:"payment_status,omitempty"`
 	FulfillmentStatus *string `json:"fulfillment_status,omitempty"`
 	Note              *string `json:"note,omitempty"`
@@ -22,6 +23,7 @@ type Order struct {
 	RawId                *int64          `json:"-"`
 	RawSession           *string         `json:"-"`
 	RawCustomerId        *sql.NullInt64  `json:"-"`
+	RawStatus            *string         `json:"-"`
 	RawPaymentStatus     *string         `json:"-"`
 	RawFulfillmentStatus *string         `json:"-"`
 	RawNote              *sql.NullString `json:"-"`
@@ -40,6 +42,7 @@ func (order *Order) FillResponse() {
 			order.CustomerId = &order.RawCustomerId.Int64
 		}
 	}
+	order.Status = order.RawStatus
 	order.PaymentStatus = order.RawPaymentStatus
 	order.FulfillmentStatus = order.RawFulfillmentStatus
 	if order.RawNote != nil {
@@ -70,6 +73,7 @@ type BodyOrder struct {
 	Id                *int64  `json:"_id" binding:"omitempty,gt=0"`
 	Session           *string `json:"session" binding:"omitempty"`
 	CustomerId        *int64  `json:"customer_id" binding:"omitempty,gt=0"`
+	Status            *string `json:"status" binding:"omitempty"`
 	PaymentStatus     *string `json:"payment_status" binding:"omitempty"`
 	FulfillmentStatus *string `json:"fulfillment_status" binding:"omitempty"`
 	Note              *string `json:"note" binding:"omitempty"`
@@ -91,6 +95,7 @@ type QueryOrder struct {
 	Id                *string `form:"id" binding:"omitempty"`
 	Session           *string `form:"session" binding:"omitempty"`
 	CustomerId        *int64  `form:"customer_id" binding:"omitempty"`
+	Status            *string `json:"status" binding:"omitempty"`
 	PaymentStatus     *string `form:"payment_status" binding:"omitempty"`
 	FulfillmentStatus *string `form:"fulfillment_status" binding:"omitempty"`
 	Note              *string `form:"note" binding:"omitempty"`

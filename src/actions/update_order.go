@@ -19,6 +19,11 @@ func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
 		args = append(args, body.CustomerId)
 	}
 
+	if body.Status != nil {
+		set = append(set, " status=?")
+		args = append(args, body.Status)
+	}
+
 	if body.PaymentStatus != nil {
 		set = append(set, " payment_status=?")
 		args = append(args, body.PaymentStatus)
