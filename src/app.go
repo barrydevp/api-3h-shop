@@ -11,9 +11,9 @@ type App struct {
 
 func (app *App) NewGinEngine() *gin.Engine {
 	_app := gin.Default()
-
-	_app.Use(cors.Default())
-	BindRouterWithApp(_app)
+	_cors := cors.Default()
+	_app.Use(_cors)
+	BindRouterWithApp(_app, []gin.HandlerFunc{_cors})
 
 	app.instance = _app
 

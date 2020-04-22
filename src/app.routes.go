@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func BindRouterWithApp(router *gin.Engine) {
+func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "API 3H-Shop.")
 	})
@@ -35,7 +35,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * Customers.
 	 */
 
-	customerRouter := router.Group("/customers")
+	customerRouter := router.Group("/customers", handlerFuncs...)
 
 	routers.BindCustomer(customerRouter)
 
@@ -43,7 +43,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * Products.
 	 */
 
-	productRouter := router.Group("/products")
+	productRouter := router.Group("/products", handlerFuncs...)
 
 	routers.BindProduct(productRouter)
 
@@ -57,7 +57,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * ProductItems.
 	 */
 
-	productItemRouter := router.Group("/product-items")
+	productItemRouter := router.Group("/product-items", handlerFuncs...)
 
 	routers.BindProductItem(productItemRouter)
 
@@ -65,7 +65,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * Orders.
 	 */
 
-	orderRouter := router.Group("/orders")
+	orderRouter := router.Group("/orders", handlerFuncs...)
 
 	routers.BindOrder(orderRouter)
 
@@ -73,7 +73,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * OrderItems.
 	 */
 
-	orderItemRouter := router.Group("/order-items")
+	orderItemRouter := router.Group("/order-items", handlerFuncs...)
 
 	routers.BindOrderItem(orderItemRouter)
 
@@ -82,7 +82,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * Shippings.
 	 */
 
-	shippingRouter := router.Group("/shippings")
+	shippingRouter := router.Group("/shippings", handlerFuncs...)
 
 	routers.BindShipping(shippingRouter)
 
@@ -91,7 +91,7 @@ func BindRouterWithApp(router *gin.Engine) {
 	 * Current.
 	 */
 
-	currentRouter := router.Group("/current")
+	currentRouter := router.Group("/current", handlerFuncs...)
 
 	routers.BindCurrent(currentRouter)
 }
