@@ -20,6 +20,11 @@ func UpdateCategory(categoryId int64, body *model.BodyCategory) (*model.Category
 		args = append(args, body.Name)
 	}
 
+	if body.ImagePath != nil {
+		set = append(set, " image_path=?")
+		args = append(args, body.ImagePath)
+	}
+
 	if body.ParentId != nil {
 		if *body.ParentId == 0 {
 			set = append(set, " parent_id=?")

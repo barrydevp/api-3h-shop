@@ -11,7 +11,7 @@ func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
 
 	queryString := `
 		SELECT
-			_id, name, parent_id, status, updated_at
+			_id, name, image_path, parent_id, status, updated_at
 		FROM categories
 	`
 	var args []interface{}
@@ -44,6 +44,7 @@ func FindCategory(query *connect.QueryMySQL) ([]*model.Category, error) {
 		err = rows.Scan(
 			&_category.RawId,
 			&_category.RawName,
+			&_category.ImagePath,
 			&_category.RawParentId,
 			&_category.RawStatus,
 			&_category.RawUpdatedAt,

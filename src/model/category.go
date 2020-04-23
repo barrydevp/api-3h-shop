@@ -11,15 +11,17 @@ type Category struct {
 	/** Response Field */
 	Id        *int64  `json:"_id"`
 	Name      *string `json:"name"`
+	ImagePath *string `json:"image_path"`
 	ParentId  *int64  `json:"parent_id,omitempty"`
 	Status    *string `json:"status"`
 	UpdatedAt *string `json:"updated_at"`
 	/** Database Field */
-	RawId        *int64         `json:"-"`
-	RawName      *string        `json:"-"`
-	RawParentId  *sql.NullInt64 `json:"-"`
-	RawStatus    *string        `json:"-"`
-	RawUpdatedAt *string        `json:"-"`
+	RawId        *int64          `json:"-"`
+	RawName      *string         `json:"-"`
+	RawImagePath *sql.NullString `json:"-"`
+	RawParentId  *sql.NullInt64  `json:"-"`
+	RawStatus    *string         `json:"-"`
+	RawUpdatedAt *string         `json:"-"`
 }
 
 func (cat *Category) FillResponse() {
@@ -32,12 +34,18 @@ func (cat *Category) FillResponse() {
 	}
 	cat.Status = cat.RawStatus
 	cat.UpdatedAt = cat.RawUpdatedAt
+	if cat.RawImagePath != nil {
+		if cat.RawImagePath.Valid {
+			cat.ImagePath = &cat.RawImagePath.String
+		}
+	}
 
 }
 
 type BodyCategory struct {
-	Name     *string `json:"name" binding:"omitempty"`
-	ParentId *int64  `json:"parent_id" binding:"omitempty,gte=0"`
+	Name      *string `json:"name" binding:"omitempty"`
+	ImagePath *string `json:"image_path" binding:"omitempty"`
+	ParentId  *int64  `json:"parent_id" binding:"omitempty,gte=0"`
 }
 
 func (body *BodyCategory) Normalize() error {

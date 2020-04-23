@@ -11,7 +11,7 @@ func FindCategoryById(categoryId int64) (*model.Category, error) {
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, name, parent_id, status, updated_at
+			_id, name, image_path, parent_id, status, updated_at
 		FROM categories
 		WHERE _id=?
 	`)
@@ -24,7 +24,7 @@ func FindCategoryById(categoryId int64) (*model.Category, error) {
 
 	var _category model.Category
 
-	err = stmt.QueryRow(categoryId).Scan(&_category.RawId, &_category.RawName, &_category.RawParentId, &_category.RawStatus, &_category.RawUpdatedAt)
+	err = stmt.QueryRow(categoryId).Scan(&_category.RawId, &_category.RawName, &_category.RawImagePath, &_category.RawParentId, &_category.RawStatus, &_category.RawUpdatedAt)
 
 	switch err {
 	case sql.ErrNoRows:

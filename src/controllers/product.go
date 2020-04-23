@@ -83,6 +83,20 @@ func BulkInsertProduct(c *gin.Context) (interface{}, error) {
 	//return nil, nil
 }
 
+func BulkUpdateProduct(c *gin.Context) (interface{}, error) {
+	var sliceBody model.SliceBodyProduct
+
+	err := c.ShouldBindJSON(&sliceBody)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.BulkUpdateProduct(&sliceBody)
+
+	//return nil, nil
+}
+
 func UpdateProduct(c *gin.Context) (interface{}, error) {
 	productId, err := strconv.ParseInt(c.Param("productId"), 10, 64)
 
