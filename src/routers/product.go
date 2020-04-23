@@ -8,7 +8,7 @@ import (
 
 func BindProduct(router *gin.RouterGroup) {
 
-	router.GET("/", func(c *gin.Context) {
+	router.GET("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.GetListProduct).Then(response.SendSuccess).Catch(response.SendError)
@@ -32,7 +32,7 @@ func BindProduct(router *gin.RouterGroup) {
 		handle.Try(controllers.InsertProductItemByProductId).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("/", func(c *gin.Context) {
+	router.POST("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.InsertProduct).Then(response.SendSuccess).Catch(response.SendError)

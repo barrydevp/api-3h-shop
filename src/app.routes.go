@@ -35,7 +35,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * Customers.
 	 */
 
-	customerRouter := router.Group("/customers", handlerFuncs...)
+	customerRouter := router.Group("/customers")
 
 	routers.BindCustomer(customerRouter)
 
@@ -43,7 +43,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * Products.
 	 */
 
-	productRouter := router.Group("/products", handlerFuncs...)
+	productRouter := router.Group("/products")
 
 	routers.BindProduct(productRouter)
 
@@ -57,7 +57,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * ProductItems.
 	 */
 
-	productItemRouter := router.Group("/product-items", handlerFuncs...)
+	productItemRouter := router.Group("/product-items")
 
 	routers.BindProductItem(productItemRouter)
 
@@ -65,7 +65,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * Orders.
 	 */
 
-	orderRouter := router.Group("/orders", handlerFuncs...)
+	orderRouter := router.Group("/orders")
 
 	routers.BindOrder(orderRouter)
 
@@ -73,7 +73,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * OrderItems.
 	 */
 
-	orderItemRouter := router.Group("/order-items", handlerFuncs...)
+	orderItemRouter := router.Group("/order-items")
 
 	routers.BindOrderItem(orderItemRouter)
 
@@ -82,7 +82,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * Shippings.
 	 */
 
-	shippingRouter := router.Group("/shippings", handlerFuncs...)
+	shippingRouter := router.Group("/shippings")
 
 	routers.BindShipping(shippingRouter)
 
@@ -91,7 +91,7 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * Current.
 	 */
 
-	currentRouter := router.Group("/current", handlerFuncs...)
+	currentRouter := router.Group("/current")
 
 	routers.BindCurrent(currentRouter)
 }

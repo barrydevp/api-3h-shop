@@ -8,7 +8,7 @@ import (
 
 func BindCategory(router *gin.RouterGroup) {
 
-	router.GET("/", func(c *gin.Context) {
+	router.GET("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.GetListCategory).Then(response.SendSuccess).Catch(response.SendError)
@@ -26,7 +26,7 @@ func BindCategory(router *gin.RouterGroup) {
 		handle.Try(controllers.GetCategoryTreeById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("/", func(c *gin.Context) {
+	router.POST("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.InsertCategory).Then(response.SendSuccess).Catch(response.SendError)
