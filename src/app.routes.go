@@ -21,20 +21,6 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	 * Categories.
 	 */
 
-	/**
-	 * Products.
-	 */
-
-	productRouter := router.Group("/products")
-
-	routers.BindProduct(productRouter)
-
-	//router.POST("/bulk/product", func(c *gin.Context) {
-	//	handle := response.Handle{Context: c}
-	//
-	//	handle.Try(controllers.BulkInsertProduct).Then(response.SendSuccess).Catch(response.SendError)
-	//})
-
 	categoryRouter := router.Group("/categories")
 
 	routers.BindCategory(categoryRouter)
@@ -52,6 +38,20 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	customerRouter := router.Group("/customers")
 
 	routers.BindCustomer(customerRouter)
+
+	/**
+	 * Products.
+	 */
+
+	productRouter := router.Group("/products")
+
+	routers.BindProduct(productRouter)
+
+	//router.POST("/bulk/product", func(c *gin.Context) {
+	//	handle := response.Handle{Context: c}
+	//
+	//	handle.Try(controllers.BulkInsertProduct).Then(response.SendSuccess).Catch(response.SendError)
+	//})
 
 	/**
 	 * ProductItems.

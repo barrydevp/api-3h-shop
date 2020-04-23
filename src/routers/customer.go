@@ -8,7 +8,7 @@ import (
 
 func BindCustomer(router *gin.RouterGroup) {
 
-	router.GET("/", func(c *gin.Context) {
+	router.GET("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.GetListCustomer).Then(response.SendSuccess).Catch(response.SendError)
@@ -20,7 +20,7 @@ func BindCustomer(router *gin.RouterGroup) {
 		handle.Try(controllers.GetCustomerById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("/", func(c *gin.Context) {
+	router.POST("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.InsertCustomer).Then(response.SendSuccess).Catch(response.SendError)

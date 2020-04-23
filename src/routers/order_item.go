@@ -8,7 +8,7 @@ import (
 
 func BindOrderItem(router *gin.RouterGroup) {
 
-	router.GET("/", func(c *gin.Context) {
+	router.GET("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.GetListOrderItem).Then(response.SendSuccess).Catch(response.SendError)
@@ -20,7 +20,7 @@ func BindOrderItem(router *gin.RouterGroup) {
 		handle.Try(controllers.GetOrderItemById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("/", func(c *gin.Context) {
+	router.POST("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.InsertOrderItem).Then(response.SendSuccess).Catch(response.SendError)
