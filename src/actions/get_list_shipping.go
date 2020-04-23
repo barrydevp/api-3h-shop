@@ -28,7 +28,7 @@ func GetListShipping(queryShipping *model.QueryShipping) (*response.DataList, er
 	}
 	if queryShipping.Carrier != nil {
 		where = append(where, " carrier LIKE ?")
-		args = append(args, "%"+*queryShipping.Id+"%")
+		args = append(args, "%"+*queryShipping.Carrier+"%")
 	}
 	if queryShipping.Status != nil {
 		where = append(where, " status=?")

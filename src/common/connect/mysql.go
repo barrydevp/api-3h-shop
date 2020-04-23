@@ -6,6 +6,7 @@ import (
 	"github.com/barrydev/api-3h-shop/src/common/utils/parser"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"time"
 )
 
 type MysqlDB struct {
@@ -22,6 +23,12 @@ func (db *MysqlDB) New(url string) *MysqlDB {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	if err = connection.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
+	connection.SetConnMaxLifetime(3595 * time.Second)
 
 	db.connection = connection
 

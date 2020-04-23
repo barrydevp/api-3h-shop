@@ -68,20 +68,21 @@ func (body *BodyProduct) Normalize() error {
 }
 
 type QueryProduct struct {
-	Id            *string  `form:"id" binding:"omitempty"`
-	CategoryId    *int64   `form:"category_id" binding:"omitempty"`
-	Name          *string  `form:"name" binding:"omitempty"`
-	OutPrice      *float64 `form:"out_price" binding:"omitempty"`
-	Discount      *float64 `form:"discount" binding:"omitempty"`
-	ImagePath     *string  `form:"image_path" binding:"omitempty"`
-	Description   *string  `form:"description" binding:"omitempty"`
-	CreatedAtFrom *string  `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
-	CreatedAtTo   *string  `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
-	UpdatedAtFrom *string  `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
-	UpdatedAtTo   *string  `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
-	Page          *int     `form:"page" binding:"omitempty,gte=0"`
-	Limit         *int     `form:"limit" binding:"omitempty,gte=0"`
-	Offset        *int
+	Id               *int64   `form:"id" binding:"omitempty"`
+	CategoryId       *int64   `form:"category_id" binding:"omitempty"`
+	CategoryParentId *int64   `form:"category_parent_id" binding:"omitempty"`
+	Name             *string  `form:"name" binding:"omitempty"`
+	OutPrice         *float64 `form:"out_price" binding:"omitempty"`
+	Discount         *float64 `form:"discount" binding:"omitempty"`
+	ImagePath        *string  `form:"image_path" binding:"omitempty"`
+	Description      *string  `form:"description" binding:"omitempty"`
+	CreatedAtFrom    *string  `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
+	CreatedAtTo      *string  `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
+	UpdatedAtFrom    *string  `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
+	UpdatedAtTo      *string  `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
+	Page             *int     `form:"page" binding:"omitempty,gte=0"`
+	Limit            *int     `form:"limit" binding:"omitempty,gte=0"`
+	Offset           *int
 }
 
 func (query *QueryProduct) ParsePaging() {

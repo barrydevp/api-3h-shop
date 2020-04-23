@@ -58,7 +58,7 @@ func (body *BodyCustomer) Normalize() error {
 }
 
 type QueryCustomer struct {
-	Id            *string `form:"id" binding:"omitempty"`
+	Id            *int64  `form:"id" binding:"omitempty"`
 	Phone         *string `form:"phone" binding:"omitempty"`
 	Address       *string `form:"address" binding:"omitempty"`
 	FullName      *string `form:"full_name" binding:"omitempty"`

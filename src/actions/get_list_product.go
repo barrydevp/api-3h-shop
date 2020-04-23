@@ -26,6 +26,12 @@ func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error
 			args = append(args, queryProduct.CategoryId)
 		}
 	}
+	if queryProduct.CategoryParentId != nil {
+		if *queryProduct.CategoryParentId != 0 {
+			where = append(where, " EXISTS (SELECT _id FROM categories WHERE categories.parent_id=? AND categories._id=products.category_id")
+			args = append(args, queryProduct.CategoryParentId)
+		}
+	}
 	if queryProduct.Name != nil {
 		where = append(where, " name LIKE ?")
 		args = append(args, "%"+*queryProduct.Name+"%")

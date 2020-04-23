@@ -56,7 +56,7 @@ func (body *BodyShipping) Normalize() error {
 }
 
 type QueryShipping struct {
-	Id              *string `form:"id" binding:"omitempty"`
+	Id              *int64  `form:"id" binding:"omitempty"`
 	Carrier         *string `json:"carrier" binding:"omitempty"`
 	Status          *string `json:"status" binding:"omitempty"`
 	OrderId         *int64  `json:"order_id" binding:"omitempty"`

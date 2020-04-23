@@ -49,7 +49,7 @@ func (body *BodyProductItem) Normalize() error {
 }
 
 type QueryProductItem struct {
-	Id            *string  `form:"id" binding:"omitempty"`
+	Id            *int64   `form:"id" binding:"omitempty"`
 	ProductId     *int64   `json:"product_id" binding:"omitempty"`
 	Stock         *int64   `json:"stock" binding:"omitempty"`
 	InPrice       *float64 `json:"in_price" binding:"omitempty"`

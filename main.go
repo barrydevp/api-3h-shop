@@ -23,7 +23,8 @@ func main() {
 		s.Close()
 	}()
 
+	log.Println("Listening on port ", constants.PORT, "...")
+
 	s.ListenAndServe()
 
-	log.Println("Listening on port ", constants.PORT, "...")
 }

@@ -52,7 +52,7 @@ func (body *BodyUser) Normalize() error {
 }
 
 type QueryUser struct {
-	Id            *string `form:"id" binding:"omitempty"`
+	Id            *int64  `form:"id" binding:"omitempty"`
 	Email         *string `json:"email" binding::omitempty`
 	Name          *string `json:"name" binding::omitempty`
 	Password      *string `json:"password" binding::omitempty`

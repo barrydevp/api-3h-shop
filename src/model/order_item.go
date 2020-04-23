@@ -58,7 +58,7 @@ func (body *BodyOrderItem) Normalize() error {
 }
 
 type QueryOrderItem struct {
-	Id            *string `form:"id" binding:"omitempty"`
+	Id            *int64  `form:"id" binding:"omitempty"`
 	ProductId     *int64  `form:"product_id" binding:"omitempty"`
 	ProductItemId *int64  `form:"product_item_id" binding:"omitempty"`
 	OrderId       *int64  `form:"order_id" binding:"omitempty"`
