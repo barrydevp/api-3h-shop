@@ -29,6 +29,7 @@ func (db *MysqlDB) New(url string) *MysqlDB {
 	}
 
 	connection.SetConnMaxLifetime(3595 * time.Second)
+	connection.SetMaxIdleConns(0)
 
 	db.connection = connection
 

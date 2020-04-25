@@ -11,7 +11,7 @@ import (
 
 func BulkInsertProduct(sliceBody *model.SliceBodyProduct) (interface{}, error) {
 
-	for index, body := range sliceBody.Data{
+	for index, body := range sliceBody.Data {
 		log.Println("Start on index - ", index)
 		queryString := ""
 
@@ -25,14 +25,16 @@ func BulkInsertProduct(sliceBody *model.SliceBodyProduct) (interface{}, error) {
 			category, err := factories.FindCategoryById(*body.CategoryId)
 
 			if err != nil {
-				return nil, err
+				if !sliceBody.Strict {
+					return nil, err
+				}
+			} else {
+				if category == nil {
+					return nil, errors.New("category does not exists")
+				}
+				set = append(set, " category_id=?")
+				args = append(args, body.CategoryId)
 			}
-
-			if category == nil {
-				return nil, errors.New("category does not exists")
-			}
-			set = append(set, " category_id=?")
-			args = append(args, body.CategoryId)
 		}
 
 		if body.Name == nil {
@@ -75,17 +77,18 @@ func BulkInsertProduct(sliceBody *model.SliceBodyProduct) (interface{}, error) {
 			Args:        args,
 		})
 
-		if err != nil {
-			return nil, err
+		if !sliceBody.Strict{
+			if err != nil {
+				return nil, err
+			}
+
+			if id == nil {
+				return nil, errors.New("insert error")
+			}
 		}
 
-		if id == nil {
-			return nil, errors.New("insert error")
-		}
-
-		log.Println("Completed on index - ", index)
+		log.Println("Completed on index - ", index, " - status:", err == nil)
 	}
-
 
 	return nil, nil
 }

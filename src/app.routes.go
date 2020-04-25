@@ -47,17 +47,17 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 
 	routers.BindProduct(productRouter)
 
-	//router.POST("/bulk/product", func(c *gin.Context) {
-	//	handle := response.Handle{Context: c}
-	//
-	//	handle.Try(controllers.BulkInsertProduct).Then(response.SendSuccess).Catch(response.SendError)
-	//})
+	router.POST("/bulk/product/insert", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
 
-	//router.POST("/bulk/product", func(c *gin.Context) {
-	//	handle := response.Handle{Context: c}
-	//
-	//	handle.Try(controllers.BulkUpdateProduct).Then(response.SendSuccess).Catch(response.SendError)
-	//})
+		handle.Try(controllers.BulkInsertProduct).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/bulk/product/update", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.BulkUpdateProduct).Then(response.SendSuccess).Catch(response.SendError)
+	})
 
 	/**
 	 * ProductItems.

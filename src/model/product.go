@@ -102,5 +102,6 @@ func (query *QueryProduct) ParsePaging() {
 }
 
 type SliceBodyProduct struct {
-	Data []*BodyProduct `json:"data"`
+	Data   []*BodyProduct `json:"data"`
+	Strict bool           `json:"strict"`
 }
