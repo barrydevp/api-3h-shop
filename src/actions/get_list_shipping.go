@@ -19,7 +19,7 @@ func GetListShipping(queryShipping *model.QueryShipping) (*response.DataList, er
 		args = append(args, queryShipping.Id)
 	}
 	if queryShipping.OrderId != nil {
-		if *queryShipping.OrderId == 0 {
+		if *queryShipping.OrderId == -1 {
 			where = append(where, " order_id IS NULL")
 		} else {
 			where = append(where, " order_id=?")

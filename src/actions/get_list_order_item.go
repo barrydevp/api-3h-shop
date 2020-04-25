@@ -19,27 +19,33 @@ func GetListOrderItem(queryOrderItem *model.QueryOrderItem) (*response.DataList,
 		args = append(args, queryOrderItem.Id)
 	}
 	if queryOrderItem.OrderId != nil {
-		if *queryOrderItem.OrderId == 0 {
-			where = append(where, " order_id IS NULL")
-		} else {
-			where = append(where, " order_id=?")
-			args = append(args, queryOrderItem.OrderId)
+		if *queryOrderItem.OrderId != 0 {
+			if *queryOrderItem.OrderId == -1 {
+				where = append(where, " order_id IS NULL")
+			} else {
+				where = append(where, " order_id=?")
+				args = append(args, queryOrderItem.OrderId)
+			}
 		}
 	}
 	if queryOrderItem.ProductId != nil {
-		if *queryOrderItem.ProductId == 0 {
-			where = append(where, " product_id IS NULL")
-		} else {
-			where = append(where, " product_id=?")
-			args = append(args, queryOrderItem.ProductId)
+		if *queryOrderItem.ProductId != 0 {
+			if *queryOrderItem.ProductId == -1 {
+				where = append(where, " product_id IS NULL")
+			} else {
+				where = append(where, " product_id=?")
+				args = append(args, queryOrderItem.ProductId)
+			}
 		}
 	}
 	if queryOrderItem.ProductItemId != nil {
-		if *queryOrderItem.ProductItemId == 0 {
-			where = append(where, " product_item_id IS NULL")
-		} else {
-			where = append(where, " product_item_id=?")
-			args = append(args, queryOrderItem.ProductItemId)
+		if *queryOrderItem.ProductItemId != 0 {
+			if *queryOrderItem.ProductItemId == -1 {
+				where = append(where, " product_item_id IS NULL")
+			} else {
+				where = append(where, " product_item_id=?")
+				args = append(args, queryOrderItem.ProductItemId)
+			}
 		}
 	}
 	if queryOrderItem.CreatedAtFrom != nil && queryOrderItem.CreatedAtTo != nil {

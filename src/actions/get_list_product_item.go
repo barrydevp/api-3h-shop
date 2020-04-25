@@ -19,11 +19,13 @@ func GetListProductItem(queryProductItem *model.QueryProductItem) (*response.Dat
 		args = append(args, queryProductItem.Id)
 	}
 	if queryProductItem.ProductId != nil {
-		if *queryProductItem.ProductId == 0 {
-			where = append(where, " product_id IS NULL")
-		} else {
-			where = append(where, " product_id=?")
-			args = append(args, queryProductItem.ProductId)
+		if *queryProductItem.ProductId != 0 {
+			if *queryProductItem.ProductId == -1 {
+				where = append(where, " product_id IS NULL")
+			} else {
+				where = append(where, " product_id=?")
+				args = append(args, queryProductItem.ProductId)
+			}
 		}
 	}
 	if queryProductItem.CreatedAtFrom != nil && queryProductItem.CreatedAtTo != nil {

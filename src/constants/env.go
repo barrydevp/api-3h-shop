@@ -24,8 +24,8 @@ func init() {
 	WEB_HOST = os.Getenv("WEB_HOST")
 
 	if WEB_HOST == "" {
-		WEB_HOST = "localhost:3000"
-		log.Print("$WEB_HOST must be set => Using default WEB_HOST: ", "localhost:3000")
+		WEB_HOST = "http://localhost:3000"
+		log.Print("$WEB_HOST must be set => Using default WEB_HOST: ", "http://localhost:3000")
 	}
 
 	PORT = os.Getenv("PORT")

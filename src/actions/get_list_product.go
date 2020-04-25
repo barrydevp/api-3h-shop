@@ -19,11 +19,13 @@ func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error
 		args = append(args, queryProduct.Id)
 	}
 	if queryProduct.CategoryId != nil {
-		if *queryProduct.CategoryId == 0 {
-			where = append(where, " category_id IS NULL")
-		} else {
-			where = append(where, " category_id=?")
-			args = append(args, queryProduct.CategoryId)
+		if *queryProduct.CategoryId != 0 {
+			if *queryProduct.CategoryId == -1 {
+				where = append(where, " category_id IS NULL")
+			} else {
+				where = append(where, " category_id=?")
+				args = append(args, queryProduct.CategoryId)
+			}
 		}
 	}
 	if queryProduct.CategoryParentId != nil {

@@ -23,7 +23,7 @@ func InsertCategory(body *model.BodyCategory) (*model.Category, error) {
 	}
 
 	if body.ParentId != nil {
-		if *body.ParentId == 0 {
+		if *body.ParentId == -1 {
 			set = append(set, " parent_id=?")
 			args = append(args, &sql.NullInt64{
 				Int64: *body.ParentId,

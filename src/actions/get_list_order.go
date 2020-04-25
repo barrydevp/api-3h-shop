@@ -19,11 +19,13 @@ func GetListOrder(queryOrder *model.QueryOrder) (*response.DataList, error) {
 		args = append(args, queryOrder.Id)
 	}
 	if queryOrder.CustomerId != nil {
-		if *queryOrder.CustomerId == 0 {
-			where = append(where, " order_id IS NULL")
-		} else {
-			where = append(where, " order_id=?")
-			args = append(args, queryOrder.CustomerId)
+		if *queryOrder.CustomerId != 0 {
+			if *queryOrder.CustomerId == -1 {
+				where = append(where, " order_id IS NULL")
+			} else {
+				where = append(where, " order_id=?")
+				args = append(args, queryOrder.CustomerId)
+			}
 		}
 	}
 	if queryOrder.PaymentStatus != nil {

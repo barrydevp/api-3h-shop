@@ -23,12 +23,13 @@ func GetListCategory(queryCategory *model.QueryCategory) (*response.DataList, er
 		args = append(args, "%"+*queryCategory.Name+"%")
 	}
 	if queryCategory.ParentId != nil {
-
-		if *queryCategory.ParentId == 0 {
-			where = append(where, " parent_id IS NULL")
-		} else {
-			where = append(where, " parent_id=?")
-			args = append(args, queryCategory.ParentId)
+		if *queryCategory.ParentId != 0 {
+			if *queryCategory.ParentId == -1 {
+				where = append(where, " parent_id IS NULL")
+			} else {
+				where = append(where, " parent_id=?")
+				args = append(args, queryCategory.ParentId)
+			}
 		}
 	}
 	if queryCategory.Status != nil {

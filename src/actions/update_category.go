@@ -26,7 +26,7 @@ func UpdateCategory(categoryId int64, body *model.BodyCategory) (*model.Category
 	}
 
 	if body.ParentId != nil {
-		if *body.ParentId == 0 {
+		if *body.ParentId == -1 {
 			set = append(set, " parent_id=?")
 			args = append(args, &sql.NullInt64{
 				Int64: *body.ParentId,
