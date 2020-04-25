@@ -13,7 +13,7 @@ type App struct {
 func (app *App) NewGinEngine() *gin.Engine {
 	_app := gin.Default()
 	_corsConfig := cors.DefaultConfig()
-	_corsConfig.AllowOrigins = []string{"http://localhost:3000", constants.PRIMARY_HOST}
+	_corsConfig.AllowOrigins = []string{"http://localhost:3000", constants.WEB_HOST}
 	_corsConfig.AllowCredentials = true
 	_cors := cors.New(_corsConfig)
 	_app.Use(_cors)
