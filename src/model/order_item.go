@@ -35,6 +35,8 @@ func (orderItem *OrderItem) FillResponse() {
 		}
 	}
 	orderItem.OrderId = orderItem.RawOrderId
+	orderItem.Status = orderItem.RawStatus
+	orderItem.Quantity = orderItem.RawQuantity
 	orderItem.CreatedAt = orderItem.RawCreatedAt
 	orderItem.UpdatedAt = orderItem.RawUpdatedAt
 }

@@ -31,4 +31,22 @@ func BindOrderItem(router *gin.RouterGroup) {
 
 		handle.Try(controllers.UpdateOrderItem).Then(response.SendSuccess).Catch(response.SendError)
 	})
+
+	router.POST("/:orderItemId/delete", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.DeleteOrderItemById).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:orderItemId/quantity/increase", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.IncreaseQuantityOrderItem).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:orderItemId/quantity/decrease", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.DecreaseQuantityOrderItem).Then(response.SendSuccess).Catch(response.SendError)
+	})
 }

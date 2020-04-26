@@ -58,3 +58,49 @@ func UpdateOrderItem(c *gin.Context) (interface{}, error) {
 
 	return actions.UpdateOrderItem(orderItemId, &body)
 }
+
+func DeleteOrderItemById(c *gin.Context) (interface{}, error) {
+	orderItemId, err := strconv.ParseInt(c.Param("orderItemId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.DeleteOrderItem(orderItemId)
+}
+
+func DecreaseQuantityOrderItem(c *gin.Context) (interface{}, error) {
+	orderItemId, err := strconv.ParseInt(c.Param("orderItemId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body model.BodyOrderItem
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.DecreaseQuantityOrderItem(orderItemId, &body)
+}
+
+func IncreaseQuantityOrderItem(c *gin.Context) (interface{}, error) {
+	orderItemId, err := strconv.ParseInt(c.Param("orderItemId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body model.BodyOrderItem
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.IncreaseQuantityOrderItem(orderItemId, &body)
+}
