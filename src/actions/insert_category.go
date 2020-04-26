@@ -30,15 +30,15 @@ func InsertCategory(body *model.BodyCategory) (*model.Category, error) {
 				Valid: false,
 			})
 		} else {
-			parentCat, err := factories.FindCategoryById(*body.ParentId)
-
-			if err != nil {
-				return nil, err
-			}
-
-			if parentCat == nil {
-				return nil, errors.New("parent category does not exists")
-			}
+			//parentCat, err := factories.FindCategoryById(*body.ParentId)
+			//
+			//if err != nil {
+			//	return nil, err
+			//}
+			//
+			//if parentCat == nil {
+			//	return nil, errors.New("parent category does not exists")
+			//}
 
 			set = append(set, " parent_id=?")
 			args = append(args, &sql.NullInt64{

@@ -15,15 +15,15 @@ func UpdateProductItem(productItemId int64, body *model.BodyProductItem) (*model
 	var set []string
 
 	if body.ProductId != nil {
-		product, err := factories.FindProductById(*body.ProductId)
-
-		if err != nil {
-			return nil, err
-		}
-
-		if product == nil {
-			return nil, errors.New("product does not exists")
-		}
+		//product, err := factories.FindProductById(*body.ProductId)
+		//
+		//if err != nil {
+		//	return nil, err
+		//}
+		//
+		//if product == nil {
+		//	return nil, errors.New("product does not exists")
+		//}
 		set = append(set, " product_id=?")
 		args = append(args, body.ProductId)
 	}

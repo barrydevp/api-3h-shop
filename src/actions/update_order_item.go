@@ -19,60 +19,60 @@ func UpdateOrderItem(orderItemId int64, body *model.BodyOrderItem) (*model.Order
 	rejectChan := make(chan error)
 
 	if body.ProductId != nil {
-		goroutines = append(goroutines, func() {
-			order, err := factories.FindProductById(*body.ProductId)
-
-			if err != nil {
-				rejectChan <- err
-				return
-			}
-			if order == nil {
-				rejectChan <- errors.New("product does not exists")
-				return
-			}
-
-			resolveChan <- order
-		})
+		//goroutines = append(goroutines, func() {
+		//	order, err := factories.FindProductById(*body.ProductId)
+		//
+		//	if err != nil {
+		//		rejectChan <- err
+		//		return
+		//	}
+		//	if order == nil {
+		//		rejectChan <- errors.New("product does not exists")
+		//		return
+		//	}
+		//
+		//	resolveChan <- order
+		//})
 
 		set = append(set, " product_id=?")
 		args = append(args, body.ProductId)
 	}
 
 	if body.ProductItemId != nil {
-		goroutines = append(goroutines, func() {
-			order, err := factories.FindProductItemById(*body.ProductItemId)
-
-			if err != nil {
-				rejectChan <- err
-				return
-			}
-			if order == nil {
-				rejectChan <- errors.New("product_item does not exists")
-				return
-			}
-
-			resolveChan <- order
-		})
+		//goroutines = append(goroutines, func() {
+		//	order, err := factories.FindProductItemById(*body.ProductItemId)
+		//
+		//	if err != nil {
+		//		rejectChan <- err
+		//		return
+		//	}
+		//	if order == nil {
+		//		rejectChan <- errors.New("product_item does not exists")
+		//		return
+		//	}
+		//
+		//	resolveChan <- order
+		//})
 
 		set = append(set, " product_item_id=?")
 		args = append(args, body.ProductItemId)
 	}
 
 	if body.OrderId != nil {
-		goroutines = append(goroutines, func() {
-			order, err := factories.FindOrderById(*body.OrderId)
-
-			if err != nil {
-				rejectChan <- err
-				return
-			}
-			if order == nil {
-				rejectChan <- errors.New("order does not exists")
-				return
-			}
-
-			resolveChan <- order
-		})
+		//goroutines = append(goroutines, func() {
+		//	order, err := factories.FindOrderById(*body.OrderId)
+		//
+		//	if err != nil {
+		//		rejectChan <- err
+		//		return
+		//	}
+		//	if order == nil {
+		//		rejectChan <- errors.New("order does not exists")
+		//		return
+		//	}
+		//
+		//	resolveChan <- order
+		//})
 
 		set = append(set, " order_id=?")
 		args = append(args, body.OrderId)

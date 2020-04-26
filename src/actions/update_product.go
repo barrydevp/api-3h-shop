@@ -15,15 +15,15 @@ func UpdateProduct(productId int64, body *model.BodyProduct) (*model.Product, er
 	var set []string
 
 	if body.CategoryId != nil {
-		category, err := factories.FindCategoryById(*body.CategoryId)
-
-		if err != nil {
-			return nil, err
-		}
-
-		if category == nil {
-			return nil, errors.New("category does not exists")
-		}
+		//category, err := factories.FindCategoryById(*body.CategoryId)
+		//
+		//if err != nil {
+		//	return nil, err
+		//}
+		//
+		//if category == nil {
+		//	return nil, errors.New("category does not exists")
+		//}
 
 		set = append(set, " category_id=?")
 		args = append(args, body.CategoryId)

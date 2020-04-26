@@ -17,15 +17,15 @@ func InsertProductItem(body *model.BodyProductItem) (*model.ProductItem, error) 
 	if body.ProductId == nil {
 		return nil, errors.New("product_item's product_id is required")
 	} else {
-		product, err := factories.FindProductById(*body.ProductId)
-
-		if err != nil {
-			return nil, err
-		}
-
-		if product == nil {
-			return nil, errors.New("product does not exists")
-		}
+		//product, err := factories.FindProductById(*body.ProductId)
+		//
+		//if err != nil {
+		//	return nil, err
+		//}
+		//
+		//if product == nil {
+		//	return nil, errors.New("product does not exists")
+		//}
 		set = append(set, " product_id=?")
 		args = append(args, body.ProductId)
 	}

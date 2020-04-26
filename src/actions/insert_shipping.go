@@ -15,15 +15,15 @@ func InsertShipping(body *model.BodyShipping) (*model.Shipping, error) {
 	var set []string
 
 	if body.OrderId != nil {
-		order, err := factories.FindOrderById(*body.OrderId)
-
-		if err != nil {
-			return nil, err
-		}
-
-		if order == nil {
-			return nil, errors.New("order does not exists")
-		}
+		//order, err := factories.FindOrderById(*body.OrderId)
+		//
+		//if err != nil {
+		//	return nil, err
+		//}
+		//
+		//if order == nil {
+		//	return nil, errors.New("order does not exists")
+		//}
 		set = append(set, " order_id=?")
 		args = append(args, body.OrderId)
 	} else {

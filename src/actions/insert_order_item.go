@@ -79,19 +79,19 @@ func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
 		set = append(set, " order_id=?")
 		args = append(args, body.OrderId)
 
-		//goroutines = append(goroutines, func() {
-		//	orderItem, err := factories.FindOrderItem(&connect.QueryMySQL{
-		//		QueryString: "WHERE order_id=? AND product_id=?",
-		//		Args: []interface{}{body.OrderId, body.ProductId},
-		//	})
-		//
-		//	if err != nil {
-		//		rejectChan <- err
-		//		return
-		//	}
-		//
-		//	resolveChan <- orderItem
-		//})
+		goroutines = append(goroutines, func() {
+			orderItem, err := factories.FindOrderItem(&connect.QueryMySQL{
+				QueryString: "WHERE order_id=? AND product_id=?",
+				Args: []interface{}{body.OrderId, body.ProductId},
+			})
+
+			if err != nil {
+				rejectChan <- err
+				return
+			}
+
+			resolveChan <- orderItem
+		})
 	} else {
 		return nil, errors.New("order_item's product_id is required")
 	}
