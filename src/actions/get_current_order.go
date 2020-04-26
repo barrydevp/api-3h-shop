@@ -25,9 +25,20 @@ func GetCurrentOrder(current *model.Current) (*model.CurrentResponse, error) {
 	}
 
 	if order != nil {
+		totalItem, err := factories.CountOrderItem(
+			&connect.QueryMySQL{
+				QueryString: "WHERE order_id=?",
+				Args:        []interface{}{order.Id},
+			})
+
+		if err != nil {
+			return nil, err
+		}
+
 		return &model.CurrentResponse{
 			Order:     order,
 			Session:   current.Session,
+			TotalItem: totalItem,
 		}, nil
 	}
 
@@ -57,5 +68,6 @@ func GetCurrentOrder(current *model.Current) (*model.CurrentResponse, error) {
 	return &model.CurrentResponse{
 		Order:     order,
 		Session:   current.Session,
+		TotalItem: 0,
 	}, nil
 }

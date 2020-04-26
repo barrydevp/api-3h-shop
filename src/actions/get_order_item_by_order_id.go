@@ -7,7 +7,7 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func GetOrderItemByOrderId(orderId int64) ([]*model.OrderItem, error) {
+func GetOrderItemByOrderId(orderId int64) ([]*model.OrderItemJoinProduct, error) {
 	query := connect.QueryMySQL{
 		QueryString: "WHERE order_id=?",
 		Args:        []interface{}{orderId},
@@ -17,7 +17,7 @@ func GetOrderItemByOrderId(orderId int64) ([]*model.OrderItem, error) {
 	rejectChan := make(chan error)
 
 	go func() {
-		data, err := factories.FindOrderItem(&query)
+		data, err := factories.FindOrderItemJoinProduct(&query)
 
 		if err != nil {
 			rejectChan <- err
@@ -36,7 +36,7 @@ func GetOrderItemByOrderId(orderId int64) ([]*model.OrderItem, error) {
 		resolveChan <- order
 	}()
 
-	var items []*model.OrderItem
+	var items []*model.OrderItemJoinProduct
 	var order *model.Order
 
 	for i := 0; i < 2; i++ {
@@ -48,7 +48,7 @@ func GetOrderItemByOrderId(orderId int64) ([]*model.OrderItem, error) {
 				if order == nil {
 					return nil, errors.New("order does not exists")
 				}
-			case []*model.OrderItem:
+			case []*model.OrderItemJoinProduct:
 				items = val
 			}
 		case err := <-rejectChan:

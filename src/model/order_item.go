@@ -88,3 +88,17 @@ func (query *QueryOrderItem) ParsePaging() {
 
 	query.Offset = &skip
 }
+
+type OrderItemJoinProduct struct {
+	*OrderItem `json:"order_item"`
+	*Product   `json:"product"`
+}
+
+func (orderItemJoinProduct *OrderItemJoinProduct) FillResponse() {
+	if orderItemJoinProduct.OrderItem != nil {
+		orderItemJoinProduct.OrderItem.FillResponse()
+	}
+	if orderItemJoinProduct.Product != nil {
+		orderItemJoinProduct.Product.FillResponse()
+	}
+}

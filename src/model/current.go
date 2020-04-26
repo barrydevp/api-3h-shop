@@ -5,6 +5,7 @@ type Current struct {
 }
 
 type CurrentResponse struct {
-	Order     *Order     `json:"order"`
-	Session   *string    `json:"session"`
+	Order     *Order  `json:"order"`
+	Session   *string `json:"session"`
+	TotalItem int     `json:"total_item"`
 }
