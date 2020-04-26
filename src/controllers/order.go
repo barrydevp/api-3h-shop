@@ -85,6 +85,24 @@ func InsertShippingByOrderId(c *gin.Context) (interface{}, error) {
 	return actions.InsertShippingByOrderId(orderId, &insertShipping)
 }
 
+func CheckoutOrder(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var checkoutBody model.BodyCheckoutOrder
+
+	err = c.ShouldBindJSON(&checkoutBody)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.CheckoutOrder(orderId, &checkoutBody)
+}
+
 func InsertOrder(c *gin.Context) (interface{}, error) {
 	var insertOrder model.BodyOrder
 

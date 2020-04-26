@@ -44,6 +44,12 @@ func BindOrder(router *gin.RouterGroup) {
 		handle.Try(controllers.InsertShippingByOrderId).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
+	router.POST("/:orderId/checkout", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.CheckoutOrder).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	router.POST("", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 

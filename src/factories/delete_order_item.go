@@ -14,7 +14,7 @@ func DeleteOrderItem(query *connect.QueryMySQL) (*int64, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
-		DELETE order_items 
+		DELETE FROM order_items 
 	` + query.QueryString
 	args := query.Args
 

@@ -129,3 +129,9 @@ func (query *QueryOrder) ParsePaging() {
 
 	query.Offset = &skip
 }
+
+type BodyCheckoutOrder struct {
+	*Customer   `form:"customer" binding:"omitempty"`
+	Note        *string `form:"note" binding:"omitempty"`
+	PaymentType *int    `form:"payment_type" binding:"omitempty"`
+}
