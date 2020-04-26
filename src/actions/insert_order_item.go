@@ -80,7 +80,7 @@ func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
 		args = append(args, body.OrderId)
 
 		goroutines = append(goroutines, func() {
-			orderItem, err := factories.FindOrderItem(&connect.QueryMySQL{
+			orderItem, err := factories.FindOneOrderItem(&connect.QueryMySQL{
 				QueryString: "WHERE order_id=? AND product_id=?",
 				Args: []interface{}{body.OrderId, body.ProductId},
 			})
