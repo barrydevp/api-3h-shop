@@ -14,6 +14,19 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 
 	var set []string
 
+	totalItem, err := factories.CountCategory(&connect.QueryMySQL{
+		QueryString: "WHERE order_id=?",
+		Args: []interface{}{&orderId},
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if totalItem <= 0 {
+		return nil, errors.New("your order is empty")
+	}
+
 	if body.Customer == nil {
 		return nil, errors.New("customer's information is required")
 	}
