@@ -1,8 +1,7 @@
 package src
 
 import (
-	"github.com/barrydev/api-3h-shop/src/constants"
-	"github.com/gin-contrib/cors"
+	"github.com/barrydev/api-3h-shop/src/common/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +11,7 @@ type App struct {
 
 func (app *App) NewGinEngine() *gin.Engine {
 	_app := gin.Default()
-	_corsConfig := cors.DefaultConfig()
-	_corsConfig.AllowOrigins = []string{"http://localhost:3000", constants.WEB_HOST}
-	_corsConfig.AllowCredentials = true
-	_cors := cors.New(_corsConfig)
+	_cors := utils.Cors()
 	_app.Use(_cors)
 	BindRouterWithApp(_app, []gin.HandlerFunc{_cors})
 
