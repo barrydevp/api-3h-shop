@@ -131,7 +131,7 @@ func (query *QueryOrder) ParsePaging() {
 }
 
 type BodyCheckoutOrder struct {
-	*Customer   `form:"customer" binding:"omitempty"`
-	Note        *string `form:"note" binding:"omitempty"`
-	PaymentType *int    `form:"payment_type" binding:"omitempty"`
+	*Customer   `json:"customer" binding:"omitempty"`
+	Note        *string `json:"note" binding:"omitempty"`
+	PaymentType *int    `json:"payment_type" binding:"omitempty"`
 }
