@@ -61,20 +61,23 @@ func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
 	}
 
 	if body.OrderId != nil {
-		//goroutines = append(goroutines, func() {
-		//	order, err := factories.FindOrderById(*body.OrderId)
-		//
-		//	if err != nil {
-		//		rejectChan <- err
-		//		return
-		//	}
-		//	if order == nil {
-		//		rejectChan <- errors.New("order does not exists")
-		//		return
-		//	}
-		//
-		//	resolveChan <- order
-		//})
+		goroutines = append(goroutines, func() {
+			order, err := factories.FindOneOrder(&connect.QueryMySQL{
+				QueryString: "WHERE _id=? AND status='pending'",
+				Args:        []interface{}{body.OrderId},
+			})
+
+			if err != nil {
+				rejectChan <- err
+				return
+			}
+			if order == nil {
+				rejectChan <- errors.New("order does not exists or has been checkout")
+				return
+			}
+
+			resolveChan <- order
+		})
 
 		set = append(set, " order_id=?")
 		args = append(args, body.OrderId)
@@ -82,7 +85,7 @@ func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
 		goroutines = append(goroutines, func() {
 			orderItem, err := factories.FindOneOrderItem(&connect.QueryMySQL{
 				QueryString: "WHERE order_id=? AND product_id=?",
-				Args: []interface{}{body.OrderId, body.ProductId},
+				Args:        []interface{}{body.OrderId, body.ProductId},
 			})
 
 			if err != nil {
