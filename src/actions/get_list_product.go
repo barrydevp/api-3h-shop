@@ -38,6 +38,14 @@ func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error
 		where = append(where, " name LIKE ?")
 		args = append(args, "%"+*queryProduct.Name+"%")
 	}
+	if queryProduct.StartOutPrice != nil {
+		where = append(where, " out_price >= ?")
+		args = append(args, queryProduct.StartOutPrice)
+	}
+	if queryProduct.EndOutPrice != nil {
+		where = append(where, " out_price <= ?")
+		args = append(args, queryProduct.EndOutPrice)
+	}
 	if queryProduct.CreatedAtFrom != nil && queryProduct.CreatedAtTo != nil {
 		where = append(where, " created_at BETWEEN ? AND ?")
 		args = append(args, queryProduct.CreatedAtFrom, queryProduct.CreatedAtTo)
@@ -56,7 +64,8 @@ func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error
 		Args:        args,
 	}
 
-	queryString += "ORDER BY _id ASC\n"
+	queryProduct.ParseSort()
+	queryString += "ORDER BY " + *queryProduct.OrderBy + "\n"
 
 	queryProduct.ParsePaging()
 	queryString += "LIMIT ?, ?\n"

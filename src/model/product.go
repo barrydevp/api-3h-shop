@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql"
 	"github.com/barrydev/api-3h-shop/src/constants"
+	"strings"
 )
 
 type Product struct {
@@ -73,6 +74,8 @@ type QueryProduct struct {
 	CategoryParentId *int64   `form:"category_parent_id" binding:"omitempty"`
 	Name             *string  `form:"name" binding:"omitempty"`
 	OutPrice         *float64 `form:"out_price" binding:"omitempty"`
+	StartOutPrice    *float64 `form:"start_out_price" binding:"omitempty"`
+	EndOutPrice      *float64 `form:"end_out_price" binding:"omitempty"`
 	Discount         *float64 `form:"discount" binding:"omitempty"`
 	ImagePath        *string  `form:"image_path" binding:"omitempty"`
 	Description      *string  `form:"description" binding:"omitempty"`
@@ -82,7 +85,9 @@ type QueryProduct struct {
 	UpdatedAtTo      *string  `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
 	Page             *int     `form:"page" binding:"omitempty,gte=0"`
 	Limit            *int     `form:"limit" binding:"omitempty,gte=0"`
+	Sort             []string `form:"sort[]" binding:"omitempty"`
 	Offset           *int
+	OrderBy          *string
 }
 
 func (query *QueryProduct) ParsePaging() {
@@ -99,6 +104,39 @@ func (query *QueryProduct) ParsePaging() {
 	skip := (*query.Page - 1) * *query.Limit
 
 	query.Offset = &skip
+}
+
+func (query *QueryProduct) ParseSort() {
+	var orderBy []string
+	if query.Sort != nil {
+		if len(query.Sort) > 0 {
+			for _, sort := range query.Sort {
+				sortArr := strings.Split(sort, " ")
+				if len(sortArr) > 0 {
+					if len(sortArr) == 1 {
+						subOrderBy := sortArr[0] + " ASC"
+						orderBy = append(orderBy, subOrderBy)
+					} else {
+						subOrderBy := sortArr[0]
+						typeOrder := strings.ToLower(sortArr[1])
+						if typeOrder != "asc" && typeOrder != "desc" {
+							typeOrder = "ASC"
+						}
+						subOrderBy += " " + typeOrder
+						orderBy = append(orderBy, subOrderBy)
+					}
+				}
+			}
+		}
+	}
+
+	orderByString := "_id ASC"
+
+	if len(orderBy) > 0 {
+		orderByString = strings.Join(orderBy, ", ")
+	}
+
+	query.OrderBy = &orderByString
 }
 
 type SliceBodyProduct struct {

@@ -26,7 +26,7 @@ func GetCurrentOrder(c *gin.Context) (interface{}, error) {
 	}
 
 	c.SetCookie("3h.session", *current.Session, 1000*30*24*3600, "/", constants.PRIMARY_HOST, false, true)
-
+	//c.SetCookie("3h.session", *current.Session, 1000*30*24*3600, "/", "web-3h-shop.herokuapp.com", false, true)
 	return res, nil
 }
 
