@@ -38,11 +38,11 @@ func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error
 		where = append(where, " name LIKE ?")
 		args = append(args, "%"+*queryProduct.Name+"%")
 	}
-	if queryProduct.StartOutPrice != nil {
+	if queryProduct.StartOutPrice != nil && *queryProduct.StartOutPrice > 0 {
 		where = append(where, " out_price >= ?")
 		args = append(args, queryProduct.StartOutPrice)
 	}
-	if queryProduct.EndOutPrice != nil {
+	if queryProduct.EndOutPrice != nil && *queryProduct.EndOutPrice > 0 {
 		where = append(where, " out_price <= ?")
 		args = append(args, queryProduct.EndOutPrice)
 	}
