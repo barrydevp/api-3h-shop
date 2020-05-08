@@ -50,15 +50,15 @@ func BindOrder(router *gin.RouterGroup) {
 		handle.Try(controllers.CheckoutOrder).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.POST("", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.InsertOrder).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.InsertOrder).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 
-	router.POST("/:orderId/update", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.POST("/:orderId/update", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.UpdateOrder).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.UpdateOrder).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 }

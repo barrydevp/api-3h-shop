@@ -20,11 +20,11 @@ func BindOrderItem(router *gin.RouterGroup) {
 		handle.Try(controllers.GetOrderItemById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.POST("", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.InsertOrderItem).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.InsertOrderItem).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 
 	router.POST("/:orderItemId/update", func(c *gin.Context) {
 		handle := response.Handle{Context: c}

@@ -2,11 +2,11 @@ package actions
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"log"
-	"strings"
 )
 
 func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, error) {
@@ -62,26 +62,26 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 	}()
 
 	go func() {
-		totalItem, err := factories.CountOrderItem(&connect.QueryMySQL{
+		totalItem, totalPrice, err := factories.CountAndCaculateOrderItem(&connect.QueryMySQL{
 			QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=order_items.order_id AND status='pending')",
-			Args: []interface{}{&orderId},
+			Args:        []interface{}{&orderId},
 		})
 
 		if err != nil {
-			rejectChan <-err
+			rejectChan <- err
 		}
 
-		log.Println(totalItem)
+		// log.Println(totalItem)
 
 		if totalItem <= 0 {
-			rejectChan <-errors.New("your order is empty or has been checkout")
+			rejectChan <- errors.New("your order is empty or has been checkout")
 		}
 
-		resolveChan <-totalItem
+		resolveChan <- &totalPrice
 	}()
 
-
 	var customer *model.Customer
+	var totalPrice *float64
 
 	for i := 0; i < 2; i++ {
 		select {
@@ -89,7 +89,8 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 			switch val := res.(type) {
 			case *model.Customer:
 				customer = val
-			case int:
+			case *float64:
+				totalPrice = val
 			}
 
 		case err := <-rejectChan:
@@ -137,6 +138,7 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 	status := "payment"
 	bodyOrder.Status = &status
 	bodyOrder.CustomerId = &customerId
+	bodyOrder.TotalPrice = totalPrice
 	if body.Note != nil {
 		bodyOrder.Note = body.Note
 	}

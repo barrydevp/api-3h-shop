@@ -2,36 +2,39 @@ package model
 
 import (
 	"database/sql"
+
 	"github.com/barrydev/api-3h-shop/src/constants"
 )
 
 type Order struct {
 	/** Response Field */
-	Id                *int64  `json:"_id,omitempty"`
-	Session           *string `json:"session,omitempty"`
-	CustomerId        *int64  `json:"customer_id,omitempty"`
-	Status            *string `json:"status,omitempty"`
-	PaymentStatus     *string `json:"payment_status,omitempty"`
-	FulfillmentStatus *string `json:"fulfillment_status,omitempty"`
-	Note              *string `json:"note,omitempty"`
-	CreatedAt         *string `json:"created_at,omitempty"`
-	UpdatedAt         *string `json:"updated_at,omitempty"`
-	PaidAt            *string `json:"paid_at,omitempty"`
-	FulfilledAt       *string `json:"fulfill_at,omitempty"`
-	CancelledAt       *string `json:"cancelled_at,omitempty"`
+	Id                *int64   `json:"_id,omitempty"`
+	Session           *string  `json:"session,omitempty"`
+	CustomerId        *int64   `json:"customer_id,omitempty"`
+	Status            *string  `json:"status,omitempty"`
+	TotalPrice        *float64 `json:"total_price,omitempty"`
+	PaymentStatus     *string  `json:"payment_status,omitempty"`
+	FulfillmentStatus *string  `json:"fulfillment_status,omitempty"`
+	Note              *string  `json:"note,omitempty"`
+	CreatedAt         *string  `json:"created_at,omitempty"`
+	UpdatedAt         *string  `json:"updated_at,omitempty"`
+	PaidAt            *string  `json:"paid_at,omitempty"`
+	FulfilledAt       *string  `json:"fulfill_at,omitempty"`
+	CancelledAt       *string  `json:"cancelled_at,omitempty"`
 	/** Database Field */
-	RawId                *int64          `json:"-"`
-	RawSession           *string         `json:"-"`
-	RawCustomerId        *sql.NullInt64  `json:"-"`
-	RawStatus            *string         `json:"-"`
-	RawPaymentStatus     *string         `json:"-"`
-	RawFulfillmentStatus *string         `json:"-"`
-	RawNote              *sql.NullString `json:"-"`
-	RawCreatedAt         *string         `json:"-"`
-	RawUpdatedAt         *string         `json:"-"`
-	RawPaidAt            *sql.NullString `json:"-"`
-	RawFulfilledAt       *sql.NullString `json:"-"`
-	RawCancelledAt       *sql.NullString `json:"-"`
+	RawId                *int64           `json:"-"`
+	RawSession           *string          `json:"-"`
+	RawCustomerId        *sql.NullInt64   `json:"-"`
+	RawStatus            *string          `json:"-"`
+	RawTotalPrice        *sql.NullFloat64 `json:"-"`
+	RawPaymentStatus     *string          `json:"-"`
+	RawFulfillmentStatus *string          `json:"-"`
+	RawNote              *sql.NullString  `json:"-"`
+	RawCreatedAt         *string          `json:"-"`
+	RawUpdatedAt         *string          `json:"-"`
+	RawPaidAt            *sql.NullString  `json:"-"`
+	RawFulfilledAt       *sql.NullString  `json:"-"`
+	RawCancelledAt       *sql.NullString  `json:"-"`
 }
 
 func (order *Order) FillResponse() {
@@ -43,6 +46,11 @@ func (order *Order) FillResponse() {
 		}
 	}
 	order.Status = order.RawStatus
+	if order.RawTotalPrice != nil {
+		if order.RawTotalPrice.Valid {
+			order.TotalPrice = &order.RawTotalPrice.Float64
+		}
+	}
 	order.PaymentStatus = order.RawPaymentStatus
 	order.FulfillmentStatus = order.RawFulfillmentStatus
 	if order.RawNote != nil {
@@ -70,16 +78,17 @@ func (order *Order) FillResponse() {
 }
 
 type BodyOrder struct {
-	Id                *int64  `json:"_id" binding:"omitempty,gt=0"`
-	Session           *string `json:"session" binding:"omitempty"`
-	CustomerId        *int64  `json:"customer_id" binding:"omitempty,gt=0"`
-	Status            *string `json:"status" binding:"omitempty"`
-	PaymentStatus     *string `json:"payment_status" binding:"omitempty"`
-	FulfillmentStatus *string `json:"fulfillment_status" binding:"omitempty"`
-	Note              *string `json:"note" binding:"omitempty"`
-	PaidAt            *string `json:"paid_at" binding:"omitempty"`
-	FulfilledAt       *string `json:"fulfill_at" binding:"omitempty"`
-	CancelledAt       *string `json:"cancelled_at" binding:"omitempty"`
+	Id                *int64   `json:"_id" binding:"omitempty,gt=0"`
+	Session           *string  `json:"session" binding:"omitempty"`
+	CustomerId        *int64   `json:"customer_id" binding:"omitempty,gt=0"`
+	Status            *string  `json:"status" binding:"omitempty"`
+	TotalPrice        *float64 `json:"total_price" binding:"omitempty,gte=0"`
+	PaymentStatus     *string  `json:"payment_status" binding:"omitempty"`
+	FulfillmentStatus *string  `json:"fulfillment_status" binding:"omitempty"`
+	Note              *string  `json:"note" binding:"omitempty"`
+	PaidAt            *string  `json:"paid_at" binding:"omitempty"`
+	FulfilledAt       *string  `json:"fulfill_at" binding:"omitempty"`
+	CancelledAt       *string  `json:"cancelled_at" binding:"omitempty"`
 }
 
 func (body *BodyOrder) Normalize() error {

@@ -1,20 +1,22 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/barrydev/api-3h-shop/src"
 	"github.com/barrydev/api-3h-shop/src/connections"
 	"github.com/barrydev/api-3h-shop/src/constants"
-	"log"
-	"net/http"
 )
 
 func main() {
 	app := src.App{}
+
 	ginEngine := app.NewGinEngine()
 
 	s := &http.Server{
-		Addr:           ":" + constants.PORT,
-		Handler:        ginEngine,
+		Addr:    ":" + constants.PORT,
+		Handler: ginEngine,
 	}
 
 	defer func() {

@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+
 	"github.com/barrydev/api-3h-shop/src/constants"
 )
 

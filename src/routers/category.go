@@ -26,15 +26,15 @@ func BindCategory(router *gin.RouterGroup) {
 		handle.Try(controllers.GetCategoryTreeById).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
-	router.POST("", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.POST("", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.InsertCategory).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.InsertCategory).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 
-	router.POST("/:categoryId/update", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.POST("/:categoryId/update", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.UpdateCategory).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.UpdateCategory).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 }

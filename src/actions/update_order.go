@@ -2,10 +2,11 @@ package actions
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"strings"
 )
 
 func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
@@ -14,7 +15,7 @@ func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
 
 	var set []string
 
-	if body.CustomerId != nil  {
+	if body.CustomerId != nil {
 		set = append(set, " customer_id=?")
 		args = append(args, body.CustomerId)
 	}
@@ -22,6 +23,11 @@ func UpdateOrder(orderId int64, body *model.BodyOrder) (*model.Order, error) {
 	if body.Status != nil {
 		set = append(set, " status=?")
 		args = append(args, body.Status)
+	}
+
+	if body.TotalPrice != nil {
+		set = append(set, " total_price=?")
+		args = append(args, body.TotalPrice)
 	}
 
 	if body.PaymentStatus != nil {
