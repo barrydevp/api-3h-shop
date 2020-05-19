@@ -1,25 +1,35 @@
 package factories
 
 import (
+	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindUser() ([]*model.User, error){
+func FindUser(query *connect.QueryMySQL) ([]*model.User, error) {
 	connection := connections.Mysql.GetConnection()
 
-	stmt, err := connection.Prepare(`
+	queryString := `
 		SELECT
-			_id, email, name, password, address, status, created_at, updated_at
+			_id, email, name, password, address, phone, role, session, status, created_at, updated_at 
 		FROM users
-	`)
+	`
+	var args []interface{}
 
-	defer stmt.Close()
+	if query != nil {
+		queryString += query.QueryString
+		args = query.Args
+	}
+
+	stmt, err := connection.Prepare(queryString)
+
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := stmt.Query()
+	defer stmt.Close()
+
+	rows, err := stmt.Query(args...)
 
 	if err != nil {
 		return nil, err
@@ -31,11 +41,25 @@ func FindUser() ([]*model.User, error){
 	for rows.Next() {
 		_user := model.User{}
 
-		err = rows.Scan(&_user.Id, &_user.Email, &_user.Name, &_user.Password, &_user.Address, &_user.Status, &_user.CreatedAt, &_user.UpdatedAt)
+		err = rows.Scan(
+			&_user.RawId,
+			&_user.RawEmail,
+			&_user.RawName,
+			&_user.RawPassword,
+			&_user.RawAddress,
+			&_user.RawPhone,
+			&_user.RawRole,
+			&_user.RawSession,
+			&_user.RawStatus,
+			&_user.RawCreatedAt,
+			&_user.RawUpdatedAt,
+		)
 
 		if err != nil {
 			return nil, err
 		}
+
+		_user.FillResponse()
 
 		listUser = append(listUser, &_user)
 	}

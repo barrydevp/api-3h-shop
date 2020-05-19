@@ -7,7 +7,7 @@ import (
 	"github.com/barrydev/api-3h-shop/src/connections"
 )
 
-func UpdateOrder(query *connect.QueryMySQL) (*int64, error) {
+func InsertUser(query *connect.QueryMySQL) (*int64, error) {
 	if query == nil {
 		return nil, errors.New("query is required")
 	}
@@ -15,7 +15,7 @@ func UpdateOrder(query *connect.QueryMySQL) (*int64, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
-		UPDATE orders 
+		INSERT users 
 	` + query.QueryString
 	args := query.Args
 
@@ -32,10 +32,10 @@ func UpdateOrder(query *connect.QueryMySQL) (*int64, error) {
 		return nil, err
 	}
 
-	rowsAffected, err := res.RowsAffected()
+	id, err := res.LastInsertId()
 	if err != nil {
 		return nil, err
 	}
 
-	return &rowsAffected, nil
+	return &id, nil
 }

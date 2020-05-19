@@ -1,6 +1,10 @@
 package model
 
-import "github.com/barrydev/api-3h-shop/src/constants"
+import (
+	"database/sql"
+
+	"github.com/barrydev/api-3h-shop/src/constants"
+)
 
 type User struct {
 	/** Response Field */
@@ -9,25 +13,39 @@ type User struct {
 	Name      *string `json:"name,omitempty"`
 	Password  *string `json:"password,omitempty"`
 	Address   *string `json:"address,omitempty"`
+	Role      *int64  `json:"role,omitempty"`
+	Session   *string `json:"session,omitempty"`
+	Phone     *string `json:"session,omitempty"`
 	Status    *string `json:"status,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	UpdatedAt *string `json:"updated_at,omitempty"`
 	/** Database Field */
-	RawId        *int64  `json:"-"`
-	RawEmail     *string `json:"-"`
-	RawName      *string `json:"-"`
-	RawPassword  *string `json:"-"`
-	RawAddress   *string `json:"-"`
-	RawStatus    *string `json:"-"`
-	RawCreatedAt *string `json:"-"`
-	RawUpdatedAt *string `json:"-"`
+	RawId        *int64          `json:"-"`
+	RawEmail     *string         `json:"-"`
+	RawName      *string         `json:"-"`
+	RawPassword  *string         `json:"-"`
+	RawAddress   *string         `json:"-"`
+	RawRole      *int64          `json:"-"`
+	RawSession   *sql.NullString `json:"-"`
+	RawPhone     *string         `json:"-"`
+	RawStatus    *string         `json:"-"`
+	RawCreatedAt *string         `json:"-"`
+	RawUpdatedAt *string         `json:"-"`
 }
 
 func (user *User) FillResponse() {
 	user.Id = user.RawId
 	user.Email = user.RawEmail
-	user.Password = user.RawPassword
+	user.Name = user.RawName
+	// user.Password = user.RawPassword
 	user.Address = user.RawAddress
+	user.Role = user.RawRole
+	if user.RawSession != nil {
+		if user.RawSession.Valid {
+			user.Session = &user.RawSession.String
+		}
+	}
+	user.Phone = user.RawPhone
 	user.Status = user.RawStatus
 	user.CreatedAt = user.RawCreatedAt
 	user.UpdatedAt = user.RawUpdatedAt
@@ -39,12 +57,15 @@ type BodyUser struct {
 	Name     *string `json:"name" binding::omitempty`
 	Password *string `json:"password" binding::omitempty`
 	Address  *string `json:"address" binding::omitempty`
+	Session  *string `json:"session" binding:"omitempty"`
+	Phone    *string `json:"phone" binding:"omitempty"`
+	Role     *int64  `json:"role" binding:"omitempty,gt=0"`
 	Status   *string `json:"status" binding::omitempty`
 }
 
 func (body *BodyUser) Normalize() error {
 	//*body.Name = helpers.SanitizeString(*body.Name)
-	//if body.ParentId != nil && *body.ParentId < 1 {
+	//if body.ParentId != nl && *body.ParentId < 1 {
 	//	return errors.New("invalid parent_id")
 	//}
 
@@ -52,11 +73,13 @@ func (body *BodyUser) Normalize() error {
 }
 
 type QueryUser struct {
-	Id            *int64  `form:"id" binding:"omitempty"`
-	Email         *string `json:"email" binding::omitempty`
-	Name          *string `json:"name" binding::omitempty`
-	Password      *string `json:"password" binding::omitempty`
+	Id    *int64  `form:"id" binding:"omitempty"`
+	Email *string `json:"email" binding::omitempty`
+	Name  *string `json:"name" binding::omitempty`
+	Phone *string `json:"phone" binding::omitempty`
+	// Password      *string `json:"password" binding::omitempty`
 	Address       *string `json:"address" binding::omitempty`
+	Role          *string `form:"role" binding:"omitempty"`
 	Status        *string `json:"status" binding::omitempty`
 	CreatedAtFrom *string `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
 	CreatedAtTo   *string `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
