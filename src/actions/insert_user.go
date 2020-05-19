@@ -2,6 +2,7 @@ package actions
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"strings"
 
@@ -28,7 +29,7 @@ func InsertUser(body *model.BodyUser) (*model.User, error) {
 	} else {
 		hashPassword := md5.Sum([]byte(*body.Password))
 		set = append(set, " password=?")
-		args = append(args, string(hashPassword[:]))
+		args = append(args, hex.EncodeToString(hashPassword[:]))
 	}
 
 	if body.Name != nil {
@@ -65,7 +66,8 @@ func InsertUser(body *model.BodyUser) (*model.User, error) {
 	}
 
 	if len(set) > 0 {
-		queryString += "SET" + strings.Join(set, ",") + "\n"
+		queryString += "SET" + strings.Join(set, ",") + ", created_at=NOW() \n"
+
 	} else {
 		return nil, errors.New("invalid body")
 	}

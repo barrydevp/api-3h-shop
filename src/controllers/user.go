@@ -62,14 +62,6 @@ func AuthenticateUser(c *gin.Context) (interface{}, error) {
 		return nil, err
 	}
 
-	session, err := c.Cookie("3h.session")
-
-	if err != nil {
-		body.Session = nil
-	} else {
-		body.Session = &session
-	}
-
 	return actions.AuthenticateUser(&body)
 }
 

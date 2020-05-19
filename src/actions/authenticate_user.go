@@ -2,75 +2,42 @@ package actions
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"strings"
+	"time"
 
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
+	"github.com/barrydev/api-3h-shop/src/helpers"
 	"github.com/barrydev/api-3h-shop/src/model"
+	"github.com/dgrijalva/jwt-go"
 )
 
-func AuthenticateUser(body *model.BodyUser) (*model.User, error) {
+func AuthenticateUser(body *model.BodyUser) (*factories.ResponseAccessToken, error) {
 	queryString := ""
 	var args []interface{}
 
-	var set []string
+	var where []string
 
 	if body.Email == nil {
 		return nil, errors.New("user's email is required")
 	} else {
-		set = append(set, " email=?")
+		where = append(where, " email=?")
 		args = append(args, body.Email)
 	}
 
 	if body.Password == nil {
 		return nil, errors.New("user's password is required")
-	} else {
-		hashPassword := md5.Sum([]byte(*body.Password))
-		set = append(set, " password=?")
-		args = append(args, string(hashPassword[:]))
 	}
 
-	if body.Name != nil {
-		set = append(set, " name=?")
-		args = append(args, body.Name)
-	} else {
-		return nil, errors.New("user's name is required")
-	}
-
-	if body.Address != nil {
-		set = append(set, " address=?")
-		args = append(args, body.Address)
-	} else {
-		return nil, errors.New("user's address is required")
-	}
-
-	if body.Phone != nil {
-		set = append(set, " phone=?")
-		args = append(args, body.Phone)
-	} else {
-		return nil, errors.New("user's phone is required")
-	}
-
-	if body.Session != nil {
-		set = append(set, " session=?")
-		args = append(args, body.Session)
-	}
-
-	if body.Role != nil {
-		set = append(set, " role=?")
-		args = append(args, body.Role)
-	} else {
-		return nil, errors.New("user's role is required")
-	}
-
-	if len(set) > 0 {
-		queryString += "SET" + strings.Join(set, ",") + "\n"
+	if len(where) > 0 {
+		queryString += "WHERE" + strings.Join(where, " AND") + "\n"
 	} else {
 		return nil, errors.New("invalid body")
 	}
 
-	id, err := factories.InsertUser(&connect.QueryMySQL{
+	foundUser, err := factories.FindOneUser(&connect.QueryMySQL{
 		QueryString: queryString,
 		Args:        args,
 	})
@@ -79,9 +46,32 @@ func AuthenticateUser(body *model.BodyUser) (*model.User, error) {
 		return nil, err
 	}
 
-	if id == nil {
-		return nil, errors.New("insert error")
+	if foundUser == nil {
+		return nil, errors.New("user not found")
 	}
 
-	return factories.FindUserById(*id)
+	hashPassword := md5.Sum([]byte(*body.Password))
+
+	if hex.EncodeToString(hashPassword[:]) != *foundUser.RawPassword {
+		return nil, errors.New("wrong password")
+	}
+
+	claims := factories.AccessTokenClaims{
+		*foundUser.Id,
+		*foundUser.Role,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 7).Unix(),
+		},
+	}
+
+	accessToken, err := helpers.GenerateJwtToken(claims)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &factories.ResponseAccessToken{
+		User:        foundUser,
+		AccessToken: &accessToken,
+	}, nil
 }

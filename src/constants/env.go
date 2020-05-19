@@ -6,11 +6,12 @@ import (
 )
 
 var (
-	PRIMARY_HOST string
-	WEB_HOST string
-	PORT string
-	APP_ENV string
+	PRIMARY_HOST         string
+	WEB_HOST             string
+	PORT                 string
+	APP_ENV              string
 	CLEARDB_DATABASE_URL string
+	SECRET_KEY           string
 )
 
 func init() {
@@ -45,8 +46,15 @@ func init() {
 	CLEARDB_DATABASE_URL = os.Getenv("CLEARDB_DATABASE_URL")
 
 	if CLEARDB_DATABASE_URL == "" {
-		// CLEARDB_DATABASE_URL = "mysql://b08738ff9fff5e:e79a1d81@us-cdbr-iron-east-01.cleardb.net/heroku_e16926abf051efd?reconnect=true"
-        CLEARDB_DATABASE_URL = "mysql://root:barry123456@localhost/3hshop"
+		CLEARDB_DATABASE_URL = "mysql://b08738ff9fff5e:e79a1d81@us-cdbr-iron-east-01.cleardb.net/heroku_e16926abf051efd?reconnect=true"
+		// CLEARDB_DATABASE_URL = "mysql://root:barry123456@localhost/3hshop"
 		log.Print("CLEARDB_DATABASE_URL: ", CLEARDB_DATABASE_URL)
+	}
+
+	SECRET_KEY = os.Getenv("SECRET_KEY")
+
+	if SECRET_KEY == "" {
+		SECRET_KEY = "api3hshop"
+		log.Print("SECRET_KEY: ", SECRET_KEY)
 	}
 }

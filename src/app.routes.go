@@ -41,6 +41,14 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	routers.BindCustomer(customerRouter)
 
 	/**
+	 * Users.
+	 */
+
+	userRouter := router.Group("/users")
+
+	routers.BindUser(userRouter)
+
+	/**
 	 * Products.
 	 */
 
