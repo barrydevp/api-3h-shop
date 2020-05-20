@@ -15,7 +15,7 @@ type User struct {
 	Address   *string `json:"address,omitempty"`
 	Role      *int64  `json:"role,omitempty"`
 	Session   *string `json:"session,omitempty"`
-	Phone     *string `json:"session,omitempty"`
+	Phone     *string `json:"phone,omitempty"`
 	Status    *string `json:"status,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	UpdatedAt *string `json:"updated_at,omitempty"`

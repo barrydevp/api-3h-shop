@@ -5,6 +5,7 @@ import (
 
 	"github.com/barrydev/api-3h-shop/src/common/response"
 	"github.com/barrydev/api-3h-shop/src/controllers"
+	"github.com/barrydev/api-3h-shop/src/middlewares"
 	"github.com/barrydev/api-3h-shop/src/routers"
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,34 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 		c.String(http.StatusOK, "API 3H-Shop:pong")
 	})
 
+	/**
+	 * Router.
+	 */
+	BindRouter(router, handlerFuncs)
+
+	/**
+	 * AuthRouter.
+	 */
+	authRouter := router.Group("/auth")
+	authRouter.Use(middlewares.AuthenticateJwtToken())
+	BindAuthRouter(authRouter, handlerFuncs)
+
+	testRouter := router.Group("/test")
+	testRouter.Use(middlewares.AuthenticateJwtToken())
+	testRouter.GET("/payload", func(c *gin.Context) {
+		payload, ok := c.Get("payload_token")
+
+		if !ok {
+			c.String(400, "invalid payload")
+
+			return
+		}
+
+		c.JSON(200, payload)
+	})
+}
+
+func BindRouter(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	/**
 	 * Categories.
 	 */
@@ -107,4 +136,80 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	currentRouter := router.Group("/current")
 
 	routers.BindCurrent(currentRouter)
+
+}
+
+func BindAuthRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
+	/**
+	 * Categories.
+	 */
+
+	// categoryRouter := router.Group("/categories")
+
+	// routers.BindCategory(categoryRouter)
+
+	/**
+	 * Customers.
+	 */
+
+	// customerRouter := router.Group("/customers")
+
+	// routers.BindCustomer(customerRouter)
+
+	/**
+	 * Users.
+	 */
+
+	userRouter := router.Group("/users")
+
+	routers.BindUserAuth(userRouter)
+
+	/**
+	 * Products.
+	 */
+
+	// productRouter := router.Group("/products")
+
+	// routers.BindProduct(productRouter)
+
+	/**
+	 * ProductItems.
+	 */
+
+	// productItemRouter := router.Group("/product-items")
+
+	// routers.BindProductItem(productItemRouter)
+
+	/**
+	 * Orders.
+	 */
+
+	// orderRouter := router.Group("/orders")
+
+	// routers.BindOrder(orderRouter)
+
+	/**
+	 * OrderItems.
+	 */
+
+	// orderItemRouter := router.Group("/order-items")
+
+	// routers.BindOrderItem(orderItemRouter)
+
+	/**
+	 * Shippings.
+	 */
+
+	// shippingRouter := router.Group("/shippings")
+
+	// routers.BindShipping(shippingRouter)
+
+	/**
+	 * Current.
+	 */
+
+	currentRouter := router.Group("/current")
+
+	routers.BindCurrentAuth(currentRouter)
+
 }

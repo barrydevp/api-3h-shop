@@ -11,6 +11,15 @@ func BindCurrent(router *gin.RouterGroup) {
 	router.GET("/order", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
-		handle.Try(controllers.GetCurrentOrder).Then(response.SendSuccess).Catch(response.SendError)
+		handle.Try(controllers.GetCurrentOrderV2).Then(response.SendSuccess).Catch(response.SendError)
+	})
+}
+
+func BindCurrentAuth(router *gin.RouterGroup) {
+
+	router.GET("/order", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetCurrentOrderAuth).Then(response.SendSuccess).Catch(response.SendError)
 	})
 }

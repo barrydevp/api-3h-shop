@@ -8,17 +8,17 @@ import (
 
 func BindUser(router *gin.RouterGroup) {
 
-	router.GET("", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.GET("", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.GetListUser).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.GetListUser).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 
-	router.GET("/:userId", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
+	// router.GET("/:userId", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
 
-		handle.Try(controllers.GetUserById).Then(response.SendSuccess).Catch(response.SendError)
-	})
+	// 	handle.Try(controllers.GetUserById).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 
 	router.POST("/register", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
@@ -37,4 +37,19 @@ func BindUser(router *gin.RouterGroup) {
 
 	// 	handle.Try(controllers.UpdateUser).Then(response.SendSuccess).Catch(response.SendError)
 	// })
+}
+
+func BindUserAuth(router *gin.RouterGroup) {
+
+	router.GET("", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetListUser).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.GET("/:userId", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetUserById).Then(response.SendSuccess).Catch(response.SendError)
+	})
 }

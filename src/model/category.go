@@ -2,9 +2,8 @@ package model
 
 import (
 	"database/sql"
-	"errors"
+
 	"github.com/barrydev/api-3h-shop/src/constants"
-	"github.com/barrydev/api-3h-shop/src/helpers"
 )
 
 type Category struct {
@@ -49,10 +48,10 @@ type BodyCategory struct {
 }
 
 func (body *BodyCategory) Normalize() error {
-	*body.Name = helpers.SanitizeString(*body.Name)
-	if body.ParentId != nil && *body.ParentId < 1 {
-		return errors.New("invalid parent_id")
-	}
+	// *body.Name = helpers.SanitizeString(*body.Name)
+	// if body.ParentId != nil && *body.ParentId < 1 {
+	// 	return errors.New("invalid parent_id")
+	// }
 
 	return nil
 }

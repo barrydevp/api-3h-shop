@@ -3,15 +3,21 @@ package factories
 import (
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
+	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func CountOrderItemTwoSession(query *connect.QueryMySQL) ([]int, error) {
+func GetOrderAndTotalItemWithSession(query *connect.QueryMySQL) (map[string]int, map[string]*model.Order, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			COUNT(*)
-		FROM order_items
+			_id, session, customer_id, status, total_price, payment_status, fulfillment_status, created_at, updated_at, paid_at, fulfilled_at, cancelled_at, note,
+			(	
+				SELECT COUNT(*) 
+				FROM order_items
+				WHERE order_id = orders._id
+			) 
+		FROM orders
 	`
 	var args []interface{}
 
@@ -20,12 +26,10 @@ func CountOrderItemTwoSession(query *connect.QueryMySQL) ([]int, error) {
 		args = query.Args
 	}
 
-	queryString += `GROUP BY order_id`
-
 	stmt, err := connection.Prepare(queryString)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	defer stmt.Close()
@@ -33,27 +37,47 @@ func CountOrderItemTwoSession(query *connect.QueryMySQL) ([]int, error) {
 	rows, err := stmt.Query(args...)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	defer rows.Close()
-	var listTotal []int
+	mapTotal := make(map[string]int)
+	mapOrders := make(map[string]*model.Order)
 
 	for rows.Next() {
+		_order := model.Order{}
 		total := 0
 
-		err = rows.Scan(&total)
+		err = rows.Scan(
+			&_order.RawId,
+			&_order.RawSession,
+			&_order.RawCustomerId,
+			&_order.RawStatus,
+			&_order.RawTotalPrice,
+			&_order.RawPaymentStatus,
+			&_order.RawFulfillmentStatus,
+			&_order.RawCreatedAt,
+			&_order.RawUpdatedAt,
+			&_order.RawPaidAt,
+			&_order.RawFulfilledAt,
+			&_order.RawCancelledAt,
+			&_order.RawNote,
+			&total,
+		)
 
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 
-		listTotal = append(listTotal, total)
+		_order.FillResponse()
+
+		mapTotal[*_order.Session] = total
+		mapOrders[*_order.Session] = &_order
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return listTotal, nil
+	return mapTotal, mapOrders, nil
 }
