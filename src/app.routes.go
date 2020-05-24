@@ -260,12 +260,4 @@ func BindAdminRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
 
 	routers.BindShippingAdmin(shippingRouter)
 
-	/**
-	 * Current.
-	 */
-
-	currentRouter := router.Group("/current")
-
-	routers.BindCurrentAuth(currentRouter)
-
 }

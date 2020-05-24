@@ -8,12 +8,6 @@ import (
 
 func BindOrder(router *gin.RouterGroup) {
 
-	router.GET("", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
-
-		handle.Try(controllers.GetListOrder).Then(response.SendSuccess).Catch(response.SendError)
-	})
-
 	router.GET("/:orderId", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
@@ -59,16 +53,16 @@ func BindOrder(router *gin.RouterGroup) {
 
 func BindOrderAdmin(router *gin.RouterGroup) {
 
+	router.GET("", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetListOrder).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	router.POST("/:orderId/shipping", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.InsertShippingByOrderId).Then(response.SendSuccess).Catch(response.SendError)
-	})
-
-	router.POST("/:orderId/checkout", func(c *gin.Context) {
-		handle := response.Handle{Context: c}
-
-		handle.Try(controllers.CheckoutOrder).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
 	router.POST("", func(c *gin.Context) {

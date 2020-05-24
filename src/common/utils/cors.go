@@ -19,6 +19,7 @@ func Cors() gin.HandlerFunc {
 	allowOrigins := []string{}
 	_generateAndAppendURL(&allowOrigins, "localhost:3000")
 	_generateAndAppendURL(&allowOrigins, constants.WEB_HOST)
+	_generateAndAppendURL(&allowOrigins, constants.ADMIN_HOST)
 	_generateAndAppendURL(&allowOrigins, "test-cors.org")
 	// allowOrigins = append(allowOrigins, "http://"+constants.WEB_HOST)
 	// allowOrigins = append(allowOrigins, "https://.test-cors.org")

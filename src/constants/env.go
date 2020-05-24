@@ -8,6 +8,7 @@ import (
 var (
 	PRIMARY_HOST         string
 	WEB_HOST             string
+	ADMIN_HOST           string
 	PORT                 string
 	APP_ENV              string
 	CLEARDB_DATABASE_URL string
@@ -27,6 +28,13 @@ func init() {
 	if WEB_HOST == "" {
 		WEB_HOST = "http://localhost:3000"
 		log.Print("$WEB_HOST must be set => Using default WEB_HOST: ", "http://localhost:3000")
+	}
+
+	WEB_HOST = os.Getenv("ADMIN_HOST")
+
+	if WEB_HOST == "" {
+		WEB_HOST = "http://localhost:3000"
+		log.Print("$ADMIN_HOST must be set => Using default ADMIN_HOST: ", "http://localhost:3000")
 	}
 
 	PORT = os.Getenv("PORT")
