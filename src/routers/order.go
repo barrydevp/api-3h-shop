@@ -20,6 +20,12 @@ func BindOrder(router *gin.RouterGroup) {
 		handle.Try(controllers.GetOrderItemByOrderId).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
+	router.GET("/:orderId/customer", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetOrderCustomerByOrderId).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	router.GET("/:orderId/shipping", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 

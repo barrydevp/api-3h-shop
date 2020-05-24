@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/barrydev/api-3h-shop/src/actions"
 	"github.com/barrydev/api-3h-shop/src/model"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func GetListOrder(c *gin.Context) (interface{}, error) {
@@ -113,6 +114,16 @@ func InsertOrder(c *gin.Context) (interface{}, error) {
 	}
 
 	return actions.InsertOrder(&insertOrder)
+}
+
+func GetOrderCustomerByOrderId(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.GetOrderCustomerByOrderId(orderId)
 }
 
 func UpdateOrder(c *gin.Context) (interface{}, error) {
