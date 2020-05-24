@@ -27,7 +27,7 @@ func Cors() gin.HandlerFunc {
 	// allowOrigins = append(allowOrigins, "http://www.test-cors.org")
 	// allowOrigins = append(allowOrigins, "https://"+constants.WEB_HOST)
 
-	allowHeaders := []string{"Origin", "Authorization"}
+	allowHeaders := []string{"Origin", "Authorization", "cache-control"}
 
 	_corsConfig.AllowOrigins = allowOrigins
 	_corsConfig.AllowCredentials = true
