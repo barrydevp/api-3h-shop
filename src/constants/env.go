@@ -30,10 +30,10 @@ func init() {
 		log.Print("$WEB_HOST must be set => Using default WEB_HOST: ", "http://localhost:3000")
 	}
 
-	WEB_HOST = os.Getenv("ADMIN_HOST")
+	ADMIN_HOST = os.Getenv("ADMIN_HOST")
 
-	if WEB_HOST == "" {
-		WEB_HOST = "http://localhost:3000"
+	if ADMIN_HOST == "" {
+		ADMIN_HOST = "http://localhost:3000"
 		log.Print("$ADMIN_HOST must be set => Using default ADMIN_HOST: ", "http://localhost:3000")
 	}
 
