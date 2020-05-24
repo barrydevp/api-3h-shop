@@ -16,7 +16,8 @@ func _generateAndAppendURL(listURL *[]string, uri string) {
 func Cors() gin.HandlerFunc {
 	_corsConfig := cors.DefaultConfig()
 
-	allowOrigins := []string{"http://localhost:3000"}
+	allowOrigins := []string{}
+	_generateAndAppendURL(&allowOrigins, "localhost:3000")
 	_generateAndAppendURL(&allowOrigins, constants.WEB_HOST)
 	_generateAndAppendURL(&allowOrigins, "test-cors.org")
 	// allowOrigins = append(allowOrigins, "http://"+constants.WEB_HOST)
@@ -26,7 +27,7 @@ func Cors() gin.HandlerFunc {
 	// allowOrigins = append(allowOrigins, "http://www.test-cors.org")
 	// allowOrigins = append(allowOrigins, "https://"+constants.WEB_HOST)
 
-	allowHeaders := []string{"Authorization"}
+	allowHeaders := []string{"Origin", "Authorization"}
 
 	_corsConfig.AllowOrigins = allowOrigins
 	_corsConfig.AllowCredentials = true
