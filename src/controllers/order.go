@@ -143,3 +143,57 @@ func UpdateOrder(c *gin.Context) (interface{}, error) {
 
 	return actions.UpdateOrder(orderId, &body)
 }
+
+func ChangeOrderNoteByOrderId(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body model.BodyOrder
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.ChangeOrderNoteByOrderId(orderId, &body)
+}
+
+func ChangeOrderFulfilmentStatusByOrderId(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body model.BodyOrder
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.ChangeOrderFulfilmentStatusByOrderId(orderId, &body)
+}
+
+func ChangeOrderPaymentStatusByOrderId(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body model.BodyOrder
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.ChangeOrderPaymentStatusByOrderId(orderId, &body)
+}

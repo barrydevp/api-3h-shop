@@ -7,6 +7,9 @@ import (
 	"github.com/barrydev/api-3h-shop/src/constants"
 )
 
+var ValidFulfillmentStatus = []string{"pending", "fulfilled", "in-production", "shipped", "cancelled"}
+var ValidPaymentStatus = []string{"pending", "paid"}
+
 type Order struct {
 	/** Response Field */
 	Id                *int64   `json:"_id,omitempty"`
@@ -179,4 +182,24 @@ type BodyCheckoutOrder struct {
 	*Customer   `json:"customer" binding:"omitempty"`
 	Note        *string `json:"note" binding:"omitempty"`
 	PaymentType *int    `json:"payment_type" binding:"omitempty"`
+}
+
+func IsValidFulfillmentStatus(status string) bool {
+	for _, validStatus := range ValidFulfillmentStatus {
+		if validStatus == status {
+			return true
+		}
+	}
+
+	return false
+}
+
+func IsValidPaymentStatus(status string) bool {
+	for _, validStatus := range ValidPaymentStatus {
+		if validStatus == status {
+			return true
+		}
+	}
+
+	return false
 }
