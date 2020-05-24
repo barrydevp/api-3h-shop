@@ -132,7 +132,7 @@ func _getCurrentOrderAuth(current *model.Current, payloadToken *factories.Access
 		return NewSession(current)
 	}
 
-	if okUser {
+	if !okCurrent {
 		*needUpdateUser = false
 		order := mapOrders[*user.Session]
 
@@ -143,12 +143,36 @@ func _getCurrentOrderAuth(current *model.Current, payloadToken *factories.Access
 		}, nil
 	}
 
-	order := mapOrders[*current.Session]
+	if !okUser {
+		*needUpdateUser = true
+		order := mapOrders[*current.Session]
+
+		return &model.CurrentResponse{
+			Order:     order,
+			Session:   current.Session,
+			TotalItem: totalItemOfUser,
+		}, nil
+	}
+
+	var order *model.Order
+	var session *string
+	var totalItem *int
+
+	if totalItemOfCurrent >= totalItemOfUser {
+		*needUpdateUser = true
+		order = mapOrders[*current.Session]
+		session = current.Session
+		totalItem = &totalItemOfCurrent
+	} else {
+		order = mapOrders[*user.Session]
+		session = user.Session
+		totalItem = &totalItemOfUser
+	}
 
 	return &model.CurrentResponse{
 		Order:     order,
-		Session:   current.Session,
-		TotalItem: totalItemOfCurrent,
+		Session:   session,
+		TotalItem: *totalItem,
 	}, nil
 }
 
