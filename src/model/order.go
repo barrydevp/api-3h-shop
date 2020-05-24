@@ -23,7 +23,7 @@ type Order struct {
 	CreatedAt         *string  `json:"created_at,omitempty"`
 	UpdatedAt         *string  `json:"updated_at,omitempty"`
 	PaidAt            *string  `json:"paid_at,omitempty"`
-	FulfilledAt       *string  `json:"fulfill_at,omitempty"`
+	FulfilledAt       *string  `json:"fulfilled_at,omitempty"`
 	CancelledAt       *string  `json:"cancelled_at,omitempty"`
 	/** Database Field */
 	RawId                *int64           `json:"-"`
@@ -91,7 +91,7 @@ type BodyOrder struct {
 	FulfillmentStatus *string  `json:"fulfillment_status" binding:"omitempty"`
 	Note              *string  `json:"note" binding:"omitempty"`
 	PaidAt            *string  `json:"paid_at" binding:"omitempty"`
-	FulfilledAt       *string  `json:"fulfill_at" binding:"omitempty"`
+	FulfilledAt       *string  `json:"fulfilled_at" binding:"omitempty"`
 	CancelledAt       *string  `json:"cancelled_at" binding:"omitempty"`
 }
 
