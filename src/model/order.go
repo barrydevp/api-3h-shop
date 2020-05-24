@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"strings"
 
 	"github.com/barrydev/api-3h-shop/src/constants"
 )
@@ -101,26 +102,28 @@ func (body *BodyOrder) Normalize() error {
 }
 
 type QueryOrder struct {
-	Id                *int64  `form:"id" binding:"omitempty"`
-	Session           *string `form:"session" binding:"omitempty"`
-	CustomerId        *int64  `form:"customer_id" binding:"omitempty"`
-	Status            *string `json:"status" binding:"omitempty"`
-	PaymentStatus     *string `form:"payment_status" binding:"omitempty"`
-	FulfillmentStatus *string `form:"fulfillment_status" binding:"omitempty"`
-	Note              *string `form:"note" binding:"omitempty"`
-	CreatedAtFrom     *string `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
-	CreatedAtTo       *string `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
-	UpdatedAtFrom     *string `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
-	UpdatedAtTo       *string `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
-	PaidAtFrom        *string `form:"paid_at_from" binding:"omitempty,required_with=PaidAtTo,datetime"`
-	PaidAtTo          *string `form:"paid_at_to" binding:"omitempty,required_with=PaidAtFrom,datetime"`
-	FulfilledAtFrom   *string `form:"fulfilled_at_from" binding:"omitempty,required_with=FulfilledAtTo,datetime"`
-	FulfilledAtTo     *string `form:"fulfilled_at_to" binding:"omitempty,required_with=FulfilledAtFrom,datetime"`
-	CancelledAtFrom   *string `form:"cancelled_at_from" binding:"omitempty,required_with=CancelledAtTo,datetime"`
-	CancelledAtTo     *string `form:"cancelled_at_to" binding:"omitempty,required_with=CancelledAtFrom,datetime"`
-	Page              *int    `form:"page" binding:"omitempty,gte=0"`
-	Limit             *int    `form:"limit" binding:"omitempty,gte=0"`
+	Id                *int64   `form:"id" binding:"omitempty"`
+	Session           *string  `form:"session" binding:"omitempty"`
+	CustomerId        *int64   `form:"customer_id" binding:"omitempty"`
+	Status            *string  `json:"status" binding:"omitempty"`
+	PaymentStatus     *string  `form:"payment_status" binding:"omitempty"`
+	FulfillmentStatus *string  `form:"fulfillment_status" binding:"omitempty"`
+	Note              *string  `form:"note" binding:"omitempty"`
+	CreatedAtFrom     *string  `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
+	CreatedAtTo       *string  `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
+	UpdatedAtFrom     *string  `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
+	UpdatedAtTo       *string  `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
+	PaidAtFrom        *string  `form:"paid_at_from" binding:"omitempty,required_with=PaidAtTo,datetime"`
+	PaidAtTo          *string  `form:"paid_at_to" binding:"omitempty,required_with=PaidAtFrom,datetime"`
+	FulfilledAtFrom   *string  `form:"fulfilled_at_from" binding:"omitempty,required_with=FulfilledAtTo,datetime"`
+	FulfilledAtTo     *string  `form:"fulfilled_at_to" binding:"omitempty,required_with=FulfilledAtFrom,datetime"`
+	CancelledAtFrom   *string  `form:"cancelled_at_from" binding:"omitempty,required_with=CancelledAtTo,datetime"`
+	CancelledAtTo     *string  `form:"cancelled_at_to" binding:"omitempty,required_with=CancelledAtFrom,datetime"`
+	Page              *int     `form:"page" binding:"omitempty,gte=0"`
+	Limit             *int     `form:"limit" binding:"omitempty,gte=0"`
+	Sort              []string `form:"sort[]" binding:"omitempty"`
 	Offset            *int
+	OrderBy           *string
 }
 
 func (query *QueryOrder) ParsePaging() {
@@ -137,6 +140,39 @@ func (query *QueryOrder) ParsePaging() {
 	skip := (*query.Page - 1) * *query.Limit
 
 	query.Offset = &skip
+}
+
+func (query *QueryOrder) ParseSort() {
+	var orderBy []string
+	if query.Sort != nil {
+		if len(query.Sort) > 0 {
+			for _, sort := range query.Sort {
+				sortArr := strings.Split(sort, " ")
+				if len(sortArr) > 0 {
+					if len(sortArr) == 1 {
+						subOrderBy := sortArr[0] + " ASC"
+						orderBy = append(orderBy, subOrderBy)
+					} else {
+						subOrderBy := sortArr[0]
+						typeOrder := strings.ToLower(sortArr[1])
+						if typeOrder != "asc" && typeOrder != "desc" {
+							typeOrder = "ASC"
+						}
+						subOrderBy += " " + typeOrder
+						orderBy = append(orderBy, subOrderBy)
+					}
+				}
+			}
+		}
+	}
+
+	orderByString := "_id ASC"
+
+	if len(orderBy) > 0 {
+		orderByString = strings.Join(orderBy, ", ")
+	}
+
+	query.OrderBy = &orderByString
 }
 
 type BodyCheckoutOrder struct {

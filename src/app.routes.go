@@ -19,6 +19,12 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 		c.String(http.StatusOK, "API 3H-Shop:pong")
 	})
 
+	router.POST("/admin/authenticate", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.AuthenticateAdmin).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	/**
 	 * Router.
 	 */
@@ -30,6 +36,13 @@ func BindRouterWithApp(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 	authRouter := router.Group("/auth")
 	authRouter.Use(middlewares.AuthenticateJwtToken())
 	BindAuthRouter(authRouter, handlerFuncs)
+
+	/**
+	 * AdminRouter.
+	 */
+	adminRouter := router.Group("/admin")
+	adminRouter.Use(middlewares.AuthenticateAdminJwtToken())
+	BindAdminRouter(adminRouter, handlerFuncs)
 
 	testRouter := router.Group("/test")
 	testRouter.Use(middlewares.AuthenticateJwtToken())
@@ -141,14 +154,6 @@ func BindRouter(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 
 func BindAuthRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
 	/**
-	 * Categories.
-	 */
-
-	// categoryRouter := router.Group("/categories")
-
-	// routers.BindCategory(categoryRouter)
-
-	/**
 	 * Customers.
 	 */
 
@@ -163,22 +168,6 @@ func BindAuthRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
 	userRouter := router.Group("/users")
 
 	routers.BindUserAuth(userRouter)
-
-	/**
-	 * Products.
-	 */
-
-	// productRouter := router.Group("/products")
-
-	// routers.BindProduct(productRouter)
-
-	/**
-	 * ProductItems.
-	 */
-
-	// productItemRouter := router.Group("/product-items")
-
-	// routers.BindProductItem(productItemRouter)
 
 	/**
 	 * Orders.
@@ -203,6 +192,73 @@ func BindAuthRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
 	// shippingRouter := router.Group("/shippings")
 
 	// routers.BindShipping(shippingRouter)
+
+	/**
+	 * Current.
+	 */
+
+	currentRouter := router.Group("/current")
+
+	routers.BindCurrentAuth(currentRouter)
+
+}
+
+func BindAdminRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
+	/**
+	 * Customers.
+	 */
+
+	customerRouter := router.Group("/customers")
+
+	routers.BindCustomerAdmin(customerRouter)
+
+	/**
+	 * Customers.
+	 */
+
+	categoryRouter := router.Group("/categories")
+
+	routers.BindCategoryAdmin(categoryRouter)
+
+	/**
+	 * Products.
+	 */
+
+	productRouter := router.Group("/products")
+
+	routers.BindProductAdmin(productRouter)
+
+	/**
+	 * Users.
+	 */
+
+	userRouter := router.Group("/users")
+
+	routers.BindUserAdmin(userRouter)
+
+	/**
+	 * Orders.
+	 */
+
+	orderRouter := router.Group("/orders")
+
+	routers.BindOrderAdmin(orderRouter)
+
+	/**
+	 * OrderItems.
+	 */
+
+	// orderItemRouter := router.Group("/order-items")
+
+	// routers.BindOrderItem(orderItemRouter)
+
+	/**
+	 * Shippings.
+	 */
+
+	shippingRouter := router.Group("/shippings")
+
+	routers.BindShippingAdmin(shippingRouter)
 
 	/**
 	 * Current.

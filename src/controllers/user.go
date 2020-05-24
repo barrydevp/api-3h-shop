@@ -65,6 +65,18 @@ func AuthenticateUser(c *gin.Context) (interface{}, error) {
 	return actions.AuthenticateUser(&body)
 }
 
+func AuthenticateAdmin(c *gin.Context) (interface{}, error) {
+	var body model.BodyUser
+
+	err := c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.AuthenticateAdmin(&body)
+}
+
 func InsertUser(c *gin.Context) (interface{}, error) {
 	var insertUser model.BodyUser
 

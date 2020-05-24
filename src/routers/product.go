@@ -44,3 +44,30 @@ func BindProduct(router *gin.RouterGroup) {
 	// 	handle.Try(controllers.UpdateProduct).Then(response.SendSuccess).Catch(response.SendError)
 	// })
 }
+
+func BindProductAdmin(router *gin.RouterGroup) {
+
+	router.GET("/:productId/items", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetProductItemByProductId).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:productId/items", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.InsertProductItemByProductId).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.InsertProduct).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:productId/update", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.UpdateProduct).Then(response.SendSuccess).Catch(response.SendError)
+	})
+}

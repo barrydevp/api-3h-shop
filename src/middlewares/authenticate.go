@@ -26,3 +26,25 @@ func AuthenticateJwtToken() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func AuthenticateAdminJwtToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		claims, err := factories.RetriveAccessTokenPayload(c)
+
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, err.Error())
+			c.Abort()
+			return
+		}
+
+		if claims.Role == 11 {
+			c.JSON(http.StatusForbidden, "forbidden")
+			c.Abort()
+			return
+		}
+
+		InjectPayloadToContext(c, claims)
+
+		c.Next()
+	}
+}

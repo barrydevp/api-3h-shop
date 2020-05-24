@@ -32,3 +32,18 @@ func BindShipping(router *gin.RouterGroup) {
 	// 	handle.Try(controllers.UpdateShipping).Then(response.SendSuccess).Catch(response.SendError)
 	// })
 }
+
+func BindShippingAdmin(router *gin.RouterGroup) {
+
+	router.POST("", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.InsertShipping).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:shippingId/update", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.UpdateShipping).Then(response.SendSuccess).Catch(response.SendError)
+	})
+}

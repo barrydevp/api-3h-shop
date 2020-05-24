@@ -1,11 +1,12 @@
 package actions
 
 import (
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/common/response"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"strings"
 )
 
 func GetListOrder(queryOrder *model.QueryOrder) (*response.DataList, error) {
@@ -70,7 +71,8 @@ func GetListOrder(queryOrder *model.QueryOrder) (*response.DataList, error) {
 		Args:        args,
 	}
 
-	queryString += "ORDER BY _id ASC\n"
+	queryOrder.ParseSort()
+	queryString += "ORDER BY " + *queryOrder.OrderBy + "\n"
 
 	queryOrder.ParsePaging()
 	queryString += "LIMIT ?, ?\n"

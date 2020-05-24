@@ -24,6 +24,25 @@ func InsertUser(body *model.BodyUser) (*model.User, error) {
 		args = append(args, body.Email)
 	}
 
+	if body.Phone != nil {
+		set = append(set, " phone=?")
+		args = append(args, body.Phone)
+	} else {
+		return nil, errors.New("user's phone is required")
+	}
+
+	user, err := factories.FindOneUser(&connect.QueryMySQL{
+		QueryString: "WHERE email=? OR phone=?",
+		Args:        []interface{}{body.Email, body.Phone},
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	if user != nil {
+		return nil, errors.New("email or phone is exists")
+	}
+
 	if body.Password == nil {
 		return nil, errors.New("user's password is required")
 	} else {
@@ -44,13 +63,6 @@ func InsertUser(body *model.BodyUser) (*model.User, error) {
 		args = append(args, body.Address)
 	} else {
 		return nil, errors.New("user's address is required")
-	}
-
-	if body.Phone != nil {
-		set = append(set, " phone=?")
-		args = append(args, body.Phone)
-	} else {
-		return nil, errors.New("user's phone is required")
 	}
 
 	if body.Session != nil {
