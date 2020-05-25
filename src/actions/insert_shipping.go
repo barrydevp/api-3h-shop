@@ -41,6 +41,18 @@ func InsertShipping(body *model.BodyShipping) (*model.Shipping, error) {
 		return nil, errors.New("shipping's carrier is required")
 	}
 
+	if body.Price != nil {
+		set = append(set, " price=?")
+		args = append(args, body.Price)
+	} else {
+		return nil, errors.New("shipping's price is required")
+	}
+
+	if body.Note != nil {
+		set = append(set, " note=?")
+		args = append(args, body.Note)
+	}
+
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + ", created_at=NOW() \n"
 	} else {

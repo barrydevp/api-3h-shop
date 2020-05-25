@@ -2,18 +2,21 @@ package model
 
 import (
 	"database/sql"
+
 	"github.com/barrydev/api-3h-shop/src/constants"
 )
 
 type Shipping struct {
 	/** Response Field */
-	Id          *int64  `json:"_id,omitempty"`
-	Carrier     *string `json:"carrier,omitempty"`
-	Status      *string `json:"status,omitempty"`
-	OrderId     *int64  `json:"order_id,omitempty"`
-	CreatedAt   *string `json:"created_at,omitempty"`
-	UpdatedAt   *string `json:"updated_at,omitempty"`
-	DeliveredAt *string `json:"delivered_at,omitempty"`
+	Id          *int64   `json:"_id,omitempty"`
+	Carrier     *string  `json:"carrier,omitempty"`
+	Status      *string  `json:"status,omitempty"`
+	OrderId     *int64   `json:"order_id,omitempty"`
+	CreatedAt   *string  `json:"created_at,omitempty"`
+	UpdatedAt   *string  `json:"updated_at,omitempty"`
+	DeliveredAt *string  `json:"delivered_at,omitempty"`
+	Note        *string  `json:"note,omitempty"`
+	Price       *float64 `json:"price,omitempty"`
 	/** Database Field */
 	RawId          *int64          `json:"-"`
 	RawCarrier     *string         `json:"-"`
@@ -22,6 +25,8 @@ type Shipping struct {
 	RawCreatedAt   *string         `json:"-"`
 	RawUpdatedAt   *string         `json:"-"`
 	RawDeliveredAt *sql.NullString `json:"-"`
+	RawNote        *sql.NullString `json:"-"`
+	RawPrice       float64         `json:"-"`
 }
 
 func (shipping *Shipping) FillResponse() {
@@ -36,14 +41,21 @@ func (shipping *Shipping) FillResponse() {
 			shipping.DeliveredAt = &shipping.RawDeliveredAt.String
 		}
 	}
+	if shipping.RawNote != nil {
+		if shipping.RawNote.Valid {
+			shipping.Note = &shipping.RawNote.String
+		}
+	}
 }
 
 type BodyShipping struct {
-	Id          *int64  `json:"_id" binding:"omitempty,gt=0"`
-	Carrier     *string `json:"carrier" binding:"omitempty"`
-	Status      *string `json:"status" binding:"omitempty"`
-	OrderId     *int64  `json:"order_id" binding:"omitempty,gt=0"`
-	DeliveredAt *string `json:"delivered_at" binding:"omitempty"`
+	Id          *int64   `json:"_id" binding:"omitempty,gt=0"`
+	Carrier     *string  `json:"carrier" binding:"omitempty"`
+	Status      *string  `json:"status" binding:"omitempty"`
+	OrderId     *int64   `json:"order_id" binding:"omitempty,gt=0"`
+	DeliveredAt *string  `json:"delivered_at" binding:"omitempty"`
+	Note        *string  `json:"note" binding:"omitempty"`
+	Price       *float64 `json:"price" binding:"omitempty,gt=0"`
 }
 
 func (body *BodyShipping) Normalize() error {

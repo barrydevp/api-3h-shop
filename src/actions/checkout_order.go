@@ -63,8 +63,8 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (bool, error) {
 
 	go func() {
 		totalItem, totalPrice, err := factories.CountAndCaculateOrderItem(&connect.QueryMySQL{
-			QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=order_items.order_id AND payment_status='pending')",
-			Args:        []interface{}{&orderId},
+			QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=? AND payment_status='pending')",
+			Args:        []interface{}{&orderId, &orderId},
 		})
 
 		if err != nil {

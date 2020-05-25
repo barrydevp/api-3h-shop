@@ -12,17 +12,18 @@ func CountAndCaculateOrderItem(query *connect.QueryMySQL) (int, float64, error) 
 
 	queryString := `
 		SELECT
-			COUNT(*), ROUND(SUM(products.out_price * (1 - products.discount)), 2)
-		FROM order_items
-		INNER JOIN products
-		ON order_items.product_id = products._id
-	`
+			COUNT(*), COALESCE(ROUND(SUM(products.out_price * o_i.quantity * (1 - products.discount)), 2), 0)
+`
 	var args []interface{}
 
 	if query != nil {
-		queryString += query.QueryString
+		queryString += "FROM (SELECT * FROM order_items " + query.QueryString + ") o_i"
 		args = query.Args
 	}
+	queryString += `
+		INNER JOIN products
+		ON o_i.product_id = products._id
+	`
 
 	stmt, err := connection.Prepare(queryString)
 
