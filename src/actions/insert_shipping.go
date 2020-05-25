@@ -17,7 +17,7 @@ func InsertShipping(body *model.BodyShipping) (*model.Shipping, error) {
 
 	if body.OrderId != nil {
 		order, err := factories.FindOneOrder(&connect.QueryMySQL{
-			QueryString: "WHERE _id=? AND payment_status='pending'",
+			QueryString: "WHERE _id=? AND payment_status='paid'",
 			Args:        []interface{}{body.OrderId},
 		})
 
