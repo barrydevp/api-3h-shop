@@ -2,10 +2,11 @@ package actions
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"strings"
 )
 
 func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
@@ -63,7 +64,7 @@ func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
 	if body.OrderId != nil {
 		goroutines = append(goroutines, func() {
 			order, err := factories.FindOneOrder(&connect.QueryMySQL{
-				QueryString: "WHERE _id=? AND status='pending'",
+				QueryString: "WHERE _id=? AND payment_status='pending'",
 				Args:        []interface{}{body.OrderId},
 			})
 

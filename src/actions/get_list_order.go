@@ -29,13 +29,22 @@ func GetListOrder(queryOrder *model.QueryOrder) (*response.DataList, error) {
 			}
 		}
 	}
+	if queryOrder.FulfillmentStatus != nil {
+		fulfillmentStatuses := strings.Split(*queryOrder.FulfillmentStatus, ",")
+		if len(fulfillmentStatuses) > 1 {
+			where = append(where, " fulfillment_status IN(?"+strings.Repeat(",?", len(fulfillmentStatuses)-1)+")")
+			for _, fulfillmentStatus := range fulfillmentStatuses {
+				args = append(args, fulfillmentStatus)
+			}
+
+		} else {
+			where = append(where, " fulfillment_status=?")
+			args = append(args, *queryOrder.FulfillmentStatus)
+		}
+	}
 	if queryOrder.PaymentStatus != nil {
 		where = append(where, " payment_status=?")
 		args = append(args, *queryOrder.PaymentStatus)
-	}
-	if queryOrder.FulfillmentStatus != nil {
-		where = append(where, " fulfillment_status=?")
-		args = append(args, *queryOrder.FulfillmentStatus)
 	}
 	if queryOrder.Note != nil {
 		where = append(where, " note LIKE ?")

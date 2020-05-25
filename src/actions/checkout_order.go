@@ -9,25 +9,25 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, error) {
+func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (bool, error) {
 	queryString := ""
 	var args []interface{}
 
 	var set []string
 
 	if body.Customer == nil {
-		return nil, errors.New("customer's information is required")
+		return false, errors.New("customer's information is required")
 	}
 
 	if body.Customer.Phone == nil {
-		return nil, errors.New("customer's phone is required")
+		return false, errors.New("customer's phone is required")
 	} else {
 		set = append(set, " phone=?")
 		args = append(args, body.Customer.Phone)
 	}
 
 	if body.Customer.Address == nil {
-		return nil, errors.New("customer's address is required")
+		return false, errors.New("customer's address is required")
 	} else {
 		set = append(set, " address=?")
 		args = append(args, body.Customer.Address)
@@ -63,7 +63,7 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 
 	go func() {
 		totalItem, totalPrice, err := factories.CountAndCaculateOrderItem(&connect.QueryMySQL{
-			QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=order_items.order_id AND status='pending')",
+			QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=order_items.order_id AND payment_status='pending')",
 			Args:        []interface{}{&orderId},
 		})
 
@@ -94,14 +94,14 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 			}
 
 		case err := <-rejectChan:
-			return nil, err
+			return false, err
 		}
 	}
 
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + "\n"
 	} else {
-		return nil, errors.New("invalid body")
+		return false, errors.New("invalid body customer")
 	}
 
 	var customerId int64
@@ -113,7 +113,7 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 		})
 
 		if err != nil {
-			return nil, err
+			return false, err
 		}
 
 		customerId = *customer.Id
@@ -124,24 +124,53 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (*model.Order, 
 		})
 
 		if err != nil {
-			return nil, err
+			return false, err
 		}
 
 		if id == nil {
-			return nil, errors.New("insert error")
+			return false, errors.New("insert error")
 		}
 
 		customerId = *id
 	}
 
-	bodyOrder := model.BodyOrder{}
-	status := "payment"
-	bodyOrder.Status = &status
-	bodyOrder.CustomerId = &customerId
-	bodyOrder.TotalPrice = totalPrice
+	var argsUpdateOrder []interface{}
+	var setUpdateOrder []string
+
+	setUpdateOrder = append(setUpdateOrder, ` status="payment"`)
+	setUpdateOrder = append(setUpdateOrder, ` payment_status="paid"`)
+	setUpdateOrder = append(setUpdateOrder, ` paid_at=NOW()`)
+	setUpdateOrder = append(setUpdateOrder, ` customer_id=?`)
+	argsUpdateOrder = append(argsUpdateOrder, &customerId)
+	setUpdateOrder = append(setUpdateOrder, ` total_price=?`)
+	argsUpdateOrder = append(argsUpdateOrder, totalPrice)
+
 	if body.Note != nil {
-		bodyOrder.Note = body.Note
+		setUpdateOrder = append(setUpdateOrder, ` note=?`)
+		argsUpdateOrder = append(argsUpdateOrder, body.Note)
 	}
 
-	return UpdateOrder(orderId, &bodyOrder)
+	if len(setUpdateOrder) > 0 {
+		queryString = "SET" + strings.Join(setUpdateOrder, ",") + "\n"
+	} else {
+		return false, errors.New("invalid body order")
+	}
+
+	queryString += "WHERE _id=?"
+	argsUpdateOrder = append(argsUpdateOrder, &orderId)
+
+	rowEffected, err := factories.UpdateOrder(&connect.QueryMySQL{
+		QueryString: queryString,
+		Args:        argsUpdateOrder,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	if rowEffected == nil {
+		return false, errors.New("update error")
+	}
+
+	return true, nil
 }
