@@ -197,3 +197,13 @@ func ChangeOrderPaymentStatusByOrderId(c *gin.Context) (interface{}, error) {
 
 	return actions.ChangeOrderPaymentStatusByOrderId(orderId, &body)
 }
+
+func MarkOrderPaid(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.MarkOrderPaid(orderId)
+}

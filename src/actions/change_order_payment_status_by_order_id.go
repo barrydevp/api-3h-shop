@@ -25,12 +25,12 @@ func ChangeOrderPaymentStatusByOrderId(orderId int64, body *model.BodyOrder) (bo
 		return false, errors.New("require order's payment_status")
 	}
 
-	if len(set) > 0 {
-		queryString += "SET" + strings.Join(set, ",") + "\n"
+	if *body.PaymentStatus == "paid" {
+		set = append(set, " paid_at=NOW()")
 	}
 
-	if *body.PaymentStatus == "paid" {
-		queryString += " paid_at=NOW()"
+	if len(set) > 0 {
+		queryString += "SET" + strings.Join(set, ",") + "\n"
 	}
 
 	queryString += "WHERE _id=?"

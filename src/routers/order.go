@@ -83,6 +83,12 @@ func BindOrderAdmin(router *gin.RouterGroup) {
 		handle.Try(controllers.ChangeOrderNoteByOrderId).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
+	router.POST("/:orderId/payment/paid", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.ChangeOrderNoteByOrderId).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	router.POST("/:orderId/shipping", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 

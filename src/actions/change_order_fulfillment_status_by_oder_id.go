@@ -27,11 +27,11 @@ func ChangeOrderFulfilmentStatusByOrderId(orderId int64, body *model.BodyOrder) 
 	}
 
 	if *body.FulfillmentStatus == "fulfilled" {
-		queryString += " fulfilled_at=NOW()"
+		set = append(set, " fulfilled_at=NOW()")
 	}
 
 	if *body.FulfillmentStatus == "cancelled" {
-		queryString += " cancelled_at=NOW()"
+		set = append(set, " cancelled_at=NOW()")
 	}
 
 	if len(set) > 0 {
