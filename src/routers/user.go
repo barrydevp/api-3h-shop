@@ -34,6 +34,18 @@ func BindUserAuth(router *gin.RouterGroup) {
 
 		handle.Try(controllers.GetUserById).Then(response.SendSuccess).Catch(response.SendError)
 	})
+
+	router.POST("/:userId/password/change", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.ChangeUserPassword).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:userId/update", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.UpdateProfile).Then(response.SendSuccess).Catch(response.SendError)
+	})
 }
 
 func BindUserAdmin(router *gin.RouterGroup) {
@@ -60,5 +72,23 @@ func BindUserAdmin(router *gin.RouterGroup) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.UpdateUser).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	// 	router.POST("/:userId/delete", func(c *gin.Context) {
+	// 		handle := response.Handle{Context: c}
+
+	// 		handle.Try(controllers.DeleteUser).Then(response.SendSuccess).Catch(response.SendError)
+	// 	})
+
+	router.POST("/:userId/role/change", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.ChangeUserRole).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:userId/password/reset", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.ResetUserPassword).Then(response.SendSuccess).Catch(response.SendError)
 	})
 }

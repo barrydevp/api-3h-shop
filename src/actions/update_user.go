@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"crypto/md5"
 	"errors"
 	"strings"
 
@@ -16,36 +15,41 @@ func UpdateUser(userId int64, body *model.BodyUser) (*model.User, error) {
 
 	var set []string
 
-	if body.Phone != nil {
-		set = append(set, " phone=?")
-		args = append(args, body.Phone)
+	if body.Name != nil {
+		set = append(set, " name=?")
+		args = append(args, body.Name)
 	}
 
-	if body.Password != nil {
-		hashPassword := md5.Sum([]byte(*body.Password))
-		set = append(set, " password=?")
-		args = append(args, string(hashPassword[:]))
-	}
+	// if body.Phone != nil {
+	// 	set = append(set, " phone=?")
+	// 	args = append(args, body.Phone)
+	// }
+
+	// if body.Password != nil {
+	// 	hashPassword := md5.Sum([]byte(*body.Password))
+	// 	set = append(set, " password=?")
+	// 	args = append(args, string(hashPassword[:]))
+	// }
 
 	if body.Address != nil {
 		set = append(set, " address=?")
 		args = append(args, body.Address)
 	}
 
-	if body.Session != nil {
-		set = append(set, " session=?")
-		args = append(args, body.Session)
-	}
+	// if body.Session != nil {
+	// 	set = append(set, " session=?")
+	// 	args = append(args, body.Session)
+	// }
 
-	if body.Role != nil {
-		set = append(set, " role=?")
-		args = append(args, body.Role)
-	}
+	// if body.Role != nil {
+	// 	set = append(set, " role=?")
+	// 	args = append(args, body.Role)
+	// }
 
-	if body.Status != nil {
-		set = append(set, " status=?")
-		args = append(args, body.Status)
-	}
+	// if body.Status != nil {
+	// 	set = append(set, " status=?")
+	// 	args = append(args, body.Status)
+	// }
 
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + "\n"

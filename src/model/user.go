@@ -6,6 +6,8 @@ import (
 	"github.com/barrydev/api-3h-shop/src/constants"
 )
 
+var SupportRole = []int64{1, 11, 21}
+
 type User struct {
 	/** Response Field */
 	Id        *int64  `json:"_id,omitempty"`
@@ -63,6 +65,11 @@ type BodyUser struct {
 	Status   *string `json:"status" binding::omitempty`
 }
 
+type BodyUserChangePassword struct {
+	NewPassword *string `json:"new_password" binding::omitempty`
+	OldPassword *string `json:"old_password" binding::omitempty`
+}
+
 func (body *BodyUser) Normalize() error {
 	//*body.Name = helpers.SanitizeString(*body.Name)
 	//if body.ParentId != nl && *body.ParentId < 1 {
@@ -104,4 +111,14 @@ func (query *QueryUser) ParsePaging() {
 	skip := (*query.Page - 1) * *query.Limit
 
 	query.Offset = &skip
+}
+
+func IsSupportedRole(role int64) bool {
+	for _, supportedRole := range SupportRole {
+		if role == supportedRole {
+			return true
+		}
+	}
+
+	return false
 }
