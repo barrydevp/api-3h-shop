@@ -153,13 +153,13 @@ func (query *QueryOrder) ParseSort() {
 				sortArr := strings.Split(sort, " ")
 				if len(sortArr) > 0 {
 					if len(sortArr) == 1 {
-						subOrderBy := sortArr[0] + " ASC"
+						subOrderBy := sortArr[0] + " DESC"
 						orderBy = append(orderBy, subOrderBy)
 					} else {
 						subOrderBy := sortArr[0]
 						typeOrder := strings.ToLower(sortArr[1])
 						if typeOrder != "asc" && typeOrder != "desc" {
-							typeOrder = "ASC"
+							typeOrder = "DESC"
 						}
 						subOrderBy += " " + typeOrder
 						orderBy = append(orderBy, subOrderBy)
@@ -169,7 +169,7 @@ func (query *QueryOrder) ParseSort() {
 		}
 	}
 
-	orderByString := "_id ASC"
+	orderByString := "_id DESC"
 
 	if len(orderBy) > 0 {
 		orderByString = strings.Join(orderBy, ", ")
