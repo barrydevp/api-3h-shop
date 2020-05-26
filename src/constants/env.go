@@ -33,8 +33,8 @@ func init() {
 	ADMIN_HOST = os.Getenv("ADMIN_HOST")
 
 	if ADMIN_HOST == "" {
-		ADMIN_HOST = "http://localhost:3000"
-		log.Print("$ADMIN_HOST must be set => Using default ADMIN_HOST: ", "http://localhost:3000")
+		ADMIN_HOST = "http://localhost:3100"
+		log.Print("$ADMIN_HOST must be set => Using default ADMIN_HOST: ", "http://localhost:3100")
 	}
 
 	PORT = os.Getenv("PORT")
