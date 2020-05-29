@@ -26,7 +26,7 @@ type Shipping struct {
 	RawUpdatedAt   *string         `json:"-"`
 	RawDeliveredAt *sql.NullString `json:"-"`
 	RawNote        *sql.NullString `json:"-"`
-	RawPrice       float64         `json:"-"`
+	RawPrice       *float64         `json:"-"`
 }
 
 func (shipping *Shipping) FillResponse() {
@@ -46,6 +46,7 @@ func (shipping *Shipping) FillResponse() {
 			shipping.Note = &shipping.RawNote.String
 		}
 	}
+    shipping.Price = shipping.RawPrice
 }
 
 type BodyShipping struct {

@@ -2,6 +2,7 @@ package factories
 
 import (
 	"database/sql"
+    "log"
 
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
@@ -24,6 +25,8 @@ func CountAndCaculateOrderItem(query *connect.QueryMySQL) (int, float64, error) 
 		INNER JOIN products
 		ON o_i.product_id = products._id
 	`
+
+    log.Println(queryString)
 
 	stmt, err := connection.Prepare(queryString)
 

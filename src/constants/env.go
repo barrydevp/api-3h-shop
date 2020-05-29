@@ -26,15 +26,15 @@ func init() {
 	WEB_HOST = os.Getenv("WEB_HOST")
 
 	if WEB_HOST == "" {
-		WEB_HOST = "http://localhost:3000"
-		log.Print("$WEB_HOST must be set => Using default WEB_HOST: ", "http://localhost:3000")
+		WEB_HOST = "localhost:3000"
+		log.Print("$WEB_HOST must be set => Using default WEB_HOST: ", "localhost:3000")
 	}
 
 	ADMIN_HOST = os.Getenv("ADMIN_HOST")
 
 	if ADMIN_HOST == "" {
-		ADMIN_HOST = "http://localhost:3100"
-		log.Print("$ADMIN_HOST must be set => Using default ADMIN_HOST: ", "http://localhost:3100")
+		ADMIN_HOST = "localhost:3100"
+		log.Print("$ADMIN_HOST must be set => Using default ADMIN_HOST: ", "localhost:3100")
 	}
 
 	PORT = os.Getenv("PORT")
@@ -54,8 +54,8 @@ func init() {
 	CLEARDB_DATABASE_URL = os.Getenv("CLEARDB_DATABASE_URL")
 
 	if CLEARDB_DATABASE_URL == "" {
-		CLEARDB_DATABASE_URL = "mysql://b08738ff9fff5e:e79a1d81@us-cdbr-iron-east-01.cleardb.net/heroku_e16926abf051efd?reconnect=true"
-		// CLEARDB_DATABASE_URL = "mysql://root:barry123456@localhost/3hshop"
+		// CLEARDB_DATABASE_URL = "mysql://b08738ff9fff5e:e79a1d81@us-cdbr-iron-east-01.cleardb.net/heroku_e16926abf051efd?reconnect=true"
+		CLEARDB_DATABASE_URL = "mysql://root:barry123456@localhost/3hshop"
 		log.Print("CLEARDB_DATABASE_URL: ", CLEARDB_DATABASE_URL)
 	}
 

@@ -44,6 +44,8 @@ func MarkOrderPaid(orderId int64) (bool, error) {
 	queryString += "WHERE _id=?"
 	argsUpdateOrder = append(argsUpdateOrder, &orderId)
 
+    // log.Println(queryString)
+
 	rowEffected, err := factories.UpdateOrder(&connect.QueryMySQL{
 		QueryString: queryString,
 		Args:        argsUpdateOrder,

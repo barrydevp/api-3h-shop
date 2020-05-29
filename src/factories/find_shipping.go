@@ -11,7 +11,7 @@ func FindShipping(query *connect.QueryMySQL) ([]*model.Shipping, error) {
 
 	queryString := `
 		SELECT
-			_id, carrier, status, order_id, created_at, updated_at, delivered_at
+			_id, carrier, status, order_id, created_at, updated_at, delivered_at, note, price
 		FROM shippings
 	`
 	var args []interface{}
@@ -49,6 +49,8 @@ func FindShipping(query *connect.QueryMySQL) ([]*model.Shipping, error) {
 			&_shipping.RawCreatedAt,
 			&_shipping.RawUpdatedAt,
 			&_shipping.RawDeliveredAt,
+            &_shipping.RawNote,
+            &_shipping.RawPrice,
 		)
 
 		if err != nil {
