@@ -22,8 +22,8 @@ func RemoveOrderCoupon(orderId int64) (bool, error) {
 	}
 
 	rowEffected, err := factories.UpdateOrder(&connect.QueryMySQL{
-		QueryString: `SET coupon_id=NULL, status="remove_coupon"`,
-		Args:        []interface{}{},
+		QueryString: `SET coupon_id=NULL, status="remove_coupon" WHERE _id=?`,
+		Args:        []interface{}{&orderId},
 	})
 
 	if err != nil {
