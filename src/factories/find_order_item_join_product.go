@@ -11,9 +11,9 @@ func FindOrderItemJoinProduct(query *connect.QueryMySQL) ([]*model.OrderItemJoin
 
 	queryString := `
 		SELECT
-			orderitems._id, orderitems.product_id, orderitems.order_id, orderitems.quantity, orderitems.status, orderitems.created_at, orderitems.updated_at, warranty_id,
-			products._id, products.category_id, products.name, products.out_price, products.discount, products.image_path, products.created_at, products.updated_at, tags,
-			_id, code, month, trial, status, description, category_id
+			orderitems._id, orderitems.product_id, orderitems.order_id, orderitems.quantity, orderitems.status, orderitems.created_at, orderitems.updated_at, orderitems.warranty_id,
+			products._id, products.category_id, products.name, products.out_price, products.discount, products.image_path, products.created_at, products.updated_at, products.tags,
+			warranties._id, warranties.code, warranties.month, warranties.trial, warranties.status, warranties.description, warranties.category_id
 		FROM (SELECT
 			order_items._id, order_items.product_id, order_items.product_item_id, order_items.order_id, order_items.quantity, order_items.status, order_items.created_at, order_items.updated_at, order_items.warranty_id
 		FROM order_items
