@@ -113,7 +113,7 @@ func (body *BodyOrder) Normalize() error {
 }
 
 type QueryOrder struct {
-	Id                *int64   `form:"id" binding:"omitempty"`
+	Id                *int64   `form:"_id" binding:"omitempty"`
 	Session           *string  `form:"session" binding:"omitempty"`
 	CustomerId        *int64   `form:"customer_id" binding:"omitempty"`
 	CouponId          *int64   `form:"coupon_id" binding:"omitempty"`
