@@ -53,12 +53,12 @@ type QueryProductItem struct {
 	ProductId     *int64   `json:"product_id" binding:"omitempty"`
 	Stock         *int64   `json:"stock" binding:"omitempty"`
 	InPrice       *float64 `json:"in_price" binding:"omitempty"`
-	CreatedAtFrom *string  `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
-	CreatedAtTo   *string  `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
-	UpdatedAtFrom *string  `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
-	UpdatedAtTo   *string  `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
-	ExpiredAtFrom *string  `form:"expired_at_from" binding:"omitempty,required_with=ExpiredAtTo,datetime"`
-	ExpiredAtTo   *string  `form:"expired_at_to" binding:"omitempty,required_with=ExpiredAtFrom,datetime"`
+	CreatedAtFrom *string  `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo"`
+	CreatedAtTo   *string  `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom"`
+	UpdatedAtFrom *string  `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo"`
+	UpdatedAtTo   *string  `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom"`
+	ExpiredAtFrom *string  `form:"expired_at_from" binding:"omitempty,required_with=ExpiredAtTo"`
+	ExpiredAtTo   *string  `form:"expired_at_to" binding:"omitempty,required_with=ExpiredAtFrom"`
 	Page          *int     `form:"page" binding:"omitempty,gte=0"`
 	Limit         *int     `form:"limit" binding:"omitempty,gte=0"`
 	Offset        *int

@@ -7,13 +7,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindCustomerById(customerId int64) (*model.Customer, error) {
+func FindWarrantyById(warrantyId int64) (*model.Warranty, error) {
 	connection := connections.Mysql.GetConnection()
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, phone, address, full_name, email, updated_at
-		FROM customers
+			_id, code, month, trial, status, description, category_id
+		FROM warranties
 		WHERE _id=?
 	`)
 
@@ -23,24 +23,25 @@ func FindCustomerById(customerId int64) (*model.Customer, error) {
 
 	defer stmt.Close()
 
-	var _customer model.Customer
+	var _warranty model.Warranty
 
-	err = stmt.QueryRow(customerId).Scan(
-		&_customer.RawId,
-		&_customer.RawPhone,
-		&_customer.RawAddress,
-		&_customer.RawFullName,
-		&_customer.RawEmail,
-		&_customer.RawUpdatedAt,
+	err = stmt.QueryRow(warrantyId).Scan(
+		&_warranty.RawId,
+		&_warranty.RawCode,
+		&_warranty.RawMonth,
+		&_warranty.RawTrial,
+		&_warranty.RawStatus,
+		&_warranty.RawDescription,
+		&_warranty.RawCategoryId,
 	)
 
 	switch err {
 	case sql.ErrNoRows:
 		return nil, nil
 	case nil:
-		_customer.FillResponse()
+		_warranty.FillResponse()
 
-		return &_customer, nil
+		return &_warranty, nil
 	default:
 		return nil, err
 	}

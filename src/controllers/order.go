@@ -58,6 +58,44 @@ func InsertOrderItemByOrderId(c *gin.Context) (interface{}, error) {
 	return actions.InsertOrderItemByOrderId(orderId, &insertOrderItem)
 }
 
+func ApplyCoupon(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var bodyCoupon model.BodyCoupon
+
+	err = c.ShouldBindJSON(&bodyCoupon)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.ApplyCoupon(orderId, &bodyCoupon)
+}
+
+func RemoveOrderCoupon(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.RemoveOrderCoupon(orderId)
+}
+
+func GetOrderCoupon(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.GetOrderCoupon(orderId)
+}
+
 func GetShippingByOrderId(c *gin.Context) (interface{}, error) {
 	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
 

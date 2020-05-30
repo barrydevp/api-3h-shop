@@ -22,6 +22,8 @@ func ChangeOrderNoteByOrderId(orderId int64, body *model.BodyOrder) (bool, error
 		return false, errors.New("require order's note")
 	}
 
+	set = append(set, " status=change_note")
+
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + "\n"
 	}

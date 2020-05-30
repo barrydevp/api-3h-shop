@@ -19,6 +19,25 @@ func InsertOrderItem(body *model.BodyOrderItem) (*model.OrderItem, error) {
 	resolveChan := make(chan interface{}, 4)
 	rejectChan := make(chan error)
 
+	if body.WarrantyId != nil {
+		//goroutines = append(goroutines, func() {
+		//	order, err := factories.FindProductById(*body.ProductId)
+		//
+		//	if err != nil {
+		//		rejectChan <- err
+		//		return
+		//	}
+		//	if order == nil {
+		//		rejectChan <- errors.New("product does not exists")
+		//		return
+		//	}
+		//
+		//	resolveChan <- order
+		//})
+
+		set = append(set, " warranty_id=?")
+		args = append(args, body.WarrantyId)
+	}
 	if body.ProductId != nil {
 		//goroutines = append(goroutines, func() {
 		//	order, err := factories.FindProductById(*body.ProductId)

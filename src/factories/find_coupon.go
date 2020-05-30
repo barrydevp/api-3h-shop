@@ -6,13 +6,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindProduct(query *connect.QueryMySQL) ([]*model.Product, error) {
+func FindCoupon(query *connect.QueryMySQL) ([]*model.Coupon, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			_id, category_id, name, out_price, discount, image_path, description, created_at, updated_at, tags
-		FROM products
+			_id, code, discount, description, expires_at, updated_at
+		FROM coupons
 	`
 	var args []interface{}
 
@@ -36,36 +36,32 @@ func FindProduct(query *connect.QueryMySQL) ([]*model.Product, error) {
 	}
 
 	defer rows.Close()
-	var listProduct []*model.Product
+	var listCoupon []*model.Coupon
 
 	for rows.Next() {
-		_product := model.Product{}
+		_coupon := model.Coupon{}
 
 		err = rows.Scan(
-			&_product.RawId,
-			&_product.RawCategoryId,
-			&_product.RawName,
-			&_product.RawOutPrice,
-			&_product.RawDiscount,
-			&_product.RawImagePath,
-			&_product.RawDescription,
-			&_product.RawCreatedAt,
-			&_product.RawUpdatedAt,
-			&_product.RawTags,
+			&_coupon.RawId,
+			&_coupon.RawCode,
+			&_coupon.RawDiscount,
+			&_coupon.RawDescription,
+			&_coupon.RawExpiresAt,
+			&_coupon.RawUpdatedAt,
 		)
 
 		if err != nil {
 			return nil, err
 		}
 
-		_product.FillResponse()
+		_coupon.FillResponse()
 
-		listProduct = append(listProduct, &_product)
+		listCoupon = append(listCoupon, &_coupon)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listProduct, nil
+	return listCoupon, nil
 }

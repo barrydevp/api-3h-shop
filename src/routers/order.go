@@ -26,6 +26,12 @@ func BindOrder(router *gin.RouterGroup) {
 		handle.Try(controllers.GetOrderCustomerByOrderId).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
+	router.GET("/:orderId/coupon", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.GetOrderCoupon).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
 	router.GET("/:orderId/shipping", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
@@ -42,6 +48,18 @@ func BindOrder(router *gin.RouterGroup) {
 		handle := response.Handle{Context: c}
 
 		handle.Try(controllers.CheckoutOrder).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:orderId/remove/coupon", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.RemoveOrderCoupon).Then(response.SendSuccess).Catch(response.SendError)
+	})
+
+	router.POST("/:orderId/apply/coupon", func(c *gin.Context) {
+		handle := response.Handle{Context: c}
+
+		handle.Try(controllers.ApplyCoupon).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
 	// router.POST("", func(c *gin.Context) {
@@ -86,7 +104,7 @@ func BindOrderAdmin(router *gin.RouterGroup) {
 	router.POST("/:orderId/payment/paid", func(c *gin.Context) {
 		handle := response.Handle{Context: c}
 
-        handle.Try(controllers.MarkOrderPaid).Then(response.SendSuccess).Catch(response.SendError)
+		handle.Try(controllers.MarkOrderPaid).Then(response.SendSuccess).Catch(response.SendError)
 	})
 
 	router.POST("/:orderId/shipping", func(c *gin.Context) {

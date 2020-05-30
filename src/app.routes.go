@@ -150,6 +150,22 @@ func BindRouter(router *gin.Engine, handlerFuncs []gin.HandlerFunc) {
 
 	routers.BindCurrent(currentRouter)
 
+	/**
+	 * Coupon.
+	 */
+
+	couponRouter := router.Group("/coupons")
+
+	routers.BindCoupon(couponRouter)
+
+	/**
+	 * Warranty.
+	 */
+
+	warrantyRouter := router.Group("/warranties")
+
+	routers.BindWarranty(warrantyRouter)
+
 }
 
 func BindAuthRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
@@ -259,5 +275,29 @@ func BindAdminRouter(router *gin.RouterGroup, handlerFuncs []gin.HandlerFunc) {
 	shippingRouter := router.Group("/shippings")
 
 	routers.BindShippingAdmin(shippingRouter)
+
+	/**
+	 * Coupon.
+	 */
+
+	couponRouter := router.Group("/coupons")
+
+	routers.BindCouponAdmin(couponRouter)
+
+	/**
+	 * Warranty.
+	 */
+
+	warrantyRouter := router.Group("/warranties")
+
+	routers.BindWarrantyAdmin(warrantyRouter)
+
+	/**
+	 * Statistic.
+	 */
+
+	statisticRouter := router.Group("/statistic")
+
+	routers.BindStatisticAdmin(statisticRouter)
 
 }

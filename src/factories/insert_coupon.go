@@ -7,7 +7,7 @@ import (
 	"github.com/barrydev/api-3h-shop/src/connections"
 )
 
-func InsertCustomer(query *connect.QueryMySQL) (*int64, error) {
+func InsertCoupon(query *connect.QueryMySQL) (*int64, error) {
 	if query == nil {
 		return nil, errors.New("query is required")
 	}
@@ -15,7 +15,7 @@ func InsertCustomer(query *connect.QueryMySQL) (*int64, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
-		INSERT customers 
+		INSERT coupons 
 	` + query.QueryString
 	args := query.Args
 

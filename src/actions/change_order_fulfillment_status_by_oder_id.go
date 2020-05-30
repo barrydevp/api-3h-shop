@@ -34,6 +34,8 @@ func ChangeOrderFulfilmentStatusByOrderId(orderId int64, body *model.BodyOrder) 
 		set = append(set, " cancelled_at=NOW()")
 	}
 
+	set = append(set, ` status="change_fulfillment"`)
+
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + "\n"
 	}

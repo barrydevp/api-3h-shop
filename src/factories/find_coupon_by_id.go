@@ -7,13 +7,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindCustomerById(customerId int64) (*model.Customer, error) {
+func FindCouponById(couponId int64) (*model.Coupon, error) {
 	connection := connections.Mysql.GetConnection()
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, phone, address, full_name, email, updated_at
-		FROM customers
+			_id, code, discount, description, expires_at, updated_at
+		FROM coupons
 		WHERE _id=?
 	`)
 
@@ -23,24 +23,24 @@ func FindCustomerById(customerId int64) (*model.Customer, error) {
 
 	defer stmt.Close()
 
-	var _customer model.Customer
+	var _coupon model.Coupon
 
-	err = stmt.QueryRow(customerId).Scan(
-		&_customer.RawId,
-		&_customer.RawPhone,
-		&_customer.RawAddress,
-		&_customer.RawFullName,
-		&_customer.RawEmail,
-		&_customer.RawUpdatedAt,
+	err = stmt.QueryRow(couponId).Scan(
+		&_coupon.RawId,
+		&_coupon.RawCode,
+		&_coupon.RawDiscount,
+		&_coupon.RawDescription,
+		&_coupon.RawExpiresAt,
+		&_coupon.RawUpdatedAt,
 	)
 
 	switch err {
 	case sql.ErrNoRows:
 		return nil, nil
 	case nil:
-		_customer.FillResponse()
+		_coupon.FillResponse()
 
-		return &_customer, nil
+		return &_coupon, nil
 	default:
 		return nil, err
 	}

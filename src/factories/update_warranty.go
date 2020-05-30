@@ -7,7 +7,7 @@ import (
 	"github.com/barrydev/api-3h-shop/src/connections"
 )
 
-func InsertCustomer(query *connect.QueryMySQL) (*int64, error) {
+func UpdateWarranty(query *connect.QueryMySQL) (*int64, error) {
 	if query == nil {
 		return nil, errors.New("query is required")
 	}
@@ -15,7 +15,7 @@ func InsertCustomer(query *connect.QueryMySQL) (*int64, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
-		INSERT customers 
+		UPDATE warranties 
 	` + query.QueryString
 	args := query.Args
 
@@ -32,10 +32,10 @@ func InsertCustomer(query *connect.QueryMySQL) (*int64, error) {
 		return nil, err
 	}
 
-	id, err := res.LastInsertId()
+	rowsAffected, err := res.RowsAffected()
 	if err != nil {
 		return nil, err
 	}
 
-	return &id, nil
+	return &rowsAffected, nil
 }

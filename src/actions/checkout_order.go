@@ -64,17 +64,21 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (bool, error) {
 	go func() {
 		totalItem, totalPrice, err := factories.CountAndCaculateOrderItem(&connect.QueryMySQL{
 			QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=? AND payment_status='pending')",
-			Args:        []interface{}{&orderId, &orderId},
+			Args:        []interface{}{&orderId, &orderId, &orderId},
 		})
 
 		if err != nil {
 			rejectChan <- err
+
+			return
 		}
 
 		// log.Println(totalItem)
 
 		if totalItem <= 0 {
 			rejectChan <- errors.New("your order is empty or has been checkout")
+
+			return
 		}
 
 		resolveChan <- &totalPrice
@@ -137,7 +141,7 @@ func CheckoutOrder(orderId int64, body *model.BodyCheckoutOrder) (bool, error) {
 	var argsUpdateOrder []interface{}
 	var setUpdateOrder []string
 
-	setUpdateOrder = append(setUpdateOrder, ` status="payment"`)
+	setUpdateOrder = append(setUpdateOrder, ` status="checkout"`)
 	setUpdateOrder = append(setUpdateOrder, ` payment_status="paid"`)
 	setUpdateOrder = append(setUpdateOrder, ` paid_at=NOW()`)
 	setUpdateOrder = append(setUpdateOrder, ` customer_id=?`)

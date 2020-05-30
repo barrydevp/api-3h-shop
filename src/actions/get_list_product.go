@@ -1,11 +1,12 @@
 package actions
 
 import (
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/common/response"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"strings"
 )
 
 func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error) {
@@ -37,6 +38,38 @@ func GetListProduct(queryProduct *model.QueryProduct) (*response.DataList, error
 	if queryProduct.Name != nil {
 		where = append(where, " name LIKE ?")
 		args = append(args, "%"+*queryProduct.Name+"%")
+	}
+	if queryProduct.Tags != nil {
+		tags := strings.Split(*queryProduct.Tags, ",")
+		if len(tags) > 1 {
+			where = append(where, " (tags LIKE ?"+strings.Repeat(" OR tags LIKE ?", len(tags)-1)+")")
+			for _, tag := range tags {
+				args = append(args, tag)
+			}
+		} else {
+			where = append(where, " tags LIKE ?")
+			args = append(args, "%"+*queryProduct.Tags+"%")
+		}
+
+	}
+	if queryProduct.NameOrTags != nil {
+		queryNameAndTag := " (name LIKE ?"
+		args = append(args, "%"+*queryProduct.NameOrTags+"%")
+
+		tags := strings.Split(*queryProduct.NameOrTags, ",")
+		if len(tags) > 1 {
+			queryNameAndTag += strings.Repeat(" OR tags LIKE ?", len(tags)) + ")"
+			for _, tag := range tags {
+				args = append(args, tag)
+			}
+
+			where = append(where, queryNameAndTag)
+
+		} else {
+			where = append(where, " (name LIKE ? OR tags LIKE ?)")
+			args = append(args, "%"+*queryProduct.NameOrTags+"%", "%"+*queryProduct.NameOrTags+"%")
+		}
+
 	}
 	if queryProduct.StartOutPrice != nil && *queryProduct.StartOutPrice > 0 {
 		where = append(where, " out_price >= ?")

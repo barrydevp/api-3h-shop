@@ -2,6 +2,7 @@ package factories
 
 import (
 	"database/sql"
+
 	"github.com/barrydev/api-3h-shop/src/connections"
 	"github.com/barrydev/api-3h-shop/src/model"
 )
@@ -11,7 +12,7 @@ func FindProductById(productId int64) (*model.Product, error) {
 
 	stmt, err := connection.Prepare(`
 		SELECT
-			_id, category_id, name, out_price, discount, image_path, description, created_at, updated_at 
+			_id, category_id, name, out_price, discount, image_path, description, created_at, updated_at, tags
 		FROM products
 		WHERE _id=?
 	`)
@@ -34,6 +35,7 @@ func FindProductById(productId int64) (*model.Product, error) {
 		&_product.RawDescription,
 		&_product.RawCreatedAt,
 		&_product.RawUpdatedAt,
+		&_product.RawTags,
 	)
 
 	switch err {

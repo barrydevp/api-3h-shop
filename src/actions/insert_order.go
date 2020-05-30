@@ -2,10 +2,11 @@ package actions
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"strings"
 )
 
 func InsertOrder(body *model.BodyOrder) (*model.Order, error) {
@@ -24,6 +25,11 @@ func InsertOrder(body *model.BodyOrder) (*model.Order, error) {
 	if body.Note != nil {
 		set = append(set, " note=?")
 		args = append(args, body.Note)
+	}
+
+	if body.CouponId != nil {
+		set = append(set, " coupon_id=?")
+		args = append(args, body.CouponId)
 	}
 
 	if len(set) > 0 {

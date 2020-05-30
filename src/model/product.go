@@ -2,8 +2,9 @@ package model
 
 import (
 	"database/sql"
-	"github.com/barrydev/api-3h-shop/src/constants"
 	"strings"
+
+	"github.com/barrydev/api-3h-shop/src/constants"
 )
 
 type Product struct {
@@ -15,6 +16,7 @@ type Product struct {
 	Discount    *float64 `json:"discount,omitempty"`
 	ImagePath   *string  `json:"image_path,omitempty"`
 	Description *string  `json:"description,omitempty"`
+	Tags        *string  `json:"tags,omitempty"`
 	CreatedAt   *string  `json:"created_at,omitempty"`
 	UpdatedAt   *string  `json:"updated_at,omitempty"`
 	/** Database Field */
@@ -25,6 +27,7 @@ type Product struct {
 	RawDiscount    *float64        `json:"-"`
 	RawImagePath   *sql.NullString `json:"-"`
 	RawDescription *sql.NullString `json:"-"`
+	RawTags        *sql.NullString `json:"-"`
 	RawCreatedAt   *string         `json:"-"`
 	RawUpdatedAt   *string         `json:"-"`
 }
@@ -45,6 +48,11 @@ func (product *Product) FillResponse() {
 			product.Description = &product.RawDescription.String
 		}
 	}
+	if product.RawTags != nil {
+		if product.RawTags.Valid {
+			product.Tags = &product.RawTags.String
+		}
+	}
 	product.CreatedAt = product.RawCreatedAt
 	product.UpdatedAt = product.RawUpdatedAt
 }
@@ -57,6 +65,7 @@ type BodyProduct struct {
 	Discount    *float64 `json:"discount" binding:"omitempty,gte=0"`
 	ImagePath   *string  `json:"image_path" binding:"omitempty"`
 	Description *string  `json:"description" binding:"omitempty"`
+	Tags        *string  `json:"tags" binding:"omitempty"`
 }
 
 func (body *BodyProduct) Normalize() error {
@@ -73,12 +82,14 @@ type QueryProduct struct {
 	CategoryId       *int64   `form:"category_id" binding:"omitempty"`
 	CategoryParentId *int64   `form:"category_parent_id" binding:"omitempty"`
 	Name             *string  `form:"name" binding:"omitempty"`
+	NameOrTags       *string  `form:"name_or_tags" binding:"omitempty"`
 	OutPrice         *float64 `form:"out_price" binding:"omitempty"`
 	StartOutPrice    *float64 `form:"start_out_price" binding:"omitempty"`
 	EndOutPrice      *float64 `form:"end_out_price" binding:"omitempty"`
 	Discount         *float64 `form:"discount" binding:"omitempty"`
 	ImagePath        *string  `form:"image_path" binding:"omitempty"`
 	Description      *string  `form:"description" binding:"omitempty"`
+	Tags             *string  `form:"tags" binding:"omitempty"`
 	CreatedAtFrom    *string  `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
 	CreatedAtTo      *string  `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
 	UpdatedAtFrom    *string  `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`

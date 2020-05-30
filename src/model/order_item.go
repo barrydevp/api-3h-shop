@@ -16,6 +16,7 @@ type OrderItem struct {
 	Status        *string `json:"status,omitempty"`
 	CreatedAt     *string `json:"created_at,omitempty"`
 	UpdatedAt     *string `json:"updated_at,omitempty"`
+	WarrantyId    *int64  `json:"warranty_id,omitempty"`
 	/** Database Field */
 	RawId            *int64         `json:"-"`
 	RawProductId     *int64         `json:"-"`
@@ -25,6 +26,7 @@ type OrderItem struct {
 	RawStatus        *string        `json:"-"`
 	RawCreatedAt     *string        `json:"-"`
 	RawUpdatedAt     *string        `json:"-"`
+	RawWarrantyId    *sql.NullInt64 `json:"-"`
 }
 
 func (orderItem *OrderItem) FillResponse() {
@@ -33,6 +35,11 @@ func (orderItem *OrderItem) FillResponse() {
 	if orderItem.RawProductItemId != nil {
 		if orderItem.RawProductItemId.Valid {
 			orderItem.ProductItemId = &orderItem.RawProductItemId.Int64
+		}
+	}
+	if orderItem.RawWarrantyId != nil {
+		if orderItem.RawWarrantyId.Valid {
+			orderItem.WarrantyId = &orderItem.RawWarrantyId.Int64
 		}
 	}
 	orderItem.OrderId = orderItem.RawOrderId
@@ -49,6 +56,7 @@ type BodyOrderItem struct {
 	OrderId       *int64  `json:"order_id" binding:"omitempty,gt=0"`
 	Quantity      *int64  `json:"quantity" binding:"omitempty,gte=0"`
 	Status        *string `json:"status"`
+	WarrantyId    *int64  `json:"warranty_id" binding:"omitempty,gt=0"`
 }
 
 func (body *BodyOrderItem) Normalize() error {
@@ -66,6 +74,7 @@ type QueryOrderItem struct {
 	ProductItemId *int64  `form:"product_item_id" binding:"omitempty"`
 	OrderId       *int64  `form:"order_id" binding:"omitempty"`
 	Quantity      *int64  `form:"quantity" binding:"omitempty"`
+	WarrantyId    *int64  `form:"warranty_id" binding:"omitempty"`
 	Status        *string `form:"status"`
 	CreatedAtFrom *string `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
 	CreatedAtTo   *string `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
@@ -95,6 +104,7 @@ func (query *QueryOrderItem) ParsePaging() {
 type OrderItemJoinProduct struct {
 	*OrderItem `json:"order_item"`
 	*Product   `json:"product"`
+	*Warranty  `json:"warranty"`
 }
 
 func (orderItemJoinProduct *OrderItemJoinProduct) FillResponse() {
@@ -103,5 +113,8 @@ func (orderItemJoinProduct *OrderItemJoinProduct) FillResponse() {
 	}
 	if orderItemJoinProduct.Product != nil {
 		orderItemJoinProduct.Product.FillResponse()
+	}
+	if orderItemJoinProduct.Warranty != nil {
+		orderItemJoinProduct.Warranty.FillResponse()
 	}
 }

@@ -11,7 +11,7 @@ func FindOrderItem(query *connect.QueryMySQL) ([]*model.OrderItem, error) {
 
 	queryString := `
 		SELECT
-			_id, product_id, product_item_id, order_id, quantity, status, created_at, updated_at
+			_id, product_id, product_item_id, order_id, quantity, status, created_at, updated_at, warranty_id
 		FROM order_items
 	`
 	var args []interface{}
@@ -50,6 +50,7 @@ func FindOrderItem(query *connect.QueryMySQL) ([]*model.OrderItem, error) {
 			&_orderItem.RawStatus,
 			&_orderItem.RawCreatedAt,
 			&_orderItem.RawUpdatedAt,
+			&_orderItem.RawWarrantyId,
 		)
 
 		if err != nil {

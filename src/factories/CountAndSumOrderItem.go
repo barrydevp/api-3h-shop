@@ -2,7 +2,7 @@ package factories
 
 import (
 	"database/sql"
-    "log"
+	"log"
 
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/connections"
@@ -12,8 +12,10 @@ func CountAndCaculateOrderItem(query *connect.QueryMySQL) (int, float64, error) 
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
-		SELECT
-			COUNT(*), COALESCE(ROUND(SUM(products.out_price * o_i.quantity * (1 - products.discount)), 2), 0)
+		SELECT o.count, ROUND(o.total_price * (100 - COALESCE((SELECT discount FROM coupons WHERE _id=(SELECT coupon_id FROM orders WHERE _id=?)), 0)) / 100, 2)
+		FROM (
+			SELECT
+				COUNT(*) count, COALESCE(SUM(products.out_price * o_i.quantity * (1 - products.discount)), 0) total_price
 `
 	var args []interface{}
 
@@ -22,11 +24,12 @@ func CountAndCaculateOrderItem(query *connect.QueryMySQL) (int, float64, error) 
 		args = query.Args
 	}
 	queryString += `
-		INNER JOIN products
-		ON o_i.product_id = products._id
+			INNER JOIN products
+			ON o_i.product_id = products._id
+		) o
 	`
 
-    log.Println(queryString)
+	log.Println(queryString)
 
 	stmt, err := connection.Prepare(queryString)
 

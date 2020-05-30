@@ -11,10 +11,11 @@ func FindOrderItemJoinProduct(query *connect.QueryMySQL) ([]*model.OrderItemJoin
 
 	queryString := `
 		SELECT
-			orderitems._id, orderitems.product_id, orderitems.order_id, orderitems.quantity, orderitems.status, orderitems.created_at, orderitems.updated_at,
-			products._id, products.category_id, products.name, products.out_price, products.discount, products.image_path, products.created_at, products.updated_at 
+			orderitems._id, orderitems.product_id, orderitems.order_id, orderitems.quantity, orderitems.status, orderitems.created_at, orderitems.updated_at, warranty_id,
+			products._id, products.category_id, products.name, products.out_price, products.discount, products.image_path, products.created_at, products.updated_at, tags,
+			_id, code, month, trial, status, description, category_id
 		FROM (SELECT
-			order_items._id, order_items.product_id, order_items.product_item_id, order_items.order_id, order_items.quantity, order_items.status, order_items.created_at, order_items.updated_at
+			order_items._id, order_items.product_id, order_items.product_item_id, order_items.order_id, order_items.quantity, order_items.status, order_items.created_at, order_items.updated_at, order_items.warranty_id
 		FROM order_items
 	`
 	var args []interface{}
@@ -26,6 +27,7 @@ func FindOrderItemJoinProduct(query *connect.QueryMySQL) ([]*model.OrderItemJoin
 
 	queryString += `
 		INNER JOIN products ON orderitems.product_id = products._id	
+		LEFT JOIN warranties ON orderitems.warranty_id = warranties._id
 	`
 
 	stmt, err := connection.Prepare(queryString)
@@ -48,9 +50,11 @@ func FindOrderItemJoinProduct(query *connect.QueryMySQL) ([]*model.OrderItemJoin
 	for rows.Next() {
 		_orderItem := model.OrderItem{}
 		_product := model.Product{}
+		_warranty := model.Warranty{}
 		_orderItemJoinProduct := model.OrderItemJoinProduct{
 			OrderItem: &_orderItem,
-			Product: &_product,
+			Product:   &_product,
+			Warranty:  &_warranty,
 		}
 
 		err = rows.Scan(
@@ -61,6 +65,7 @@ func FindOrderItemJoinProduct(query *connect.QueryMySQL) ([]*model.OrderItemJoin
 			&_orderItem.RawStatus,
 			&_orderItem.RawCreatedAt,
 			&_orderItem.RawUpdatedAt,
+			&_orderItem.RawWarrantyId,
 			&_product.RawId,
 			&_product.RawCategoryId,
 			&_product.RawName,
@@ -69,6 +74,14 @@ func FindOrderItemJoinProduct(query *connect.QueryMySQL) ([]*model.OrderItemJoin
 			&_product.RawImagePath,
 			&_product.RawCreatedAt,
 			&_product.RawUpdatedAt,
+			&_product.RawTags,
+			&_warranty.RawId,
+			&_warranty.RawCode,
+			&_warranty.RawMonth,
+			&_warranty.RawTrial,
+			&_warranty.RawStatus,
+			&_warranty.RawDescription,
+			&_warranty.RawCategoryId,
 		)
 
 		if err != nil {

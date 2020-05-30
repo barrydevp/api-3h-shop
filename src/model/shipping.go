@@ -26,7 +26,7 @@ type Shipping struct {
 	RawUpdatedAt   *string         `json:"-"`
 	RawDeliveredAt *sql.NullString `json:"-"`
 	RawNote        *sql.NullString `json:"-"`
-	RawPrice       *float64         `json:"-"`
+	RawPrice       *float64        `json:"-"`
 }
 
 func (shipping *Shipping) FillResponse() {
@@ -46,7 +46,7 @@ func (shipping *Shipping) FillResponse() {
 			shipping.Note = &shipping.RawNote.String
 		}
 	}
-    shipping.Price = shipping.RawPrice
+	shipping.Price = shipping.RawPrice
 }
 
 type BodyShipping struct {
@@ -73,12 +73,12 @@ type QueryShipping struct {
 	Carrier         *string `json:"carrier" binding:"omitempty"`
 	Status          *string `json:"status" binding:"omitempty"`
 	OrderId         *int64  `json:"order_id" binding:"omitempty"`
-	CreatedAtFrom   *string `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo,datetime"`
-	CreatedAtTo     *string `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom,datetime"`
-	UpdatedAtFrom   *string `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo,datetime"`
-	UpdatedAtTo     *string `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom,datetime"`
-	DeliveredAtFrom *string `form:"delivered_at_from" binding:"omitempty,required_with=DeliveredTo,datetime"`
-	DeliveredAtTo   *string `form:"delivered_at_to" binding:"omitempty,required_with=DeliveredFrom,datetime"`
+	CreatedAtFrom   *string `form:"created_at_from" binding:"omitempty,required_with=CreatedAtTo"`
+	CreatedAtTo     *string `form:"created_at_to" binding:"omitempty,required_with=CreatedAtFrom"`
+	UpdatedAtFrom   *string `form:"updated_at_from" binding:"omitempty,required_with=UpdatedAtTo"`
+	UpdatedAtTo     *string `form:"updated_at_to" binding:"omitempty,required_with=UpdatedAtFrom"`
+	DeliveredAtFrom *string `form:"delivered_at_from" binding:"omitempty,required_with=DeliveredTo"`
+	DeliveredAtTo   *string `form:"delivered_at_to" binding:"omitempty,required_with=DeliveredFrom"`
 	Page            *int    `form:"page" binding:"omitempty,gte=0"`
 	Limit           *int    `form:"limit" binding:"omitempty,gte=0"`
 	Offset          *int

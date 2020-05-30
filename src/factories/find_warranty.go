@@ -6,13 +6,13 @@ import (
 	"github.com/barrydev/api-3h-shop/src/model"
 )
 
-func FindProduct(query *connect.QueryMySQL) ([]*model.Product, error) {
+func FindWarranty(query *connect.QueryMySQL) ([]*model.Warranty, error) {
 	connection := connections.Mysql.GetConnection()
 
 	queryString := `
 		SELECT
-			_id, category_id, name, out_price, discount, image_path, description, created_at, updated_at, tags
-		FROM products
+			_id, code, month, trial, status, description, category_id
+		FROM warranties
 	`
 	var args []interface{}
 
@@ -36,36 +36,33 @@ func FindProduct(query *connect.QueryMySQL) ([]*model.Product, error) {
 	}
 
 	defer rows.Close()
-	var listProduct []*model.Product
+	var listWarranty []*model.Warranty
 
 	for rows.Next() {
-		_product := model.Product{}
+		_warranty := model.Warranty{}
 
 		err = rows.Scan(
-			&_product.RawId,
-			&_product.RawCategoryId,
-			&_product.RawName,
-			&_product.RawOutPrice,
-			&_product.RawDiscount,
-			&_product.RawImagePath,
-			&_product.RawDescription,
-			&_product.RawCreatedAt,
-			&_product.RawUpdatedAt,
-			&_product.RawTags,
+			&_warranty.RawId,
+			&_warranty.RawCode,
+			&_warranty.RawMonth,
+			&_warranty.RawTrial,
+			&_warranty.RawStatus,
+			&_warranty.RawDescription,
+			&_warranty.RawCategoryId,
 		)
 
 		if err != nil {
 			return nil, err
 		}
 
-		_product.FillResponse()
+		_warranty.FillResponse()
 
-		listProduct = append(listProduct, &_product)
+		listWarranty = append(listWarranty, &_warranty)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return listProduct, nil
+	return listWarranty, nil
 }

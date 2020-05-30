@@ -33,6 +33,8 @@ func ChangeOrderPaymentStatusByOrderId(orderId int64, body *model.BodyOrder) (bo
 		queryString += "SET" + strings.Join(set, ",") + "\n"
 	}
 
+	set = append(set, ` status="change_payment"`)
+
 	queryString += "WHERE _id=?"
 	args = append(args, orderId)
 

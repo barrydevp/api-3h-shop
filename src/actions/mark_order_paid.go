@@ -29,7 +29,7 @@ func MarkOrderPaid(orderId int64) (bool, error) {
 	var argsUpdateOrder []interface{}
 	var setUpdateOrder []string
 
-	setUpdateOrder = append(setUpdateOrder, ` status="payment"`)
+	setUpdateOrder = append(setUpdateOrder, ` status="mark_paid"`)
 	setUpdateOrder = append(setUpdateOrder, ` payment_status="paid"`)
 	setUpdateOrder = append(setUpdateOrder, ` paid_at=NOW()`)
 	setUpdateOrder = append(setUpdateOrder, ` total_price=?`)
@@ -44,7 +44,7 @@ func MarkOrderPaid(orderId int64) (bool, error) {
 	queryString += "WHERE _id=?"
 	argsUpdateOrder = append(argsUpdateOrder, &orderId)
 
-    // log.Println(queryString)
+	// log.Println(queryString)
 
 	rowEffected, err := factories.UpdateOrder(&connect.QueryMySQL{
 		QueryString: queryString,
