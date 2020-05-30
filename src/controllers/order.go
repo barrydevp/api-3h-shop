@@ -164,6 +164,23 @@ func GetOrderCustomerByOrderId(c *gin.Context) (interface{}, error) {
 	return actions.GetOrderCustomerByOrderId(orderId)
 }
 
+func UpdateOrderCustomer(c *gin.Context) (interface{}, error) {
+	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
+
+	if err != nil {
+		return nil, err
+	}
+	var body model.BodyCustomer
+
+	err = c.ShouldBindJSON(&body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actions.UpdateOrderCustomer(orderId, &body)
+}
+
 func UpdateOrder(c *gin.Context) (interface{}, error) {
 	orderId, err := strconv.ParseInt(c.Param("orderId"), 10, 64)
 

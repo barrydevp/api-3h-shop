@@ -13,7 +13,7 @@ func MarkOrderPaid(orderId int64) (bool, error) {
 
 	totalItem, totalPrice, err := factories.CountAndCaculateOrderItem(&connect.QueryMySQL{
 		QueryString: "WHERE order_id=? AND EXISTS (SELECT _id FROM orders WHERE _id=order_items.order_id AND payment_status='pending')",
-		Args:        []interface{}{&orderId},
+		Args:        []interface{}{&orderId, &orderId},
 	})
 
 	if err != nil {
