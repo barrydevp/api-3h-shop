@@ -13,7 +13,7 @@ func StatisticOrder(query *connect.QueryMySQL) (*model.StatisticOrder, error) {
 
 	queryString := `
 		SELECT
-			COUNT(*), SUM(IF(payment_status='pending', 1, 0)), SUM(IF(payment_status='paid', 1, 0)), SUM(IF(fulfillment_status='in-production', 1, 0)), SUM(IF(fulfillment_status='shipped', 1, 0)), SUM(IF(fulfillment_status='cancelled', 1, 0)), SUM(IF(fulfillment_status='fulfilled', 1, 0))
+			COALESCE(COUNT(*), 0), COALESCE(SUM(IF(payment_status='pending', 1, 0)), 0), COALESCE(SUM(IF(payment_status='paid', 1, 0)), 0), COALESCE(SUM(IF(fulfillment_status='in-production', 1, 0)), 0), COALESCE(SUM(IF(fulfillment_status='shipped', 1, 0)), 0), COALESCE(SUM(IF(fulfillment_status='cancelled', 1, 0)), 0), COALESCE(SUM(IF(fulfillment_status='fulfilled', 1, 0)), 0)
 		FROM orders
 	`
 	var args []interface{}
