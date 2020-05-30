@@ -20,6 +20,21 @@ func UpdateCoupon(couponId int64, body *model.BodyCoupon) (*model.Coupon, error)
 		args = append(args, body.Description)
 	}
 
+	if body.Code != nil {
+		set = append(set, " code=?")
+		args = append(args, body.Code)
+	}
+
+	if body.Discount != nil {
+		set = append(set, " discount=?")
+		args = append(args, body.Discount)
+	}
+
+	if body.ExpiresAt != nil {
+		set = append(set, " expires_at=?")
+		args = append(args, body.ExpiresAt)
+	}
+
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + "\n"
 	} else {
