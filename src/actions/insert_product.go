@@ -2,10 +2,11 @@ package actions
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/barrydev/api-3h-shop/src/common/connect"
 	"github.com/barrydev/api-3h-shop/src/factories"
 	"github.com/barrydev/api-3h-shop/src/model"
-	"strings"
 )
 
 func InsertProduct(body *model.BodyProduct) (*model.Product, error) {
@@ -58,6 +59,24 @@ func InsertProduct(body *model.BodyProduct) (*model.Product, error) {
 		set = append(set, " description=?")
 		args = append(args, body.Description)
 	}
+
+	tagsFromName := strings.Split(*body.Name, " ")
+
+	for i := 0; i < len(tagsFromName); i++ {
+		current := tagsFromName[i]
+		for j := i + 1; j < len(tagsFromName); j++ {
+			current += tagsFromName[j]
+			tagsFromName = append(tagsFromName, current)
+		}
+	}
+
+	set = append(set, " tags=?")
+
+	if body.Tags != nil {
+		tagsFromName = append(tagsFromName, *body.Tags)
+	}
+
+	args = append(args, strings.Join(tagsFromName, ","))
 
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + ", created_at=NOW() \n"
