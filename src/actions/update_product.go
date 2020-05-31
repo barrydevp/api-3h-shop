@@ -56,7 +56,7 @@ func UpdateProduct(productId int64, body *model.BodyProduct) (*model.Product, er
 	}
 
 	if body.Tags != nil {
-		set = append(set, " tags=tags+','+?")
+		set = append(set, " tags=?")
 		args = append(args, body.Tags)
 	}
 
