@@ -46,6 +46,11 @@ func BindProduct(router *gin.RouterGroup) {
 }
 
 func BindProductAdmin(router *gin.RouterGroup) {
+	// router.GET("/", func(c *gin.Context) {
+	// 	handle := response.Handle{Context: c}
+
+	// 	handle.Try(controllers.AddOldProductTag).Then(response.SendSuccess).Catch(response.SendError)
+	// })
 
 	router.GET("/:productId/items", func(c *gin.Context) {
 		handle := response.Handle{Context: c}

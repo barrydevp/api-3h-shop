@@ -60,23 +60,24 @@ func InsertProduct(body *model.BodyProduct) (*model.Product, error) {
 		args = append(args, body.Description)
 	}
 
-	tagsFromName := strings.Split(*body.Name, " ")
+	// tagsFromName := strings.Split(*body.Name, " ")
+	// originalLen := len(tagsFromName)
 
-	for i := 0; i < len(tagsFromName); i++ {
-		current := tagsFromName[i]
-		for j := i + 1; j < len(tagsFromName); j++ {
-			current += tagsFromName[j]
-			tagsFromName = append(tagsFromName, current)
-		}
-	}
-
-	set = append(set, " tags=?")
+	// for i := 0; i < originalLen; i++ {
+	// 	current := tagsFromName[i]
+	// 	for j := i + 1; j < originalLen; j++ {
+	// 		current += tagsFromName[j]
+	// 		tagsFromName = append(tagsFromName, current)
+	// 	}
+	// }
 
 	if body.Tags != nil {
-		tagsFromName = append(tagsFromName, *body.Tags)
+		set = append(set, " tags=CONCAT(COALESCE((SELECT CONCAT(c.name, ',', (SELECT pc.name FROM categories pc WHERE _id=c.parent_id), ',') FROM categories c WHERE _id=?), ''), ?)")
+		args = append(args, body.CategoryId, body.Tags)
+	} else {
+		set = append(set, " tags=COALESCE((SELECT CONCAT(c.name, ',', (SELECT pc.name FROM categories pc WHERE _id=c.parent_id), ',') FROM categories c WHERE _id=?), '')")
+		args = append(args, body.CategoryId)
 	}
-
-	args = append(args, strings.Join(tagsFromName, ","))
 
 	if len(set) > 0 {
 		queryString += "SET" + strings.Join(set, ",") + ", created_at=NOW() \n"

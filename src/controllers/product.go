@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/barrydev/api-3h-shop/src/actions"
 	"github.com/barrydev/api-3h-shop/src/model"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func GetListProduct(c *gin.Context) (interface{}, error) {
@@ -27,6 +28,10 @@ func GetProductById(c *gin.Context) (interface{}, error) {
 	}
 
 	return actions.GetProductById(productId)
+}
+
+func AddOldProductTag(c *gin.Context) (interface{}, error) {
+	return actions.AddOldProductTag()
 }
 
 func GetProductItemByProductId(c *gin.Context) (interface{}, error) {
