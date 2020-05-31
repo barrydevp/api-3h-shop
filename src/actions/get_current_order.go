@@ -65,7 +65,7 @@ func _getCurrentOrderAuth(current *model.Current, payloadToken *factories.Access
 	if user.Session == nil {
 		mapTotal, mapOrders, err = factories.GetOrderAndTotalItemWithSession(
 			&connect.QueryMySQL{
-				QueryString: "WHERE session=? AND status='pending'",
+				QueryString: "WHERE session=? AND payment_status='pending'",
 				Args:        []interface{}{current.Session},
 			})
 
@@ -91,7 +91,7 @@ func _getCurrentOrderAuth(current *model.Current, payloadToken *factories.Access
 	if current.Session == nil {
 		mapTotal, mapOrders, err = factories.GetOrderAndTotalItemWithSession(
 			&connect.QueryMySQL{
-				QueryString: "WHERE session=? AND status='pending'",
+				QueryString: "WHERE session=? AND payment_status='pending'",
 				Args:        []interface{}{current.Session},
 			})
 
@@ -117,7 +117,7 @@ func _getCurrentOrderAuth(current *model.Current, payloadToken *factories.Access
 
 	mapTotal, mapOrders, err = factories.GetOrderAndTotalItemWithSession(
 		&connect.QueryMySQL{
-			QueryString: "WHERE session IN(?, ?) AND status='pending'",
+			QueryString: "WHERE session IN(?, ?) AND payment_status='pending'",
 			Args:        []interface{}{current.Session, user.Session},
 		})
 
@@ -203,7 +203,7 @@ func GetCurrentOrderV2(current *model.Current) (*model.CurrentResponse, error) {
 	if current.Session != nil {
 		mapTotal, mapOrders, err := factories.GetOrderAndTotalItemWithSession(
 			&connect.QueryMySQL{
-				QueryString: "WHERE session=? AND status='pending'",
+				QueryString: "WHERE session=? AND payment_status='pending'",
 				Args:        []interface{}{current.Session},
 			})
 
@@ -235,7 +235,7 @@ func GetCurrentOrder(current *model.Current) (*model.CurrentResponse, error) {
 	if current.Session != nil {
 		_order, err := factories.FindOneOrder(
 			&connect.QueryMySQL{
-				QueryString: "WHERE session=? AND status='pending'",
+				QueryString: "WHERE session=? AND payment_status='pending'",
 				Args:        []interface{}{current.Session},
 			})
 
