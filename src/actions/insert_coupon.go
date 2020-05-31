@@ -25,8 +25,12 @@ func InsertCoupon(body *model.BodyCoupon) (*model.Coupon, error) {
 	if body.Discount == nil {
 		return nil, errors.New("coupon's discount is required")
 	} else {
-		set = append(set, " discount=?")
-		args = append(args, body.Discount)
+		if *body.Discount >= 0 && *body.Discount <= 100 {
+			set = append(set, " discount=?")
+			args = append(args, body.Discount)
+		} else {
+			return nil, errors.New("coupon's discount must be in range 0-100")
+		}
 	}
 
 	if body.Description != nil {
