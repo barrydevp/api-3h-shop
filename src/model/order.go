@@ -178,7 +178,7 @@ func (query *QueryOrder) ParseSort() {
 		}
 	}
 
-	orderByString := "paid_at DESC, _id DESC"
+	orderByString := "updated_at DESC"
 
 	if len(orderBy) > 0 {
 		orderByString = strings.Join(orderBy, ", ")
